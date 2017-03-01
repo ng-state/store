@@ -60,7 +60,7 @@ export function initialState() {
 }
 ```
 
-Then create actions for each component state by decorating class with @InjectStroe decorator and HasStore inheritance.
+Then create actions for each component state by decorating class with @InjectStore decorator and HasStore inheritance.
 This action will receive only that peace of nested state wich is provided as first parameter.
 
 ```ts
