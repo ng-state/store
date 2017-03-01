@@ -64,7 +64,7 @@ Then create actions for each component state by decorating class with @InjectStr
 This action will receive only that peace of nested state wich is provided as first parameter.
 
 ```ts
-import { BookSearchInitialState } from './book-searc.initial.state';
+import { BookSearchInitialState } from './book-search.initial.state';
 import { InjectStore, HasStore, Store } from 'ng-state';
 import * as Immutable from 'immutable';
 
