@@ -1,9 +1,9 @@
-# @ng-state
+# ng-state
 RxJS and ImmutableJs powered nested state management for Angular 2 applications inspired by @ngrx/store.
 
-[![npm version](https://badge.fury.io/js/%40ng%2Fstate.svg)](https://badge.fury.io/js/%40ng%2Fstate)
+[![npm version](https://badge.fury.io/js/ng-state.svg)](https://badge.fury.io/js/ng-state)
 
-@ng-state is a controlled nested state container designed to help write performant, consistent applications
+ng-state is a controlled nested state container designed to help write performant, consistent applications
 on top of Angular 2. Core tenets:
 - State is a single immutable data structure
 - Each component gets its own peace of nested state
@@ -15,13 +15,13 @@ throughout your application.
 
 
 ### Installation
-Install @ng-state from npm:
+Install ng-state from npm:
 ```bash
-npm install @ng-state --save
+npm install ng-state --save
 ```
 
 ### Examples
-- [Official @ng-state/example-app](https://github.com/ng-state/example-app) is an officially maintained example application showcasing possibilities of @ng-state
+- [Official ng-state/example-app](https://github.com/ng-state/example-app) is an officially maintained example application showcasing possibilities of @ng-state
 
 
 ## Main idea
@@ -36,7 +36,7 @@ In your app's main module, register store with initial state by using `StoreModu
 
 ```ts
 import { NgModule } from '@angular/core'
-import { StoreModule } from '@ng-state';
+import { StoreModule } from 'ng-state';
 
 @NgModule({
   imports: [
