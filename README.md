@@ -69,7 +69,7 @@ import { InjectStore, HasStore, Store } from 'ng-state';
 import * as Immutable from 'immutable';
 
 @InjectStore('books/search', BookSearchInitialState)
-export class BooksSearch implements HasStore {
+export class BooksSearchStateActions implements HasStore {
     store: Store<Immutable.Map<any, any>>;
 
     get loading() {
@@ -145,7 +145,7 @@ Now you can inject state actions by marking component with @ComponentState decor
 Notice that statePath parameter is passed to ```bc-book-prveiw-list``` in order to use relative path in ```bc-book-preview-list``` state actions.
 
 ```ts
-@ComponentState(CollectionState)
+@ComponentState(CollectionStateActions)
 @Component({
   selector: 'bc-collection-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -182,7 +182,7 @@ statePath and stateIndex properties are created in decorator and injected into A
 @ComponentState may take instance of state actions object or anonymous function to select an instance:
 ```ts
 @ComponentState((component: BookPreviewListComponent) => {
-  return component.isFromCollection ? CollectionState : BooksSearch;
+  return component.isFromCollection ? CollectionStateActions : BooksSearchStateActions;
 })
 ```
 
