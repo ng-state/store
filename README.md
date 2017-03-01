@@ -65,8 +65,7 @@ This action will receive only that peace of nested state wich is provided as fir
 
 ```ts
 import { BookSearchInitialState } from './book-searc.initial.state';
-import { Store } from '../../ng-state/store/store';
-import { InjectStore, HasStore } from './../../ng-state/decorators/inject-store.decorator';
+import { InjectStore, HasStore, Store } from 'ng-state';
 import * as Immutable from 'immutable';
 
 @InjectStore('books/search', BookSearchInitialState)
@@ -191,7 +190,7 @@ You can also inject the `Store` service into your components and services. Use `
 _select_ slice(s) of state:
 
 ```ts
-import { Store } from '@ngrx/store';
+import { Store } from 'ng-state';
 
 interface AppState {
   counter: number;
