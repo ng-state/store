@@ -1,12 +1,12 @@
-import { Router, NavigationCancel, NavigationEnd, RoutesRecognized } from '@angular/router';
 import { NgModule, ModuleWithProviders, Injector, OpaqueToken } from '@angular/core';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Store } from './store/store';
 import { State } from './state/state';
 import { ServiceLocator } from './helpers/service-locator';
 import { StateHistory } from './state/history';
 import { StateHistoryComponent } from './state/state-history';
-
+import { RouterState } from './state/router-state';
 
 export const INITIAL_STATE = new OpaqueToken('INITIAL_STATE');
 export const COLLECT_HISTORY = new OpaqueToken('COLLECT_HISTORY');
@@ -20,8 +20,12 @@ export function storeFactory(state: State<any>) {
     return new Store(state);
 }
 
-export function historyFactory(state: State<any>, collectHistory, storeHistoryItems) {
-    return new StateHistory(state, collectHistory, storeHistoryItems);
+export function historyFactory(store: Store<any>, collectHistory, storeHistoryItems) {
+    return new StateHistory(store, collectHistory, storeHistoryItems);
+}
+
+export function routerStateFactory(store: Store<any>, router: Router) {
+    return new RouterState(store, router);
 }
 
 @NgModule({
@@ -42,43 +46,16 @@ export class StoreModule {
                 { provide: INITIAL_STATE, useValue: initialState },
                 { provide: State, useFactory: stateFactory, deps: [INITIAL_STATE] },
                 { provide: Store, useFactory: storeFactory, deps: [State] },
-                { provide: StateHistory, useFactory: historyFactory, deps: [State, COLLECT_HISTORY, STORE_HISTORY_ITEMS] },
+                { provide: StateHistory, useFactory: historyFactory, deps: [Store, COLLECT_HISTORY, STORE_HISTORY_ITEMS] },
+                { provide: RouterState, useFactory: routerStateFactory, deps: [Store, Router] },
             ]
         };
     }
 
-    constructor(injector: Injector, stateHistory: StateHistory, private store: Store<any>, private router: Router) {
+    constructor(injector: Injector, stateHistory: StateHistory, routerState: RouterState) {
         ServiceLocator.injector = injector;
-        this.initRouter();
-        this.bindRouter();
         stateHistory.init();
+        routerState.init();
         (<any>window).state = StateHistory;
-    }
-
-    private initRouter() {
-        const initialRouteSubscription = this.router.events.subscribe(event => {
-            if (event instanceof RoutesRecognized) {
-                this.store.initialize(['router'], { url: event.url }, false);
-                initialRouteSubscription.unsubscribe();
-            }
-        });
-    }
-
-    bindRouter() {
-        if (!this.router.events) {
-            return;
-        }
-
-        let cancelledId = -1;
-        this.router.events.subscribe((event) => {
-            if (event instanceof NavigationCancel) {
-                cancelledId = (<NavigationCancel>event).id;
-            }
-            if (event instanceof NavigationEnd && (<NavigationEnd>event).id !== cancelledId) {
-                (<Store<any>>this.store.select(['router'])).update(state => {
-                    state.set('url', event.url);
-                });
-            }
-        });
     }
 }

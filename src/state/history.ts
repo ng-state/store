@@ -1,4 +1,4 @@
-import { State } from './state';
+import { Store } from 'ng-state';
 import { Injectable } from '@angular/core';
 import * as Rx from 'rxjs';
 
@@ -11,20 +11,18 @@ export class StateHistory {
     private static _viewHistory = new Rx.Subject<boolean>();
     private static storeHistoryItems: number | null;
 
-    constructor(private state: State<any>, collectHistory: boolean, storeHistoryItems: number | null) {
+    constructor(private store: Store<any>, collectHistory: boolean, storeHistoryItems: number | null) {
         StateHistory.collectHistory = collectHistory;
         StateHistory.storeHistoryItems = storeHistoryItems;
     }
 
     init() {
-        this.state
-            .take(1)
-            .subscribe(state => {
-                StateHistory.CURRENT_STATE = state;
-            });
+        this.store.subscribe(state => {
+            this.add(state);
+        });
     }
 
-    static add(state) {
+    private add(state) {
         StateHistory.CURRENT_STATE = state;
 
         if (!StateHistory.collectHistory || StateHistory.HISTORY.indexOf(state) >= 0) {

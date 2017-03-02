@@ -1,10 +1,9 @@
-import { StateHistory } from '../state/history';
 import { Helpers } from '../helpers/helpers';
 import { _do } from 'rxjs/operator/do';
 import * as Immutable from 'immutable';
 
 export class Initialize {
-    constructor(statePath, initialState: any = null, addToHistory = true) {
+    constructor(statePath, initialState: any = null) {
         let actionWrapper = function (state: any) {
             if (state.getIn([...statePath, '__initialized'])) {
                 return;
@@ -16,10 +15,6 @@ export class Initialize {
             initialState = initialState.set('__initialized', true);
 
             const newState = state.setIn(statePath, initialState);
-
-            if (addToHistory) {
-                StateHistory.add(newState);
-            }
 
             (<any>this).source.next(newState);
         }.bind(this);

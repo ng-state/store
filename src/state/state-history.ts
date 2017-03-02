@@ -32,10 +32,10 @@ import * as Rx from 'rxjs';
     `]
 })
 export class StateHistoryComponent implements OnInit, OnDestroy {
-    items = StateHistory.HISTORY;
     lastIndex;
     showHistory = false;
     viewistorySubscription: Rx.Subscription;
+    items;
 
     constructor(private store: Store<any>, private router: Router, private cd: ChangeDetectorRef, private zone: NgZone) {
     }
@@ -44,6 +44,11 @@ export class StateHistoryComponent implements OnInit, OnDestroy {
         this.viewistorySubscription = (<any>window).state.viewHistory
             .subscribe(value => {
                 this.showHistory = value;
+
+                if (value) {
+                    this.items = [...StateHistory.HISTORY].splice(2);
+                }
+
                 this.cd.detectChanges();
             });
     }
@@ -54,12 +59,13 @@ export class StateHistoryComponent implements OnInit, OnDestroy {
 
     applyState(index) {
         if (!this.lastIndex) {
-            this.lastIndex = StateHistory.HISTORY.length - 1;
+            this.lastIndex = this.items.length - 1;
         }
 
-        const targetRoute = StateHistory.HISTORY[index].getIn(['router', 'url']);
+        const targetRoute = this.items[index].getIn(['router', 'url']);
 
-        if (StateHistory.HISTORY[this.lastIndex].getIn(['router', 'url']) !== targetRoute) {
+        const lastState = this.items[this.lastIndex];
+        if (targetRoute && lastState.get('router') && lastState.getIn(['router', 'url']) !== targetRoute) {
             this.router.navigateByUrl(targetRoute)
                 .then(() => {
                     this.changeState(index);
@@ -75,7 +81,7 @@ export class StateHistoryComponent implements OnInit, OnDestroy {
             this.lastIndex = index;
             (<Store<any>>this.store.select([]))
                 .update(state => {
-                    state.merge(StateHistory.HISTORY[index]);
+                    state.merge(this.items[index]);
                 });
         });
     }
