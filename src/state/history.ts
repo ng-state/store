@@ -1,4 +1,4 @@
-import { Store } from 'ng-state';
+import { Store } from '../store/store';
 import { Injectable } from '@angular/core';
 import * as Rx from 'rxjs';
 
