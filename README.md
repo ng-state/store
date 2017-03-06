@@ -1,5 +1,5 @@
 # ng-state
-RxJS and ImmutableJs powered nested state management for Angular 2 applications inspired by @ngrx/store.
+RxJS and ImmutableJs powered nested state management for Angular 2 applications inspired by [ @ngrx/store](https://github.com/ngrx/store).
 
 [![npm version](https://badge.fury.io/js/ng-state.svg)](https://badge.fury.io/js/ng-state)
 

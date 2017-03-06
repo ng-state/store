@@ -1,7 +1,7 @@
 {
   "name": "ng-state",
-  "version": "1.1.1",
-  "description": "RxJS and ImmutableJs powered state managment for Angular2 apps. Inspired by @ngrx.",
+  "version": "1.1.2",
+  "description": "RxJS and ImmutableJs powered nested state managment for Angular2 apps inspired by @ngrx.",
   "main": "./bundles/store.umd.js",
   "module": "./index.js",
   "scripts": {
@@ -37,14 +37,9 @@
   "homepage": "https://github.com/ng-state/store#readme",
   "dependencies": {
     "@angular/common": "^2.3.1",
-    "@angular/compiler": "^2.3.1",
     "@angular/core": "^2.3.1",
-    "@angular/forms": "^2.3.1",
-    "@angular/http": "^2.3.1",
-    "@angular/material": "latest",
-    "@angular/platform-browser": "^2.3.1",
-    "@angular/platform-browser-dynamic": "^2.3.1",
     "@angular/router": "^3.3.1",
+    "@angular/platform-browser": "^2.3.1",
     "core-js": "^2.4.1",
     "immutable": "^3.8.1",
     "immutable-cursor": "^1.0.2",

@@ -1,6 +1,6 @@
 import { StateHistory } from './../src/state/history';
 import { Store } from './../src/store/store';
-import { stateFactory, storeFactory } from '../src/ng-state.module';
+import { stateFactory, storeFactory, historyFactory } from '../src/ng-state.module';
 
 describe('Store tests', () => {
     let store: Store<any>;
@@ -8,6 +8,8 @@ describe('Store tests', () => {
     beforeEach(() => {
         const state = stateFactory(() => { return { layout: { test: 'test' } }; });
         store = storeFactory(state);
+        const history = historyFactory(store, true, 100);
+        history.init();
     });
 
     it('should initialize state with initial value', () => {
@@ -26,8 +28,8 @@ describe('Store tests', () => {
     it('should select state', (done) => {
         store.select(['layout'])
             .take(1)
-            .subscribe(state => {
-                expect(StateHistory.CURRENT_STATE.get('test')).toBeTruthy();
+            .subscribe((state: any) => {
+                expect(state.get('test')).toBeTruthy();
                 done();
             });
     });
