@@ -27,7 +27,7 @@ npm install ng-state --save
 ## Main idea
 
 In order to work with peace of state, current state path (statePath) and current lits item index (stateIndex) is passed down to child components and are received in state actions.
-Or absolute pats are set in state actions.
+Or absolute pats are set in state actions. (see explanation image at the bottom)
 
 ### Configuration
 
@@ -153,7 +153,6 @@ Notice that statePath parameter is passed to ```bc-book-prveiw-list``` in order 
     <md-card>
       <md-card-title>My Collection</md-card-title>
     </md-card>
-	{{ state.getBooks | async }}
     <bc-book-preview-list [statePath]="statePath" [isFromCollection]="true"></bc-book-preview-list>
   `,
   styles: [`
@@ -166,6 +165,11 @@ Notice that statePath parameter is passed to ```bc-book-prveiw-list``` in order 
 export class CollectionPageComponent implements IComponentStateActions<CollectionStateActions> {
   state: CollectionStateActions;
 }
+```
+
+then you can access your action like:
+```ts
+{{ state.getBooks | async }}
 ```
 
 In the same manner stateIndex can be passed when iterating with *ngFor
@@ -203,11 +207,37 @@ interface AppState {
 	`
 })
 class MyAppComponent {
-	books: Observable<number>;
+  books: Observable<number>;
 
-	constructor(private store: Store<AppState>){
-		this.counter = store.select(['books']);
-	}
+  constructor(private store: Store<AppState>){
+    this.books = store.select(['books']);
+  }
+}
+```
+
+also you can avoid having async pipe by subscribing to state change. But then you will be responsible for subscription management. Hence it is recommended to leave this for Angular.
+
+```ts
+@Component({
+	selector: 'my-app',
+	template: `
+		<div>Searching: {{ books.get('loading') }}</div>
+	`
+})
+class MyAppComponent {
+  books: Observable<number>;
+  counterSubscription: Rx.Subscription;
+
+  constructor(private store: Store<AppState>) implements OnDestroy{
+    this.counterSubscription = store.select(['books'])
+      .subscribe(state => {
+        this.books = state;
+      });
+  }
+
+  ngOnDestroy(){
+    this.counterSubscription.unsubscribe();
+  }
 }
 ```
 
@@ -222,6 +252,10 @@ You can also view current state in ```window.state.CURRENT_STATE``` and whole hi
 
 History collecting can be disabled by passing ```false``` to ```StoreModule.provideStore``` second parameter.
 By default 100 history steps are stored in memory but it can be modified by passing third parameter to ```StoreModule.provideStore```.
+
+### Here is basic flow with code side-by-side explained:
+
+![flow](/ng-state-flow.png)
 
 ## Contributing
 Please read [contributing guidelines here](https://github.com/ng-state/store/blob/master/CONTRIBUTING.md).
