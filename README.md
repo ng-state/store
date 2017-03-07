@@ -240,6 +240,7 @@ class MyAppComponent {
   }
 }
 ```
+### Time travel
 
 @ng-state allows you to time travel. To enable this you have to add StateHistoryComponent to your app file
 
