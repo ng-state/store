@@ -98,6 +98,8 @@ export class BooksSearchStateActions implements HasStore {
 }
 ```
 
+<i>Be aware that from version 1.2.5 simple getters are converted to properties to get better performance by reducing calls to functions.</i>
+
 ### InjectStore first parameter is path:
 - if added between single quotes '' it counts as absolute path
 - if added in array [], final path will be merrged with path passed from parent ([statePath]="statePath"):
