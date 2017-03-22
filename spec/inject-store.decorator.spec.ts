@@ -1,10 +1,13 @@
-import { ServiceLocator } from './../src/helpers/service-locator';
 import { InjectStore } from '../src/decorators/inject-store.decorator';
+import { ServiceLocator } from './../src/helpers/service-locator';
 
 class TestStateActions {
     store: any;
     createStore(statePath: string[], stateIndex: number | null) {
         return ['newStatePath'];
+    }
+    get isOpened() {
+        return true;
     }
 };
 
@@ -73,5 +76,12 @@ describe('InjectStore decorator', () => {
         target.createStore(['parent'], 1);
 
         expect(target.store.initialize).toHaveBeenCalled();
+    });
+
+    it('should convert getters to properties', () => {
+        setup((currentPath, stateIndex) => 'new path');
+        const newPath = target.createStore();
+
+        expect(typeof target.isOpened).toEqual('boolean');
     });
 });
