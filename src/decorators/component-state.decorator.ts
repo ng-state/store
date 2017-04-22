@@ -26,8 +26,8 @@ export function ComponentState(stateActions: any | ((T) => any)) {
                     : stateActions;
 
                 const initState = new extractedStateAction();
-                this.statePath = initState.createStore(this.statePath, this.stateIndex);
-                this.state = initState;
+                this.statePath = initState.createStore(initState, this.statePath, this.stateIndex);
+                this.actions = initState;
             }
 
             origInit.apply(this, arguments);
@@ -36,5 +36,5 @@ export function ComponentState(stateActions: any | ((T) => any)) {
 }
 
 export interface IComponentStateActions<T> {
-    state: T;
+    actions: T;
 }

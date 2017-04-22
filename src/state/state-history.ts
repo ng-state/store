@@ -1,8 +1,10 @@
-import { Component, ChangeDetectorRef, OnDestroy, OnInit, NgZone } from '@angular/core';
-import { Router } from '@angular/router';
-import { Store } from '../store/store';
-import { StateHistory } from './history';
 import * as Rx from 'rxjs';
+
+import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from '@angular/core';
+
+import { Router } from '@angular/router';
+import { StateHistory } from './history';
+import { Store } from '../store/store';
 
 @Component({
     selector: 'state-history',
@@ -46,7 +48,7 @@ export class StateHistoryComponent implements OnInit, OnDestroy {
                 this.showHistory = value;
 
                 if (value) {
-                    this.items = [...StateHistory.HISTORY].splice(2);
+                    this.items = StateHistory.HISTORY;
                 }
 
                 this.cd.detectChanges();

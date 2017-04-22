@@ -1,6 +1,7 @@
+import * as Immutable from 'immutable';
+
 import { Helpers } from '../helpers/helpers';
 import { _do } from 'rxjs/operator/do';
-import * as Immutable from 'immutable';
 
 export class Initialize {
     constructor(statePath, initialState: any = null) {
@@ -14,7 +15,13 @@ export class Initialize {
             initialState = Immutable.fromJS(initialState);
             initialState = initialState.set('__initialized', true);
 
-            const newState = state.setIn(statePath, initialState);
+            let newState;
+
+            try {
+                newState = state.setIn(statePath, initialState);
+            } catch (exception) {
+                console.error(exception);
+            }
 
             (<any>this).source.next(newState);
         }.bind(this);

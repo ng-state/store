@@ -1,4 +1,5 @@
 import { ServiceLocator } from '../helpers/service-locator';
+import { StateHistory } from "ng-state/state/history";
 import { Store } from '../store/store';
 
 export function InjectStore(newPath: string[] | string | ((currentPath, stateIndex) => string[] | string), intialState?: Object | any) {
@@ -35,23 +36,33 @@ export function InjectStore(newPath: string[] | string | ((currentPath, stateInd
     };
 
      let getAllGetters = (target: any): string[] => {
-        return (<any>Object).entries((<any>Object).getOwnPropertyDescriptors(target.prototype))
-            .filter(([key, descriptor]) => typeof descriptor.get === 'function')
-            .map(([key]) => key);
+        const targetMethods = Reflect.getPrototypeOf(target);
+        let methods = (<any>Object).entries((<any>Object).getOwnPropertyDescriptors(targetMethods))
+            .map(([key, descriptor]: [string, any]) => {
+                return { name: key, isGetter: typeof descriptor.get === 'function' }
+            })
+            .filter(method => method.isGetter)
+            .map(method => method.name);
+
+        return methods;
     };
 
-    let convertGettersToProperties = (target: any) => {
-        const getters = getAllGetters(target);
+    let convertGettersToProperties = (instance: any) => {
+        const getters = getAllGetters(instance);
         getters.forEach(name => {
-            const tempGetter = target.prototype[name];
-            delete target.prototype[name];
-            target.prototype[name] = tempGetter;
+
+            const tempGetter = instance[name];
+            delete instance[name];
+
+            Object.defineProperty(instance, name, {
+               value:  tempGetter
+            });
         });
     };
 
     return (target: any) => {
 
-        target.prototype.createStore = function (currentPath?: any[], stateIndex?: (string | number) | (string | number)[]) {
+        target.prototype.createStore = function (instance: any, currentPath?: any[], stateIndex?: (string | number) | (string | number)[]) {
             let extractedPath = typeof newPath === 'function' && (<any>newPath).name === ''
                 ? (<any>newPath)(currentPath, stateIndex)
                 : newPath;
@@ -66,8 +77,16 @@ export function InjectStore(newPath: string[] | string | ((currentPath, stateInd
                 store.initialize(statePath, intialState);
             }
 
-            target.prototype.store = store.select(statePath);
-            convertGettersToProperties(target);
+            instance.store = store.select(statePath);
+
+            Object.defineProperty(instance, 'state', {
+                get: function () {
+                    return StateHistory.CURRENT_STATE.getIn(statePath);
+                }
+            });
+
+            convertGettersToProperties(instance);
+
             return statePath;
         };
     };
@@ -75,4 +94,5 @@ export function InjectStore(newPath: string[] | string | ((currentPath, stateInd
 
 export interface HasStore {
     store: Store<any>;
+    state?: any;
 }

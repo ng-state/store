@@ -5,7 +5,7 @@ export class Helpers {
         if (obj !== null
             && typeof (obj) === 'object'
             && !Immutable.Map.isMap(obj)
-            && !Immutable.Iterable.isIterable(obj)) {
+            && !Immutable.Iterable.isIterable(obj)) { // from ImmutableJs 4 breaking change isIterable => isCollection
             if (obj.constructor === Array) {
                 for (let i = 0; i < obj.length; i++) {
                     this.overrideContructor(obj[i]);

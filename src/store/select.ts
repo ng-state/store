@@ -1,13 +1,14 @@
-import { map } from 'rxjs/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { distinctUntilChanged } from 'rxjs/operator/distinctUntilChanged';
+import { map } from 'rxjs/operator/map';
 
 export class Select {
     constructor(path: any) {
         let mapped$;
 
         if (typeof path === 'object') {
-            mapped$ = map.call(this, state => state.getIn(path));
+            mapped$ = map.call(this, (state: any) => state.getIn(path))
+                .takeWhile((state: any) => state !== undefined);
         }
         else {
             throw new TypeError(`Unexpected type ${typeof path} in select operator,`
