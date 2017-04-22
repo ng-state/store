@@ -1,5 +1,5 @@
 import { ServiceLocator } from '../helpers/service-locator';
-import { StateHistory } from "ng-state/state/history";
+import { StateHistory } from "../state/history";
 import { Store } from '../store/store';
 
 export function InjectStore(newPath: string[] | string | ((currentPath, stateIndex) => string[] | string), intialState?: Object | any) {
