@@ -1,4 +1,5 @@
 node_modules/
 coverage/
-release/
 .vscode/
+release/index*
+release/src/
