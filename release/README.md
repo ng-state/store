@@ -202,6 +202,37 @@ class MyAppComponent {
   }
 }
 ```
+
+### Dispatcher
+There are cases when states of not related components, which has different places in state tree, should change e.g: when list item is selected filter should collapse. This is where dispatcher kicks in. Dispatcher is design to send and receive messages between components.
+
+```ts
+/* Child A */
+export class UpdateMessage extends Message {
+  constructor(payload?: any) {
+    super('MessageName', payload);
+  }
+}
+
+dispatcher.subscribe(UpdateMessage, (payload: any) => {
+  this.actions.update....
+});
+
+/* Child B */
+dispatcher.publish(new UpdateMessage('payload'));
+```
+
+Or, by using overload, even more simpler
+```ts
+/* Child A */
+dispatcher.subscribe('UPDATE_MESSAGE', (payload: any) => {
+  this.actions.update....
+});
+
+/* Child B */
+dispatcher.publish('UPDATE_MESSAGE', 'payload');
+```
+
 ### Time travel
 
 @ng-state allows you to time travel. To enable this you have to add StateHistoryComponent to your app file
