@@ -1,12 +1,14 @@
-import { NgModule, ModuleWithProviders, Injector, OpaqueToken } from '@angular/core';
-import { Router } from '@angular/router';
+import { Injector, ModuleWithProviders, NgModule, OpaqueToken } from '@angular/core';
+
 import { CommonModule } from '@angular/common';
-import { Store } from './store/store';
-import { State } from './state/state';
+import { Dispatcher } from './helpers/dispatcher';
+import { Router } from '@angular/router';
+import { RouterState } from './state/router-state';
 import { ServiceLocator } from './helpers/service-locator';
+import { State } from './state/state';
 import { StateHistory } from './state/history';
 import { StateHistoryComponent } from './state/state-history';
-import { RouterState } from './state/router-state';
+import { Store } from './store/store';
 
 export const INITIAL_STATE = new OpaqueToken('INITIAL_STATE');
 export const COLLECT_HISTORY = new OpaqueToken('COLLECT_HISTORY');
@@ -48,6 +50,7 @@ export class StoreModule {
                 { provide: Store, useFactory: storeFactory, deps: [State] },
                 { provide: StateHistory, useFactory: historyFactory, deps: [Store, COLLECT_HISTORY, STORE_HISTORY_ITEMS] },
                 { provide: RouterState, useFactory: routerStateFactory, deps: [Store, Router] },
+                Dispatcher
             ]
         };
     }
