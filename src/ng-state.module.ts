@@ -1,8 +1,7 @@
 import { Injector, ModuleWithProviders, NgModule, OpaqueToken } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
-import { Dispatcher } from './helpers/dispatcher';
 import { Router } from '@angular/router';
+import { Dispatcher } from './services/dispatcher';
 import { RouterState } from './state/router-state';
 import { ServiceLocator } from './helpers/service-locator';
 import { State } from './state/state';
