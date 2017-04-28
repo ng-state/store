@@ -2,8 +2,6 @@ import {Observable, Subject, Subscription} from 'rxjs';
 
 import { Injectable } from '@angular/core';
 
-type ObserverOrNext = ((payload: any) => void);
-
 export class Message {
     constructor(public type?: string, public payload?: any) {
     }
@@ -31,9 +29,9 @@ export class Dispatcher {
         this.subject.next(message);
     }
 
-    subscribe(message: Message, observerOrNext: ObserverOrNext, error?: (error: any) => void, complete?: () => void): Subscription;
-    subscribe(messageType: string, observerOrNext: ObserverOrNext, error?: (error: any) => void, complete?: () => void): Subscription;
-    subscribe(messageType: string | Message, observerOrNext: ObserverOrNext, error?: (error: any) => void, complete?: () => void): Subscription {
+    subscribe(message: Message, observerOrNext: (payload: any) => void, error?: (error: any) => void, complete?: () => void): Subscription;
+    subscribe(messageType: string, observerOrNext: (payload: any) => void, error?: (error: any) => void, complete?: () => void): Subscription;
+    subscribe(messageType: string | Message, observerOrNext: (payload: any) => void, error?: (error: any) => void, complete?: () => void): Subscription {
          messageType = (<Function>messageType).prototype instanceof Message
             ? (new (<any>messageType)() as Message).type
             : messageType;

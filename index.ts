@@ -9,6 +9,6 @@ export * from './src/store/update';
 export * from './src/store/cursor';
 export * from './src/helpers/helpers';
 export * from './src/helpers/service-locator';
-export * from './src/helpers/dispatcher';
+export * from './src/services/dispatcher';
 export * from './src/decorators/component-state.decorator';
 export * from './src/decorators/inject-store.decorator';

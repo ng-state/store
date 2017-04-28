@@ -17,8 +17,11 @@ throughout your application.
 
 - Developers do not need to rememebr long nested paths to access store
 - Decoples / Hides paths to state from components
+- Immutablity works greate with OnPush change detection strategy
 - Uses Redux like pure functions - actions to interact with state
-- Less boilerplate
+- Uses Redux like messages for comunication between not related components
+- No boilerplate
+- No long nested paths to access store
 
 ### Installation
 Install ng-state from npm:
