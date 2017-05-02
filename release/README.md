@@ -74,7 +74,6 @@ import { TodoModel } from "./todo.model";
 export class TodosStateActions implements HasStore {
 
     store: Store<any>;
-    state: any;
 
     addTodo(item: TodoModel) {
         this.store.update(state => {
@@ -88,7 +87,7 @@ export class TodosStateActions implements HasStore {
         }, false);
     }
 
-    get todosAsync() {
+    get todos() {
         return this.store.map((state) => {
             return state.toArray();
         });
@@ -125,8 +124,6 @@ export const FooInitialState = {
     entities: [],
 };
 ```
-<i>You can also use state instead of store in your actions, but observables are better practice and more common in Angular</i>
-
 Now you can inject state actions by marking component with @ComponentState decorator and inheriting from IComponentState interface.
 Notice that statePath and stateIndex parameters are passed from ```todos``` to ```todo-description``` in order to use relative path in ```todo-description``` state actions.
 
@@ -169,10 +166,10 @@ interface AppState {
   `
 })
 class MyAppComponent {
-  books: Observable<number>;
+  todos: Observable<number>;
 
   constructor(private store: Store<AppState>){
-    this.books = store.select(['todos']);
+    this.todos = store.select(['todos']);
   }
 }
 ```

@@ -1,3 +1,6 @@
+### 2.2.0
+- `state` has been removed due to perfrmance and consistency issues.
+
 ### V.2.0.0
 
 - Renamed 'state' to 'actions' in components to keep consistant with react library version
