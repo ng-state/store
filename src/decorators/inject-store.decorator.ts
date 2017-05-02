@@ -1,5 +1,5 @@
+import { Observable } from 'rxjs/Observable';
 import { ServiceLocator } from '../helpers/service-locator';
-import { StateHistory } from "../state/history";
 import { Store } from '../store/store';
 
 export function InjectStore(newPath: string[] | string | ((currentPath, stateIndex) => string[] | string), intialState?: Object | any) {
@@ -35,11 +35,14 @@ export function InjectStore(newPath: string[] | string | ((currentPath, stateInd
         return transformedPath;
     };
 
-     let getAllGetters = (target: any): string[] => {
+    let getAllGetters = (target: any): any[] => {
         const targetMethods = Reflect.getPrototypeOf(target);
         let methods = (<any>Object).entries((<any>Object).getOwnPropertyDescriptors(targetMethods))
             .map(([key, descriptor]: [string, any]) => {
-                return { name: key, isGetter: typeof descriptor.get === 'function' }
+                return {
+                    name: key,
+                    isGetter: typeof descriptor.get === 'function'
+                };
             })
             .filter(method => method.isGetter)
             .map(method => method.name);
@@ -52,11 +55,12 @@ export function InjectStore(newPath: string[] | string | ((currentPath, stateInd
         getters.forEach(name => {
 
             const tempGetter = instance[name];
-            delete instance[name];
-
-            Object.defineProperty(instance, name, {
-               value:  tempGetter
-            });
+            if (tempGetter instanceof Observable) {
+                delete instance[name];
+                Object.defineProperty(instance, name, {
+                    value: tempGetter
+                });
+            }
         });
     };
 
@@ -78,12 +82,6 @@ export function InjectStore(newPath: string[] | string | ((currentPath, stateInd
             }
 
             instance.store = store.select(statePath);
-
-            Object.defineProperty(instance, 'state', {
-                get: function () {
-                    return StateHistory.CURRENT_STATE.getIn(statePath);
-                }
-            });
 
             convertGettersToProperties(instance);
 
