@@ -9,7 +9,7 @@ class TestStateActions {
 class TargetComponent {
     statePath: string[];
     stateIndex: number | null;
-    state: any;
+    actions: any;
     ngOnInit() { };
 }
 
@@ -40,13 +40,13 @@ describe('ComponentState decorator', () => {
         beforeEach(TestStateActions);
         target.ngOnInit();
         expect(target.statePath[0]).toBe('newStatePath');
-        expect(target.state instanceof TestStateActions).toBeTruthy();
+        expect(target.actions instanceof TestStateActions).toBeTruthy();
     });
 
     it ('should resolve stateActions from anonymous function', () => {
         beforeEach(() => TestStateActions);
         target.ngOnInit();
         expect(target.statePath[0]).toBe('newStatePath');
-        expect(target.state instanceof TestStateActions).toBeTruthy();
+        expect(target.actions instanceof TestStateActions).toBeTruthy();
     });
 });
