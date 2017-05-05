@@ -38,13 +38,9 @@ module.exports = function (config) {
     colors: true,
     logLevel: config.LOG_WARN,
 
-    browsers: ['PhantomJS'],
+    browsers: ['Chrome'],
     browserNoActivityTimeout: 60000,
     customLaunchers: {
-      PhantomDebug: { // used by npm script 'test:watch:phantom'
-        base: 'PhantomJS',
-        debug: true
-      },
       ChromeDebug: { // used by npm script 'test:watch'
         base: 'Chrome',
         flags: ['--remote-debugging-port=9222']
