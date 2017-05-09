@@ -134,7 +134,9 @@ Notice that statePath and stateIndex parameters are passed from ```todos``` to `
   templateUrl: './todos.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TodosComponent implements IComponentStateActions<TodosStateActions> {}
+export class TodosComponent implements IComponentStateActions<TodosStateActions> {
+  actions: TodosStateActions;
+}
 ```
 
 ```html
