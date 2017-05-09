@@ -127,6 +127,16 @@ export const FooInitialState = {
 Now you can inject state actions by marking component with @ComponentState decorator and inheriting from IComponentState interface.
 Notice that statePath and stateIndex parameters are passed from ```todos``` to ```todo-description``` in order to use relative path in ```todo-description``` state actions.
 
+```ts
+@ComponentState(TodosStateActions)
+@Component({
+  selector: 'todos',
+  templateUrl: './todos.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class TodosComponent implements IComponentStateActions<TodosStateActions> {}
+```
+
 ```html
 <tr *ngFor="let todo of actions.todos | async; let i = index;">
   <th scope="row">{{ i + 1 }}</th>
@@ -140,9 +150,13 @@ Notice that statePath and stateIndex parameters are passed from ```todos``` to `
 
 statePath and stateIndex properties are created in decorator and injected into Angular component to avoid boilerplate @Input's.
 
-@ComponentState may take instance of state actions object or anonymous function to select an instance:
+@ComponentState may take state actions object or anonymous function to select an object for creating instance:
 ```ts
-@ComponentState((component: BookPreviewListComponent) => {
+@ComponentState(TodosStateActions)
+
+OR
+
+@ComponentState((component: TodosComponent) => {
   return component.isFromCollection
     ? A_StateActions
     : B_StateActions;
