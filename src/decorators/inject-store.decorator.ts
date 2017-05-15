@@ -90,7 +90,7 @@ export function InjectStore(newPath: string[] | string | ((currentPath, stateInd
     };
 }
 
-export interface HasStore {
-    store: Store<any>;
+export class HasStore<T> {
+    store: Store<T>;
     state?: any;
 }

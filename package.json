@@ -1,15 +1,12 @@
 {
   "name": "ng-state",
-  "version": "2.2.3",
-  "description": "RxJS and ImmutableJs powered nested state managment for Angular2 apps inspired by @ngrx.",
-  "main": "./bundles/store.umd.js",
   "module": "./index.js",
   "scripts": {
     "test": "karma start",
     "test:watch": "karma start --no-single-run --auto-watch --debug --browsers=ChromeDebug",
     "clean:pre": "rimraf release",
     "clean:post": "rimraf \"src/**/*.ngfactory.ts\"",
-    "copy": "cpy LICENSE package.json README.md ng-state-flow.png release",
+    "copy": "cpy LICENSE ./src/package.json README.md ng-state-flow.png release",
     "build:js": "tsc -p tsconfig.dist.json",
     "build:umd": "rollup -c rollup.config.js",
     "build:uglify": "uglifyjs -c --screw-ie8 --comments -o ./release/bundles/store.min.umd.js ./release/bundles/store.umd.js",
@@ -17,24 +14,7 @@
     "postbuild": "npm run clean:post && npm run copy",
     "build": "npm run build:js && npm run build:umd && npm run build:uglify"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ng-state/store.git"
-  },
-  "keywords": [
-    "RxJS",
-    "Angular2",
-    "Immutable Js",
-    "Nested",
-    "State"
-  ],
-  "author": "Vytautas Pranskunas <vytautas.pranskunas@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/ng-state/store/issues"
-  },
-  "homepage": "https://github.com/ng-state/store#readme",
-  "dependencies": {
+  "devDependencies": {
     "@angular/common": "^4.1.0",
     "@angular/core": "^4.1.0",
     "@angular/router": "^4.1.0",
@@ -43,9 +23,8 @@
     "immutable": "^3.8.1",
     "immutable-cursor": "^1.0.2",
     "rxjs": "^5.0.1",
-    "zone.js": "^0.7.2"
-  },
-  "devDependencies": {
+    "zone.js": "^0.7.2",
+
     "@types/es6-shim": "^0.31.32",
     "@types/jasmine": "^2.2.33",
     "@types/node": "^6.0.38",
@@ -67,14 +46,12 @@
     "phantomjs-polyfill": "0.0.2",
     "rimraf": "^2.5.4",
     "rollup": "^0.34.13",
-    "rxjs": "^5.0.0-beta.11",
     "ts-loader": "^2.0.0",
     "tsify": "^3.0.1",
     "tslint": "^3.15.1",
     "tslint-loader": "^2.1.5",
     "typescript": "^2.2.2",
     "uglifyjs": "^2.4.10",
-    "webpack": "^2.2.1",
-    "zone.js": "^0.6.17"
+    "webpack": "^2.2.1"
   }
 }

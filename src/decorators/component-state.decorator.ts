@@ -35,6 +35,7 @@ export function ComponentState(stateActions: any | ((T) => any)) {
     };
 }
 
-export interface IComponentStateActions<T> {
+export class HasStateActions<T> {
     actions: T;
+    statePath: any;
 }
