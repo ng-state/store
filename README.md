@@ -71,10 +71,7 @@ import { Store } from "../../react-state/store/store";
 import { TodoModel } from "./todo.model";
 
 @InjectStore('todos')
-export class TodosStateActions implements HasStore {
-
-    store: Store<any>;
-
+export class TodosStateActions extends HasStore<Immutable<List<any>>> {
     addTodo(item: TodoModel) {
         this.store.update(state => {
             state.push(Immutable.fromJS(item));
@@ -134,8 +131,8 @@ Notice that statePath and stateIndex parameters are passed from ```todos``` to `
   templateUrl: './todos.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TodosComponent implements IComponentStateActions<TodosStateActions> {
-  actions: TodosStateActions;
+export class TodosComponent extends HasStateActions<TodosStateActions> {
+  // actions available here
 }
 ```
 
@@ -203,7 +200,7 @@ class MyAppComponent {
   todos: Observable<number>;
   counterSubscription: Rx.Subscription;
 
-  constructor(private store: Store<AppState>) implements OnDestroy{
+  constructor(private store: Store<AppState>) implements OnDestroy {
     this.counterSubscription = store.select(['todos'])
       .subscribe(state => {
         this.todos = state;
