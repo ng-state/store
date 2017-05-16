@@ -35,7 +35,7 @@ export function ComponentState(stateActions: any | ((T) => any)) {
     };
 }
 
-export class HasStateActions<T> {
-    actions: T;
-    statePath: any;
+export abstract class HasStateActions<T> {
+    actions: T = null;
+    statePath: any = null;
 }
