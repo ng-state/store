@@ -5,11 +5,11 @@
 - Initial state, that is passed to StoreModule, is not longer a function but simple object
 
 ### 2.3.0
-- Introduced classes HasStateActions<T> and HasStore<T> to reduce boilerplate in components and actions. No there is no more need to introduce actions, state and store in each component or store in actions.
+- Introduced classes HasStateActions<T> and HasStore<T> to reduce boilerplate in components and actions. There is no more need to introduce actions, state and store in each component or store in actions.
 
 ```ts
 export class TodoDescription extends HasStateActions<TodoStateActions> {
-    // this.state is available
+    // this.actions is available
 }
 
 export class TodosStateActions extends HasStore<Immutable.List<any>> {
