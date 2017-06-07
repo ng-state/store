@@ -1,19 +1,16 @@
-import { Store } from '../store/store';
 import { Injectable } from '@angular/core';
-import * as Rx from 'rxjs';
+import { Store } from '../store/store';
+import { Subject } from 'rxjs';
 
 @Injectable()
 export class StateHistory {
     static CURRENT_STATE: any = {};
     static HISTORY = [];
+    static collectHistory = true;
+    static storeHistoryItems: number | null = 100;
+    static viewHistory = new Subject<boolean>();
 
-    private static collectHistory;
-    private static _viewHistory = new Rx.Subject<boolean>();
-    private static storeHistoryItems: number | null;
-
-    constructor(private store: Store<any>, collectHistory: boolean, storeHistoryItems: number | null) {
-        StateHistory.collectHistory = collectHistory;
-        StateHistory.storeHistoryItems = storeHistoryItems;
+    constructor(private store: Store<any>) {
     }
 
     init() {
@@ -38,15 +35,11 @@ export class StateHistory {
 
     static showHistory() {
         StateHistory.collectHistory = false;
-        StateHistory._viewHistory.next(true);
+        StateHistory.viewHistory.next(true);
     }
 
     static hideHistory() {
         StateHistory.collectHistory = true;
-        StateHistory._viewHistory.next(false);
-    }
-
-    static get viewHistory(): Rx.Subject<boolean> {
-        return StateHistory._viewHistory;
+        StateHistory.viewHistory.next(false);
     }
 }

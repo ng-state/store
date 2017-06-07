@@ -1,3 +1,9 @@
+### 2.4.0
+- added <strong>readonly</strong> ```stateIndex``` to HasStateActions. This is usefull when you want to edit list item on different route for instance and want to pass list index not via params but via route.
+- Added readonly ```state``` to actions. Now it is up to developer to use observable store or static state. But since it is readonly ```state.set``` and other update methods will not have any effect.
+- Fixed bug compilation error on first startup
+- Initial state, that is passed to StoreModule, is not longer a function but simple object
+
 ### 2.3.0
 - Introduced classes HasStateActions<T> and HasStore<T> to reduce boilerplate in components and actions. No there is no more need to introduce actions, state and store in each component or store in actions.
 

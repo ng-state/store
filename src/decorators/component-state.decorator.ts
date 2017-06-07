@@ -12,6 +12,7 @@ export function ComponentState(stateActions: any | ((T) => any)) {
     return (target: any) => {
 
         let origInit = target.prototype.ngOnInit || (() => { });
+        let origDestroy = target.prototype.ngOnDestroy || (() => { });
         addStateInputs(target);
 
         target.prototype.ngOnInit = function () {
@@ -26,11 +27,16 @@ export function ComponentState(stateActions: any | ((T) => any)) {
                     : stateActions;
 
                 const initState = new extractedStateAction();
-                this.statePath = initState.createStore(initState, this.statePath, this.stateIndex);
+                this.statePath = initState.createStore(this.statePath, this.stateIndex);
                 this.actions = initState;
             }
 
             origInit.apply(this, arguments);
+        };
+
+        target.prototype.ngOnDestroy = function () {
+            this.actions.onDestroy();
+            origDestroy.apply(this, arguments);
         };
     };
 }
@@ -38,4 +44,5 @@ export function ComponentState(stateActions: any | ((T) => any)) {
 export class HasStateActions<T> {
     actions: T;
     statePath: any;
+    readonly stateIndex?: string | number = null;
 }

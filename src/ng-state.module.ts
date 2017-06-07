@@ -1,7 +1,8 @@
-import { Injector, ModuleWithProviders, NgModule, OpaqueToken } from '@angular/core';
+import { Inject, Injector, ModuleWithProviders, NgModule, OpaqueToken } from '@angular/core';
+
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
 import { Dispatcher } from './services/dispatcher';
+import { Router } from '@angular/router';
 import { RouterState } from './state/router-state';
 import { ServiceLocator } from './helpers/service-locator';
 import { State } from './state/state';
@@ -21,8 +22,8 @@ export function storeFactory(state: State<any>) {
     return new Store(state);
 }
 
-export function historyFactory(store: Store<any>, collectHistory, storeHistoryItems) {
-    return new StateHistory(store, collectHistory, storeHistoryItems);
+export function historyFactory(store: Store<any>) {
+    return new StateHistory(store);
 }
 
 export function routerStateFactory(store: Store<any>, router: Router) {
@@ -47,14 +48,22 @@ export class StoreModule {
                 { provide: INITIAL_STATE, useValue: initialState },
                 { provide: State, useFactory: stateFactory, deps: [INITIAL_STATE] },
                 { provide: Store, useFactory: storeFactory, deps: [State] },
-                { provide: StateHistory, useFactory: historyFactory, deps: [Store, COLLECT_HISTORY, STORE_HISTORY_ITEMS] },
+                { provide: StateHistory, useFactory: historyFactory, deps: [Store] },
                 { provide: RouterState, useFactory: routerStateFactory, deps: [Store, Router] },
                 Dispatcher
             ]
         };
     }
 
-    constructor(injector: Injector, stateHistory: StateHistory, routerState: RouterState) {
+    constructor(
+        injector: Injector,
+        stateHistory: StateHistory,
+        routerState: RouterState,
+        @Inject(STORE_HISTORY_ITEMS) storeHistoryItems: any,
+        @Inject(COLLECT_HISTORY) collectHistory: any
+    ) {
+        StateHistory.collectHistory = collectHistory;
+        StateHistory.storeHistoryItems = storeHistoryItems;
         ServiceLocator.injector = injector;
         stateHistory.init();
         routerState.init();

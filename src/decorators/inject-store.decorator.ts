@@ -66,7 +66,7 @@ export function InjectStore(newPath: string[] | string | ((currentPath, stateInd
 
     return (target: any) => {
 
-        target.prototype.createStore = function (instance: any, currentPath?: any[], stateIndex?: (string | number) | (string | number)[]) {
+        target.prototype.createStore = function (currentPath: any[], stateIndex: (string | number) | (string | number)[]) {
             let extractedPath = typeof newPath === 'function' && (<any>newPath).name === ''
                 ? (<any>newPath)(currentPath, stateIndex)
                 : newPath;
@@ -81,16 +81,23 @@ export function InjectStore(newPath: string[] | string | ((currentPath, stateInd
                 store.initialize(statePath, intialState);
             }
 
-            instance.store = store.select(statePath);
+            this.store = store.select(statePath);
+            this.stateChangeSubscription = this.store.subscribe((state: any) => {
+                this.state = state;
+            });
 
-            convertGettersToProperties(instance);
+            convertGettersToProperties(this);
 
             return statePath;
+        };
+
+         target.prototype.onDestroy = function() {
+            this.stateChangeSubscription.unsubscribe();
         };
     };
 }
 
 export class HasStore<T> {
-    store: Store<T>;
-    state?: any;
+    store: Store<T> = null;
+    state?: any = null;
 }
