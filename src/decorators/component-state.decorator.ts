@@ -44,5 +44,5 @@ export function ComponentState(stateActions: any | ((T) => any)) {
 export class HasStateActions<T> {
     actions: T;
     statePath: any;
-    readonly stateIndex?: string | number = null;
+    stateIndex?: string | number = null;
 }

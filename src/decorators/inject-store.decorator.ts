@@ -99,5 +99,5 @@ export function InjectStore(newPath: string[] | string | ((currentPath, stateInd
 
 export class HasStore<T> {
     store: Store<T> = null;
-    state?: any = null;
+    state: any = null;
 }
