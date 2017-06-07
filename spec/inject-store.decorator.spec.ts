@@ -1,5 +1,6 @@
 import { InjectStore } from '../src/decorators/inject-store.decorator';
 import { ServiceLocator } from './../src/helpers/service-locator';
+import { Subject } from 'rxjs';
 
 class TestStateActions {
     store: any;
@@ -13,7 +14,7 @@ class TestStateActions {
 
 const store = {
     initialize: (statePath, intialState) => { },
-    select: (statePath: string[]) => 'store'
+    select: (statePath: string[]) => new Subject()
 };
 
 ServiceLocator.injector = <any>{
@@ -32,7 +33,7 @@ describe('InjectStore decorator', () => {
 
     it('should resolve state path from anonymous function', () => {
         setup((currentPath, stateIndex) => 'new path');
-        const newPath = target.createStore(componentInstance);
+        const newPath = target.createStore();
 
         expect(newPath.length).toEqual(1);
         expect(newPath[0]).toBe('new path');
@@ -40,7 +41,7 @@ describe('InjectStore decorator', () => {
 
     it('should extract absolute path', () => {
         setup('new/${stateIndex}/path/${stateIndex}');
-        const newPath = target.createStore(componentInstance, null, [1, 2]);
+        const newPath = target.createStore(null, [1, 2]);
 
         expect(newPath.length).toEqual(4);
         expect(newPath[0]).toBe('new');
@@ -51,7 +52,7 @@ describe('InjectStore decorator', () => {
 
     it('should extract relative path', () => {
         setup(['test', '${stateIndex}', 'path']);
-        const newPath = target.createStore(componentInstance, ['parent'], 1);
+        const newPath = target.createStore(['parent'], 1);
 
         expect(newPath.length).toEqual(4);
         expect(newPath[0]).toBe('parent');
@@ -63,26 +64,26 @@ describe('InjectStore decorator', () => {
     it('should create store', () => {
         spyOn(ServiceLocator.injector, 'get').and.callThrough();
         setup(['test', '${stateIndex}', 'path']);
-        target.createStore(componentInstance, ['parent'], 1);
+        target.createStore(['parent'], 1);
 
         expect(ServiceLocator.injector.get).toHaveBeenCalled();
-        expect((<any>componentInstance).store).toBeDefined();
+        expect(target.store).toBeDefined();
     });
 
     it('should initialize store with initial values if provided', () => {
         setup(['test', '${stateIndex}', 'path'], { test: 'test' });
         target.store = store;
-        spyOn(target.store, 'initialize');
+        spyOn(store, 'initialize');
 
-        target.createStore(componentInstance, ['parent'], 1);
+        target.createStore(['parent'], 1);
 
-        expect(target.store.initialize).toHaveBeenCalled();
+        expect(store.initialize).toHaveBeenCalled();
     });
 
     it('should convert getters to properties', () => {
         setup((currentPath, stateIndex) => 'new path');
         componentInstance = target;
-        const newPath = target.createStore(componentInstance);
+        const newPath = target.createStore();
 
         expect(typeof (<any>componentInstance).isOpened).toEqual('boolean');
     });

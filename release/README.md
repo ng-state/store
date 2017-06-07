@@ -54,11 +54,12 @@ export class AppModule {}
 ```
 
 ```ts
-export function initialState() {
-  return {
-    todos: []
-  };
-}
+let initialState = {
+  todos: [],
+  interpolationTest: 'initial'
+};
+
+export { initialState };
 ```
 
 Then create actions for each component state by decorating class with @InjectStore decorator and HasStore inheritance.
@@ -88,6 +89,12 @@ export class TodosStateActions extends HasStore<Immutable<List<any>>> {
         return this.store.map((state) => {
             return state.toArray();
         });
+    }
+
+    /// OR
+
+    get todos() {
+      return this.state.toArray();
     }
 }
 ```
@@ -212,6 +219,22 @@ class MyAppComponent {
   }
 }
 ```
+
+### When item details on different page
+There can be situation when list item is on page and its details on another. So question is how to deal with ```stateIndex```. For this case you can pass list item index along with url params
+```html
+<a href="#" [routerLink]="['/dictionaries', i]" class="card-link">Go To Values</a>
+```
+and on target component catch it and assign to stateIndex
+```ts
+constructor(private route: ActivatedRoute, private router: Router) {
+    super();
+    this.route.params.subscribe((params: Params) => {
+      this.stateIndex = params.id;
+    });
+  }
+```
+and it will be passed to actions automatically.
 
 ### Dispatcher
 There are cases when states of not related components, which has different places in state tree, should change e.g: when list item is selected filter should collapse. This is where dispatcher kicks in. Dispatcher is design to send and receive messages between components.
