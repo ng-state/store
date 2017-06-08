@@ -31,14 +31,14 @@ export function routerStateFactory(store: Store<any>, router: Router) {
 }
 
 @NgModule({
-    imports: [ CommonModule ],
-    declarations: [ StateHistoryComponent ],
-    exports: [ StateHistoryComponent ]
+    imports: [CommonModule],
+    declarations: [StateHistoryComponent],
+    exports: [StateHistoryComponent]
 })
 export class StoreModule {
     static provideStore(initialState: any,
-        collectHistory: boolean = true,
-        storeHistoryItems: number = 100
+        collectHistory?: boolean,
+        storeHistoryItems?: number
     ): ModuleWithProviders {
         return {
             ngModule: StoreModule,
@@ -62,8 +62,14 @@ export class StoreModule {
         @Inject(STORE_HISTORY_ITEMS) storeHistoryItems: any,
         @Inject(COLLECT_HISTORY) collectHistory: any
     ) {
-        StateHistory.collectHistory = collectHistory;
-        StateHistory.storeHistoryItems = storeHistoryItems;
+        if (storeHistoryItems !== undefined) {
+            StateHistory.collectHistory = collectHistory;
+        }
+
+        if (collectHistory !== undefined) {
+            StateHistory.storeHistoryItems = storeHistoryItems;
+        }
+
         ServiceLocator.injector = injector;
         stateHistory.init();
         routerState.init();
