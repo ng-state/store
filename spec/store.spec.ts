@@ -8,7 +8,7 @@ describe('Store tests', () => {
     beforeEach(() => {
         const state = stateFactory(() => { return { layout: { test: 'test' } }; });
         store = storeFactory(state);
-        const history = historyFactory(store, true, 100);
+        const history = historyFactory(store);
         history.init();
     });
 
