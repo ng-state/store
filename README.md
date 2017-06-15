@@ -3,6 +3,25 @@ RxJS and ImmutableJs powered nested state management for Angular 2 applications 
 
 [![npm version](https://badge.fury.io/js/ng-state.svg)](https://badge.fury.io/js/ng-state)
 
+# Table of Contents
+1. [Introduction](#introduction)
+2. [Main differences](#differences)
+3. [Installation](#installation)
+4. [Examples](#examples)
+5. [Main idea](#main-idea)
+6. [Configuration](#configuration)
+7. [Inject store decorator](#inject-store)
+8. [Wiring things together](#together)
+9. [Subscribe stright to store](#subscribe-to-store)
+10. [When item details on different page](#details-on-different-page)
+11. [Dispatcher](#dispatcher)
+12. [Time travel](#time-travel)
+13. [Flow diagram](#flow)
+14. [Contributing](#contributing)
+
+## Introduction
+<a name="introduction"></a>
+
 ng-state is a controlled nested state container designed to help write performant, consistent applications
 on top of Angular 2. Core tenets:
 - State is a single immutable data structure
@@ -13,30 +32,33 @@ These core principles enable building components that can use the `OnPush` chang
 giving you [intelligent, performant change detection](http://blog.thoughtram.io/angular/2016/02/22/angular-2-change-detection-explained.html#smarter-change-detection)
 throughout your application.
 
-### Main differences from other RxJs store based state managements solutions
+## Main differences from other RxJs store based state managements solutions
+<a name="differences"></a>
 
 - Developers do not need to rememebr long nested paths to access store
 - Decoples / Hides paths to state from components
 - Uses Redux like pure functions - actions to interact with state
 - Less boilerplate
 
-### Installation
+## Installation
+<a name="installation"></a>
 Install ng-state from npm:
 ```bash
 npm install ng-state --save
 ```
 
-### Examples
+## Examples
+<a name="examples"></a>
 - [Official ng-state/example-app](https://github.com/ng-state/example-app) is an officially maintained example application showcasing possibilities of @ng-state
 
 
 ## Main idea
-
+<a name="main-idea"></a>
 In order to work with peace of state, current state path (statePath) and current lits item index (stateIndex) is passed down to child components and are received in state actions.
 Or absolute pats are set in state actions. (see explanation image at the bottom)
 
-### Configuration
-
+## Configuration
+<a name="configuration"></a>
 In your app's main module, register store with initial state by using `StoreModule.provideStore(initialState)`
 ( where initialState is imported function returing plain object ) function to provide them to Angular's injector:
 
@@ -101,7 +123,10 @@ export class TodosStateActions extends HasStore<Immutable<List<any>>> {
 
 <i>Be aware that from version 1.2.5 simple getters are converted to properties to get better performance by reducing calls to functions.</i>
 
-### InjectStore first parameter is path:
+## InjectStore decorator
+<a name="inject-store"></a>
+
+### first parameter is path
 - if added between single quotes '' it counts as absolute path
 - if added in array [], final path will be merrged with path passed from parent ([statePath]="statePath"):
 ```['b'] -> ['a', 'b']```
@@ -120,7 +145,7 @@ export class TodosStateActions extends HasStore<Immutable<List<any>>> {
 })
 ```
 
-### InjectStore second parameter is initial state:
+### second parameter is initial state:
 this is optional parameter and can add default state for that path
 ```ts
 export const FooInitialState = {
@@ -128,6 +153,10 @@ export const FooInitialState = {
     entities: [],
 };
 ```
+
+## Wiring things together
+<a name="together"></a>
+
 Now you can inject state actions by marking component with @ComponentState decorator and inheriting from IComponentState interface.
 Notice that statePath and stateIndex parameters are passed from ```todos``` to ```todo-description``` in order to use relative path in ```todo-description``` state actions.
 
@@ -194,6 +223,8 @@ class MyAppComponent {
 }
 ```
 
+## Subscribe stright to store
+<a name="subscribe-to-store"></a>
 also you can avoid having async pipe by subscribing to state change. But then you will be responsible for subscription management. Hence it is recommended to leave this for Angular.
 
 ```ts
@@ -220,7 +251,9 @@ class MyAppComponent {
 }
 ```
 
-### When item details on different page
+## When item details on different page
+<a name="details-on-different-page"></a>
+
 There can be situation when list item is on page and its details on another. So question is how to deal with ```stateIndex```. For this case you can pass list item index along with url params
 ```html
 <a href="#" [routerLink]="['/dictionaries', i]" class="card-link">Go To Values</a>
@@ -236,7 +269,9 @@ constructor(private route: ActivatedRoute, private router: Router) {
 ```
 and it will be passed to actions automatically.
 
-### Dispatcher
+## Dispatcher
+<a name="dispatcher"></a>
+
 There are cases when states of not related components, which has different places in state tree, should change e.g: when list item is selected filter should collapse. This is where dispatcher kicks in. Dispatcher is design to send and receive messages between components.
 
 ```ts
@@ -266,7 +301,8 @@ dispatcher.subscribe('UPDATE_MESSAGE', (payload: any) => {
 dispatcher.publish('UPDATE_MESSAGE', 'payload');
 ```
 
-### Time travel
+## Time travel
+<a name="time-travel"></a>
 
 @ng-state allows you to time travel. To enable this you have to add StateHistoryComponent to your app file
 
@@ -280,9 +316,10 @@ You can also view current state in ```window.state.CURRENT_STATE``` and whole hi
 History collecting can be disabled by passing ```false``` to ```StoreModule.provideStore``` second parameter.
 By default 100 history steps are stored in memory but it can be modified by passing third parameter to ```StoreModule.provideStore```.
 
-### Here is basic flow with code side-by-side explained:
-
+## Flow diagram
+<a name="flow"></a>
 ![flow](/ng-state-flow.png)
 
 ## Contributing
+<a name="contributing"></a>
 Please read [contributing guidelines here](https://github.com/ng-state/store/blob/master/CONTRIBUTING.md).
