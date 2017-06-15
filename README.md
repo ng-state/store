@@ -10,7 +10,7 @@ RxJS and ImmutableJs powered nested state management for Angular 2 applications 
 4. [Examples](#examples)
 5. [Main idea](#main-idea)
 6. [Configuration](#configuration)
-7. [Inject store decorator](#inject-store)
+7. [InjectStore decorator](#inject-store)
 8. [Wiring things together](#together)
 9. [Subscribe stright to store](#subscribe-to-store)
 10. [When item details on different page](#details-on-different-page)
