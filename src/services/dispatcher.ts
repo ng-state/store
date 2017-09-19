@@ -9,7 +9,7 @@ export class Message {
 
 @Injectable()
 export class Dispatcher {
-    private subject = new Subject<Message>();
+    private subject = new Subject<any>();
 
     get observable(): Observable<Message> {
         return this.subject.asObservable();

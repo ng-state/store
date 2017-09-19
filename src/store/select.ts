@@ -20,5 +20,5 @@ export class Select {
 }
 
 export interface SelectSignature {
-  <R>(path: string[]): Observable<R>;
+  (path: string[]): Observable<any>;
 }

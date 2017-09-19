@@ -10,7 +10,7 @@ export class Store<T> extends Rx.Observable<T> implements Rx.Observer<any> {
         this.source = state;
     }
 
-    select: SelectSignature = (statePath: any): Store<T> => {
+    select: SelectSignature = (statePath: string[]): Store<T> => {
         let selectStore = Select.bind(this).call(this, statePath);
         (<any>selectStore).statePath = statePath;
         return selectStore;

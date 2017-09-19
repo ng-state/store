@@ -13,6 +13,7 @@ import { Store } from './store/store';
 export const INITIAL_STATE = new OpaqueToken('INITIAL_STATE');
 export const COLLECT_HISTORY = new OpaqueToken('COLLECT_HISTORY');
 export const STORE_HISTORY_ITEMS = new OpaqueToken('STORE_HISTORY_ITEMS');
+export const DISABLE_WARNINGS = new OpaqueToken('DISABLE_WARNING');
 
 export function stateFactory(initialState) {
     return new State(initialState);
@@ -37,6 +38,7 @@ export function routerStateFactory(store: Store<any>, router: Router) {
 })
 export class StoreModule {
     static provideStore(initialState: any,
+        disableWarnings: boolean = false,
         collectHistory?: boolean,
         storeHistoryItems?: number
     ): ModuleWithProviders {
@@ -46,6 +48,7 @@ export class StoreModule {
                 { provide: STORE_HISTORY_ITEMS, useValue: storeHistoryItems },
                 { provide: COLLECT_HISTORY, useValue: collectHistory },
                 { provide: INITIAL_STATE, useValue: initialState },
+                { provide: DISABLE_WARNINGS, useValue: disableWarnings },
                 { provide: State, useFactory: stateFactory, deps: [INITIAL_STATE] },
                 { provide: Store, useFactory: storeFactory, deps: [State] },
                 { provide: StateHistory, useFactory: historyFactory, deps: [Store] },

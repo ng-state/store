@@ -10,6 +10,13 @@ export class StateHistory {
     static storeHistoryItems: number | null = 100;
     static viewHistory = new Subject<boolean>();
 
+    private static debugMode = false;
+    private static debugStatePath;
+
+    get currentState(): any {
+        return StateHistory.CURRENT_STATE;
+    }
+
     constructor(private store: Store<any>) {
     }
 
@@ -31,6 +38,10 @@ export class StateHistory {
         };
 
         StateHistory.HISTORY.push(state);
+
+        if (StateHistory.debugMode) {
+            console.info((state.getIn(StateHistory.debugStatePath) || state).toJS());
+        }
     }
 
     static showHistory() {
@@ -41,5 +52,14 @@ export class StateHistory {
     static hideHistory() {
         StateHistory.collectHistory = true;
         StateHistory.viewHistory.next(false);
+    }
+
+    static startDebugging(statePath?: any[]) {
+        StateHistory.debugStatePath = statePath;
+        StateHistory.debugMode = true;
+    }
+
+    static stopDebugging() {
+        StateHistory.debugMode = false;
     }
 }
