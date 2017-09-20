@@ -1,3 +1,10 @@
+### 2.5.0
+- added posbiity to return state from actions without store ```get todos() { return this.state.get('todos'); }```. Because of this functionality all components that extend ```HasStateActions``` should pass ```ChangeDetecotrRef``` to its constructor. Otherways only store has to be used in actions. State update should be still done through store.update.
+- if component extends ```HasStateActions``` but does not have constructor and do not pass ```ChangeDetecotrRef``` warning will be shown in console. To suppress it new variable ```disableWarnings``` was added to ```StoreModule```
+- debuging was simplyfied. Added ```startDebugging``` and ```stopDebugging``` methods to window.state. ```startDebugging``` takes optional array parameter ```statePath``` to watch over some state part.
+Also additional param ```debug = true / false``` was added to InjectStore decorator. When set to ```true``` console will show state part of the component that uses those actions.
+- ```currentState``` getter was added to injectable ```StateHistory``` to avoid using ```window.state.CURRENT_STATE``` in code
+
 ### 2.4.0
 - added <strong>readonly</strong> ```stateIndex``` to HasStateActions. This is usefull when you want to edit list item on different route for instance and want to pass list index not via params but via route.
 - Added readonly ```state``` to actions. Now it is up to developer to use observable store or static state. But since it is readonly ```state.set``` and other update methods will not have any effect.

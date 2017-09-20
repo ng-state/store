@@ -312,6 +312,8 @@ It is easy to debug latest state changes. Just write in console ```window.state.
 
 To stop debug mode simply call ```window.state.stopDebugging()```
 
+Another way to debug is to add third parameter ```true``` on you InjectStore decorator. Console will start to show component state that uses those actions.
+
 ## Time travel
 <a name="time-travel"></a>
 

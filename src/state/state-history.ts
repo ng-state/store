@@ -10,7 +10,7 @@ import { Store } from '../store/store';
     selector: 'state-history',
     template: `
     <div class="history-holder" *ngIf="showHistory">
-        <div class="history-item" *ngFor="let item of items; let i = index;" (mouseover)="applyState(i)"></div>
+        <div class="history-item" *ngFor="let item of items; let i = index; trackBy: trackBy;" (mouseover)="applyState(i)"></div>
     </div>`,
     styles: [`
         .history-holder {
@@ -86,5 +86,9 @@ export class StateHistoryComponent implements OnInit, OnDestroy {
                     state.merge(this.items[index]);
                 });
         });
+    }
+
+    trackBy(item, index) {
+        return index;
     }
 }

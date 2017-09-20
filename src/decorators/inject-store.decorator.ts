@@ -1,8 +1,9 @@
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+// import { Observable } from 'rxjs/Observable';
 import { ServiceLocator } from '../helpers/service-locator';
 import { Store } from '../store/store';
 
-export function InjectStore(newPath: string[] | string | ((currentPath, stateIndex) => string[] | string), intialState?: Object | any) {
+export function InjectStore(newPath: string[] | string | ((currentPath, stateIndex) => string[] | string), intialState: Object | any = null, debug: boolean = false) {
     let getStatePath = (currentPath, stateIndex, extractedPath) => {
 
         let transformedPath = (<string[]>extractedPath).map(item => {
@@ -66,7 +67,7 @@ export function InjectStore(newPath: string[] | string | ((currentPath, stateInd
 
     return (target: any) => {
 
-        target.prototype.createStore = function (currentPath: any[], stateIndex: (string | number) | (string | number)[]) {
+        target.prototype.createStore = function (currentPath: any[], stateIndex: (string | number) | (string | number)[], markForCheck: () => void) {
             let extractedPath = typeof newPath === 'function' && (<any>newPath).name === ''
                 ? (<any>newPath)(currentPath, stateIndex)
                 : newPath;
@@ -75,7 +76,7 @@ export function InjectStore(newPath: string[] | string | ((currentPath, stateInd
                 ? getAbsoluteStatePath(stateIndex, extractedPath)
                 : getStatePath(currentPath, stateIndex, extractedPath);
 
-            const store = ServiceLocator.injector.get(Store);
+            const store = ServiceLocator.injector.get(Store) as Store<any>;
 
             if (intialState) {
                 store.initialize(statePath, intialState);
@@ -84,6 +85,11 @@ export function InjectStore(newPath: string[] | string | ((currentPath, stateInd
             this.store = store.select(statePath);
             this.stateChangeSubscription = this.store.subscribe((state: any) => {
                 this.state = state;
+                markForCheck();
+
+                if (debug && state.toJS) {
+                    console.info(state.toJS());
+                }
             });
 
             convertGettersToProperties(this);
@@ -91,7 +97,7 @@ export function InjectStore(newPath: string[] | string | ((currentPath, stateInd
             return statePath;
         };
 
-         target.prototype.onDestroy = function() {
+        target.prototype.onDestroy = function () {
             this.stateChangeSubscription.unsubscribe();
         };
     };
@@ -99,5 +105,5 @@ export function InjectStore(newPath: string[] | string | ((currentPath, stateInd
 
 export class HasStore<T> {
     store: Store<T> = null;
-    state: any = null;
+    state?: any = null;
 }

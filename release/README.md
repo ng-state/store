@@ -10,14 +10,15 @@ RxJS and ImmutableJs powered nested state management for Angular 2 applications 
 4. [Examples](#examples)
 5. [Main idea](#main-idea)
 6. [Configuration](#configuration)
-7. [Inject store decorator](#inject-store)
+7. [InjectStore decorator](#inject-store)
 8. [Wiring things together](#together)
 9. [Subscribe stright to store](#subscribe-to-store)
 10. [When item details on different page](#details-on-different-page)
 11. [Dispatcher](#dispatcher)
-12. [Time travel](#time-travel)
-13. [Flow diagram](#flow)
-14. [Contributing](#contributing)
+12. [Debuging](#debugging)
+13. [Time travel](#time-travel)
+14. [Flow diagram](#flow)
+15. [Contributing](#contributing)
 
 ## Introduction
 <a name="introduction"></a>
@@ -120,8 +121,9 @@ export class TodosStateActions extends HasStore<Immutable<List<any>>> {
     }
 }
 ```
+<i>To reflect data in component retrieved stright from ```this.state``` you need to pass ```ChengeDetectorRef``` to ```HasStateActions``` class which is extended by components.</i>
 
-<i>Be aware that from version 1.2.5 simple getters are converted to properties to get better performance by reducing calls to functions.</i>
+<i>Be aware that from version 1.2.5 simple getters that returns Observable are converted to properties to get better performance by reducing calls to functions.</i>
 
 ## InjectStore decorator
 <a name="inject-store"></a>
@@ -168,6 +170,9 @@ Notice that statePath and stateIndex parameters are passed from ```todos``` to `
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TodosComponent extends HasStateActions<TodosStateActions> {
+  constructor(cd: ChangeDetectorRef){
+    super(cd)
+  }
   // actions available here
 }
 ```
@@ -300,6 +305,14 @@ dispatcher.subscribe('UPDATE_MESSAGE', (payload: any) => {
 /* Child B */
 dispatcher.publish('UPDATE_MESSAGE', 'payload');
 ```
+
+## Debuging
+<a name="debugging"></a>
+It is easy to debug latest state changes. Just write in console ```window.state.startDebugging()``` and latest state will be printed in console each time it changes. Usually developers need to debug some deeply nested state and it is anoying to enter path each time. For this reason you can pass state path to ```window.state.startDebugging(['todos', 0])``` and only changes of this peace will be reflected.
+
+To stop debug mode simply call ```window.state.stopDebugging()```
+
+Another way to debug is to add third parameter ```true``` on you InjectStore decorator. Console will start to show component state that uses those actions.
 
 ## Time travel
 <a name="time-travel"></a>

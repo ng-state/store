@@ -11,7 +11,7 @@ export class StateHistory {
     static viewHistory = new Subject<boolean>();
 
     private static debugMode = false;
-    private static debugStatePath;
+    private static debugStatePath = null;
 
     get currentState(): any {
         return StateHistory.CURRENT_STATE;
@@ -40,7 +40,7 @@ export class StateHistory {
         StateHistory.HISTORY.push(state);
 
         if (StateHistory.debugMode) {
-            console.info((state.getIn(StateHistory.debugStatePath) || state).toJS());
+            console.info((StateHistory.debugStatePath && state.getIn(StateHistory.debugStatePath) || state).toJS());
         }
     }
 
