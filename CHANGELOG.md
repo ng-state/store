@@ -4,12 +4,10 @@
 - when isProd all manipulations with state from ```window``` object are not allowed.
 - simplified initial state declaration from function to simple object:
 ```ts
-let initialState = {
+export const initialState = {
   todos: [],
   interpolationTest: 'initial'
 };
-
-export { initialState };
 ```
 
 ### 2.5.0
