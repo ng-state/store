@@ -39,11 +39,15 @@ export class StateHistoryComponent implements OnInit, OnDestroy {
     viewistorySubscription: Rx.Subscription;
     items;
 
-    constructor(private store: Store<any>, private router: Router, private cd: ChangeDetectorRef, private zone: NgZone) {
+    constructor(
+        private store: Store<any>,
+        private router: Router,
+        private cd: ChangeDetectorRef,
+        private zone: NgZone) {
     }
 
     ngOnInit() {
-        this.viewistorySubscription = (<any>window).state.viewHistory
+        this.viewistorySubscription = StateHistory.viewHistory
             .subscribe(value => {
                 this.showHistory = value;
 

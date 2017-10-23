@@ -1,3 +1,4 @@
+import { ClearSignature, Clear } from './clear';
 import { Select, SelectSignature } from './select';
 import { Update, UpdateSignature } from './update';
 import { Initialize, InitializeSignature } from './initialize';
@@ -18,6 +19,7 @@ export class Store<T> extends Rx.Observable<T> implements Rx.Observer<any> {
 
     update: UpdateSignature<T> = Update.bind(this);
     initialize: InitializeSignature<T> = Initialize.bind(this);
+    clear: ClearSignature = Clear.bind(this);
 
     lift<R>(operator: Rx.Operator<T, R>): Store<R> {
         const store = new Store<R>(this);

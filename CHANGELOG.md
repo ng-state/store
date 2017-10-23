@@ -1,3 +1,17 @@
+### 2.6.0
+- store.clear() added
+- disableWarnings renamed to isProd
+- when isProd all manipulations with state from ```window``` object are not allowed.
+- simplified initial state declaration from function to simple object:
+```ts
+let initialState = {
+  todos: [],
+  interpolationTest: 'initial'
+};
+
+export { initialState };
+```
+
 ### 2.5.0
 - added posbiity to return state from actions without store ```get todos() { return this.state.get('todos'); }```. Because of this functionality all components that extend ```HasStateActions``` should pass ```ChangeDetecotrRef``` to its constructor. Otherways only store has to be used in actions. State update should be still done through store.update.
 - if component extends ```HasStateActions``` but does not have constructor and do not pass ```ChangeDetecotrRef``` warning will be shown in console. To suppress it new variable ```disableWarnings``` was added to ```StoreModule```

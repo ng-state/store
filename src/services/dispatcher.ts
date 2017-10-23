@@ -32,7 +32,7 @@ export class Dispatcher {
     subscribe(message: Message, observerOrNext: (payload: any) => void, error?: (error: any) => void, complete?: () => void): Subscription;
     subscribe(messageType: string, observerOrNext: (payload: any) => void, error?: (error: any) => void, complete?: () => void): Subscription;
     subscribe(messageType: string | Message, observerOrNext: (payload: any) => void, error?: (error: any) => void, complete?: () => void): Subscription {
-         messageType = (<Function>messageType).prototype instanceof Message
+        messageType = (<Function>messageType).prototype instanceof Message
             ? (new (<any>messageType)() as Message).type
             : messageType;
 

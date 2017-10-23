@@ -6,9 +6,10 @@ describe('Store tests', () => {
     let store: Store<any>;
 
     beforeEach(() => {
-        const state = stateFactory(() => { return { layout: { test: 'test' } }; });
+        const initialState = { layout: { test: 'test' } };
+        const state = stateFactory(initialState);
         store = storeFactory(state);
-        const history = historyFactory(store);
+        const history = historyFactory(store, initialState);
         history.init();
     });
 
@@ -20,7 +21,7 @@ describe('Store tests', () => {
     });
 
     it('should update state', () => {
-        (<Store<any>>store.select(['layout'])).update(state => state.set('loading', true));
+        store.select(['layout']).update(state => state.set('loading', true));
 
         expect(StateHistory.CURRENT_STATE.getIn(['layout', 'loading'])).toEqual(true);
     });
@@ -32,5 +33,16 @@ describe('Store tests', () => {
                 expect(state.get('test')).toBeTruthy();
                 done();
             });
+    });
+
+    it('should clear state', () => {
+        store.initialize(['router'], { url: 'home' }, false);
+        store.select(['layout']).update(state => state.set('loading', true));
+        expect(StateHistory.CURRENT_STATE.getIn(['layout', 'loading'])).toEqual(true);
+
+        store.clear();
+        expect(StateHistory.CURRENT_STATE.getIn(['layout', 'test'])).toEqual('test');
+        expect(StateHistory.CURRENT_STATE.getIn(['layout', 'loading'])).not.toBeDefined();
+        expect(StateHistory.CURRENT_STATE.getIn(['router', 'url'])).toBe('');
     });
 });
