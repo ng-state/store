@@ -9,8 +9,8 @@ describe('Store tests', () => {
         const initialState = { layout: { test: 'test' } };
         const state = stateFactory(initialState);
         store = storeFactory(state);
-        const history = historyFactory(store, initialState);
-        history.init();
+        const history = historyFactory(store);
+        history.init(initialState);
     });
 
     it('should initialize state with initial value', () => {

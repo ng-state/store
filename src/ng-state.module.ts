@@ -23,8 +23,8 @@ export function storeFactory(state: State<any>) {
     return new Store(state);
 }
 
-export function historyFactory(store: Store<any>, initialState: any) {
-    return new StateHistory(store, initialState);
+export function historyFactory(store: Store<any>) {
+    return new StateHistory(store);
 }
 
 export function routerStateFactory(store: Store<any>, router: Router) {
@@ -62,6 +62,7 @@ export class StoreModule {
         injector: Injector,
         stateHistory: StateHistory,
         routerState: RouterState,
+        @Inject(INITIAL_STATE) initialState: any,
         @Inject(STORE_HISTORY_ITEMS) storeHistoryItems: any,
         @Inject(COLLECT_HISTORY) collectHistory: any,
         @Inject(IS_PROD) isProd: any
@@ -75,7 +76,7 @@ export class StoreModule {
         }
 
         ServiceLocator.injector = injector;
-        stateHistory.init();
+        stateHistory.init(initialState);
         routerState.init();
 
         if (!isProd) {

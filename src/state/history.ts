@@ -9,7 +9,7 @@ export class StateHistory {
     static collectHistory = true;
     static storeHistoryItems: number | null = 100;
     static viewHistory = new Subject<boolean>();
-    static initialState;
+    static initialState = {};
 
     private static debugMode = false;
     private static debugStatePath = null;
@@ -18,11 +18,11 @@ export class StateHistory {
         return StateHistory.CURRENT_STATE;
     }
 
-    constructor(private store: Store<any>, initialState: any) {
-        StateHistory.initialState = initialState;
+    constructor(private store: Store<any>) {
     }
 
-    init() {
+    init(initialState: any) {
+        StateHistory.initialState = initialState;
         this.store.subscribe(state => {
             this.add(state);
         });

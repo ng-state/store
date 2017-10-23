@@ -16,9 +16,10 @@ RxJS and ImmutableJs powered nested state management for Angular 2 applications 
 10. [When item details on different page](#details-on-different-page)
 11. [Dispatcher](#dispatcher)
 12. [Debuging](#debugging)
-13. [Time travel](#time-travel)
-14. [Flow diagram](#flow)
-15. [Contributing](#contributing)
+13. [IsProd](#isprod)
+14. [Time travel](#time-travel)
+15. [Flow diagram](#flow)
+16. [Contributing](#contributing)
 
 ## Introduction
 <a name="introduction"></a>
@@ -313,6 +314,15 @@ It is easy to debug latest state changes. Just write in console ```window.state.
 To stop debug mode simply call ```window.state.stopDebugging()```
 
 Another way to debug is to add third parameter ```true``` on you InjectStore decorator. Console will start to show component state that uses those actions.
+
+## Production
+<a name="isprod"></a>
+From version 2.6 boolean flag can be passed to StoreModule.forRoot method. When production is enabled:
+- All manipulations with state from ```window``` object are not allowed
+- State is disconnected from ```window``` object
+- Warnings are disabled
+
+However for custom manipulations state and its manipulations can be accessed from injected StateHistory service.
 
 ## Time travel
 <a name="time-travel"></a>
