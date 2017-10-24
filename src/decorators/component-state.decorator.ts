@@ -1,22 +1,12 @@
+import { Input, ChangeDetectorRef } from '@angular/core';
 import { ServiceLocator } from './../helpers/service-locator';
-import { ChangeDetectorRef } from '@angular/core';
 import { IS_PROD } from '../ng-state.module';
 export function ComponentState(stateActions: any | ((T) => any)) {
-
-    let addStateInputs = function (target) {
-        const metadata = (<any>Reflect).getOwnMetadata('annotations', target)[0];
-        if (!metadata.inputs) {
-            metadata.inputs = [];
-        }
-        metadata.inputs.push('statePath');
-        metadata.inputs.push('stateIndex');
-    };
 
     return (target: any) => {
 
         let origInit = target.prototype.ngOnInit || (() => { });
         let origDestroy = target.prototype.ngOnDestroy || (() => { });
-        addStateInputs(target);
 
         target.prototype.ngOnInit = function () {
             const disableWarnings = ServiceLocator.injector.get(IS_PROD);
@@ -53,9 +43,10 @@ export function ComponentState(stateActions: any | ((T) => any)) {
 }
 
 export class HasStateActions<T> {
+    @Input() statePath: any;
+    @Input() stateIndex?: string | number = null;
+
     readonly actions: T;
-    readonly statePath: any;
-    readonly stateIndex?: string | number = null;
     readonly cd: ChangeDetectorRef;
 
     constructor(cd: ChangeDetectorRef) {

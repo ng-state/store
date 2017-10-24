@@ -1,3 +1,6 @@
+### 2.6.1
+- AOT fixes
+
 ### 2.6.0
 - store.clear() added
 - disableWarnings renamed to isProd

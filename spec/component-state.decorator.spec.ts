@@ -23,19 +23,6 @@ describe('ComponentState decorator', () => {
         target = new TargetComponent();
     };
 
-    it('should add statePath and stateIndex property Angular annotations', () => {
-        beforeEach(TestStateActions);
-        const metadata = (<any>Reflect).getOwnMetadata('annotations', TargetComponent)[0];
-        expect(metadata.inputs[0]).toEqual('statePath');
-        expect(metadata.inputs[1]).toEqual('stateIndex');
-    });
-
-    it('should initialize statePath if not set', () => {
-        beforeEach();
-        target.ngOnInit();
-        expect(target.statePath.length).toBe(1);
-    });
-
     it ('should resolve stateActions', () => {
         beforeEach(TestStateActions);
         target.ngOnInit();

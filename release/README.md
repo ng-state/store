@@ -62,7 +62,7 @@ Or absolute pats are set in state actions. (see explanation image at the bottom)
 ## Configuration
 <a name="configuration"></a>
 In your app's main module, register store with initial state by using `StoreModule.provideStore(initialState)`
-( where initialState is imported function returing plain object ) function to provide them to Angular's injector:
+( where initialState is simple object ) function to provide it to Angular's injector:
 
 ```ts
 import { NgModule } from '@angular/core'
