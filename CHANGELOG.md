@@ -1,3 +1,10 @@
+### 2.7.0
+- Upgraded to Angular 5.0.0
+- Upgraded RxJs to ^5.5.0
+- Upgraded Zone.js to ^0.8.18
+- Upgraded immutable-cursor to ^2.0.0
+- Upgraded core-js Angular ^2.5.0
+
 ### 2.6.1
 - AOT fixes
 

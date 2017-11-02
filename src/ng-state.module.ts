@@ -1,5 +1,4 @@
-import { Inject, Injector, ModuleWithProviders, NgModule, OpaqueToken } from '@angular/core';
-
+import { Inject, Injector, ModuleWithProviders, NgModule, InjectionToken } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Dispatcher } from './services/dispatcher';
 import { Router } from '@angular/router';
@@ -10,10 +9,10 @@ import { StateHistory } from './state/history';
 import { StateHistoryComponent } from './state/state-history';
 import { Store } from './store/store';
 
-export const INITIAL_STATE = new OpaqueToken('INITIAL_STATE');
-export const COLLECT_HISTORY = new OpaqueToken('COLLECT_HISTORY');
-export const STORE_HISTORY_ITEMS = new OpaqueToken('STORE_HISTORY_ITEMS');
-export const IS_PROD = new OpaqueToken('IS_PROD');
+export const INITIAL_STATE = new InjectionToken('INITIAL_STATE');
+export const COLLECT_HISTORY = new InjectionToken('COLLECT_HISTORY');
+export const STORE_HISTORY_ITEMS = new InjectionToken('STORE_HISTORY_ITEMS');
+export const IS_PROD = new InjectionToken('IS_PROD');
 
 export function stateFactory(initialState) {
     return new State(initialState);

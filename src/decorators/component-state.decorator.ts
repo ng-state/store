@@ -1,4 +1,4 @@
-import { Input, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, Input } from '@angular/core';
 import { ServiceLocator } from './../helpers/service-locator';
 import { IS_PROD } from '../ng-state.module';
 export function ComponentState(stateActions: any | ((T) => any)) {
