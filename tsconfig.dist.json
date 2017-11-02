@@ -21,6 +21,8 @@
     "index.ts"
   ],
   "angularCompilerOptions": {
-    "strictMetadataEmit": true
+    "annotationsAs": "decorators",
+    "genDir": "./release",
+    "skipMetadataEmit" : true
   }
 }
