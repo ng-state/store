@@ -1,6 +1,6 @@
 import { InjectStore } from '../src/decorators/inject-store.decorator';
 import { ServiceLocator } from './../src/helpers/service-locator';
-import { Subject } from 'rxjs';
+import { Subject } from 'rxjs/Subject';
 
 class TestStateActions {
     store: any;

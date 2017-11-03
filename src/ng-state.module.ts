@@ -36,11 +36,7 @@ export function routerStateFactory(store: Store<any>, router: Router) {
     exports: [StateHistoryComponent]
 })
 export class StoreModule {
-    static provideStore(initialState: any,
-        isProd: boolean = false,
-        collectHistory?: boolean,
-        storeHistoryItems?: number
-    ): ModuleWithProviders {
+    static provideStore(initialState: any, isProd?: boolean, collectHistory?: boolean, storeHistoryItems?: number): ModuleWithProviders {
         return {
             ngModule: StoreModule,
             providers: [
@@ -50,7 +46,7 @@ export class StoreModule {
                 { provide: IS_PROD, useValue: isProd },
                 { provide: State, useFactory: stateFactory, deps: [INITIAL_STATE] },
                 { provide: Store, useFactory: storeFactory, deps: [State] },
-                { provide: StateHistory, useFactory: historyFactory, deps: [Store, INITIAL_STATE] },
+                { provide: StateHistory, useFactory: historyFactory, deps: [Store] },
                 { provide: RouterState, useFactory: routerStateFactory, deps: [Store, Router] },
                 Dispatcher
             ]

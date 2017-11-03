@@ -22,7 +22,6 @@
   ],
   "angularCompilerOptions": {
     "annotationsAs": "decorators",
-    "genDir": "./release",
-    "skipMetadataEmit" : true
+    "genDir": "./release"
   }
 }

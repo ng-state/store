@@ -1,5 +1,4 @@
-import { Observable } from 'rxjs';
-// import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs/Observable';
 import { ServiceLocator } from '../helpers/service-locator';
 import { Store } from '../store/store';
 

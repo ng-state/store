@@ -1,10 +1,10 @@
-import * as Rx from 'rxjs';
 
 import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 
 import { Router } from '@angular/router';
 import { StateHistory } from './history';
 import { Store } from '../store/store';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
     selector: 'state-history',
@@ -36,7 +36,7 @@ import { Store } from '../store/store';
 export class StateHistoryComponent implements OnInit, OnDestroy {
     lastIndex;
     showHistory = false;
-    viewistorySubscription: Rx.Subscription;
+    viewistorySubscription: Subscription;
     items;
 
     constructor(
