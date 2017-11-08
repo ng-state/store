@@ -2,7 +2,7 @@
   "name": "ng-state",
   "version": "2.7.3",
   "description": "RxJS and ImmutableJs powered nested state managment for Angular2 apps inspired by @ngrx.",
-  "main": "./bundles/store.umd.js",
+  "main": "./bundles/store.min.umd.js",
   "module": "./index.js",
   "repository": {
     "type": "git",
