@@ -1,6 +1,6 @@
 {
   "name": "ng-state",
-  "version": "2.8.0",
+  "version": "3.0.0",
   "description": "RxJS and ImmutableJs powered nested state managment for Angular2 apps inspired by @ngrx.",
   "main": "./bundles/store.min.umd.js",
   "module": "./index.js",

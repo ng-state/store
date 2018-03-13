@@ -100,7 +100,7 @@ export function InjectStore(newPath: string[] | string | ((currentPath, stateInd
             let store = ServiceLocator.injector.get(Store);
             this.store = store.select(statePath);
             const that = this;
-            this.stateChangeSubscription = this.store.subscribe(function (state) {
+            this.stateChangeSubscription = this.store.subscribe((state) => {
                 that.state = state;
             });
         };

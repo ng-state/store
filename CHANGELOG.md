@@ -1,4 +1,4 @@
-### 2.8.0
+### 3.0.0
 - Added ```NgStateTestBed``` for simplified actions and components unit testing.
 
 ### 2.7.0
