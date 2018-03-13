@@ -2,7 +2,8 @@
   "name": "ng-state",
   "module": "./index.js",
   "scripts": {
-    "test": "karma start",
+    "ngc": "ngc",
+    "test": "jest --verbose",
     "test:watch": "karma start --no-single-run --auto-watch --debug --browsers=ChromeDebug",
     "clean:pre": "rimraf release",
     "clean:post": "rimraf \"src/**/*.ngfactory.ts\"",
@@ -22,37 +23,47 @@
     "@angular/platform-browser": "^5.0.0",
     "@angular/router": "^5.0.0",
     "@types/es6-shim": "^0.31.32",
-    "@types/jasmine": "^2.2.33",
+    "@types/jest": "^22.2.0",
     "@types/node": "^6.0.38",
-    "awesome-typescript-loader": "^2.2.1",
     "core-js": "^2.5.1",
     "cpy-cli": "^1.0.1",
     "immutable": "^3.8.1",
     "immutable-cursor": "^2.0.1",
-    "istanbul-instrumenter-loader": "^0.2.0",
-    "jasmine": "^2.5.0",
-    "karma": "^1.4.1",
-    "karma-browserify": "^5.1.1",
-    "karma-chrome-launcher": "~2.0.0",
-    "karma-coverage": "~1.1.1",
-    "karma-jasmine": "~1.0.2",
-    "karma-mocha-reporter": "~2.1.0",
-    "karma-phantomjs-launcher": "^1.0.2",
-    "karma-remap-istanbul": "^0.6.0",
-    "karma-sourcemap-loader": "~0.3.7",
-    "karma-typescript": "^2.1.7",
-    "karma-webpack": "^2.0.2",
-    "phantomjs-polyfill": "0.0.2",
-    "rimraf": "^2.5.4",
+    "jest": "^22.4.2",
     "rollup": "^0.34.13",
     "rxjs": "^5.5.2",
+    "ts-jest": "^22.4.1",
     "ts-loader": "^2.0.0",
     "tsify": "^3.0.1",
     "tslint": "^3.15.1",
-    "tslint-loader": "^2.1.5",
     "typescript": "^2.6.1",
     "uglifyjs": "^2.4.10",
-    "webpack": "^2.2.1",
     "zone.js": "^0.8.18"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.ts?$": "ts-jest"
+    },
+    "testRegex": "(spec/__tests__/.*|(\\.|/)(test|spec))\\.(ts?)$",
+    "testPathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "collectCoverage": true,
+    "coverageReporters": [
+      "lcov",
+      "text"
+    ],
+    "coverageDirectory": "tests-coverage",
+    "collectCoverageFrom": [
+      "src/**/*.ts"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
   }
 }

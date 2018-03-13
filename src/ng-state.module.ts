@@ -13,6 +13,7 @@ export const INITIAL_STATE = new InjectionToken('INITIAL_STATE');
 export const COLLECT_HISTORY = new InjectionToken('COLLECT_HISTORY');
 export const STORE_HISTORY_ITEMS = new InjectionToken('STORE_HISTORY_ITEMS');
 export const IS_PROD = new InjectionToken('IS_PROD');
+export const IS_TEST = new InjectionToken('IS_TEST');
 
 export function stateFactory(initialState) {
     return new State(initialState);

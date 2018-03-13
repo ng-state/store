@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Input } from '@angular/core';
 import { ServiceLocator } from './../helpers/service-locator';
-import { IS_PROD } from '../ng-state.module';
+import { IS_PROD, IS_TEST } from '../ng-state.module';
 export function ComponentState(stateActions: any | ((T) => any)) {
 
     return (target: any) => {
@@ -9,6 +9,12 @@ export function ComponentState(stateActions: any | ((T) => any)) {
         let origDestroy = target.prototype.ngOnDestroy || (() => { });
 
         target.prototype.ngOnInit = function () {
+            const isTest = ServiceLocator.injector.get(IS_TEST);
+            if (isTest) {
+                origInit.apply(this, arguments);
+                return;
+            }
+
             const disableWarnings = ServiceLocator.injector.get(IS_PROD);
 
             if (!this.statePath) {

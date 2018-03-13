@@ -1,3 +1,6 @@
+### 2.8.0
+- Added ```NgStateTestBed``` for simplified actions and components unit testing.
+
 ### 2.7.0
 - Upgraded to Angular 5.0.0
 - Upgraded RxJs to ^5.5.0

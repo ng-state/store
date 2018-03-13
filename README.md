@@ -19,7 +19,8 @@ RxJS and ImmutableJs powered nested state management for Angular 2 applications 
 13. [IsProd](#isprod)
 14. [Time travel](#time-travel)
 15. [Flow diagram](#flow)
-16. [Contributing](#contributing)
+16. [Testing](#testing)
+17. [Contributing](#contributing)
 
 ## Introduction
 <a name="introduction"></a>
@@ -342,6 +343,53 @@ By default 100 history steps are stored in memory but it can be modified by pass
 ## Flow diagram
 <a name="flow"></a>
 ![flow](/ng-state-flow.png)
+
+## Testing
+<a name="testing"></a>
+Unit testing is important part of every software. For this reason ng-state has simplified test bed setup. In order to setup unit test you need to make few simple actions
+
+Tell ng-state that actions are going to run in testing mode:
+```ts
+beforeEach(() => {
+    NgStateTestBed.setTestEnvironment();
+});
+```
+
+actions can be tested by calling ```NgStateTestBed.createActions``` method:
+```ts
+ it('should return actions', () => {
+    const initialState = { todos: [] };
+    initialState.todos.push({ description: 'test description' });
+
+    const actions = NgStateTestBed.createActions(initialState, ['todos', 0], TestActions) as TestActions;
+    expect(actions.todoDescription).toEqual('test description');
+});
+```
+where
+- first param is ```initialState``` is object or class
+- second param is ```statePath``` to bind actions to
+- third param is ```actions``` class
+
+In order to test components with actions you need to call ```NgStateTestBed.setActionsToComponent``` method with ```actions``` and instance of ```component```. Same like in example above just add
+```ts
+component: TodoComponent;
+
+beforeEach(() => {
+    NgStateTestBed.setTestEnvironment();
+    component = new TodoComponent();
+});
+```
+```ts
+...
+actions = ...
+
+NgStateTestBed.setActionsToComponent(actions, component);
+
+expect(component.actions.todoDescription).toEqual('test description');
+```
+
+that simple :)
+
 
 ## Contributing
 <a name="contributing"></a>

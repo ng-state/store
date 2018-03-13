@@ -4,3 +4,4 @@ coverage/
 release/index*
 release/src/
 release/bundles/
+tests-coverage/*

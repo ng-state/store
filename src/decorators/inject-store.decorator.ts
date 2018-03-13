@@ -96,6 +96,15 @@ export function InjectStore(newPath: string[] | string | ((currentPath, stateInd
             return statePath;
         };
 
+        target.prototype.createTestStore = function (statePath) {
+            let store = ServiceLocator.injector.get(Store);
+            this.store = store.select(statePath);
+            const that = this;
+            this.stateChangeSubscription = this.store.subscribe(function (state) {
+                that.state = state;
+            });
+        };
+
         target.prototype.onDestroy = function () {
             this.stateChangeSubscription.unsubscribe();
         };
