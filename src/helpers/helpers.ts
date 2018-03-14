@@ -8,7 +8,7 @@ export class Helpers {
                     this.overrideContructor(obj[i]);
                 }
             } else {
-                obj.constructor = Object;
+                obj.__proto__.constructor = Object;
                 for (let key in obj) {
                     this.overrideContructor(obj[key]);
                 }

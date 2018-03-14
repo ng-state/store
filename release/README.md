@@ -350,7 +350,7 @@ Unit testing is important part of every software. For this reason ng-state has s
 
 Tell ng-state that actions are going to run in testing mode:
 ```ts
-beforeEach(() => {
+beforeAll(() => {
     NgStateTestBed.setTestEnvironment();
 });
 ```
@@ -374,8 +374,11 @@ In order to test components with actions you need to call ```NgStateTestBed.setA
 ```ts
 component: TodoComponent;
 
-beforeEach(() => {
+beforeAll(() => {
     NgStateTestBed.setTestEnvironment();
+});
+
+beforeEach(() => {
     component = new TodoComponent();
 });
 ```

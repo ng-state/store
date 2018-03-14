@@ -1,3 +1,6 @@
+### 3.1.0
+- Improved constructor ovveride by ovveriding prototype but not instance constructor.
+
 ### 3.0.0
 - Added ```NgStateTestBed``` for simplified actions and components unit testing.
 

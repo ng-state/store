@@ -3,6 +3,7 @@
   "module": "./index.js",
   "scripts": {
     "ngc": "ngc",
+    "tsc": "tsc",
     "test": "jest --verbose",
     "test:watch": "karma start --no-single-run --auto-watch --debug --browsers=ChromeDebug",
     "clean:pre": "rimraf release",
@@ -48,7 +49,7 @@
     "testPathIgnorePatterns": [
       "/node_modules/"
     ],
-    "collectCoverage": true,
+    "collectCoverage": false,
     "coverageReporters": [
       "lcov",
       "text"
@@ -65,5 +66,8 @@
       "json",
       "node"
     ]
+  },
+  "dependencies": {
+    "@types/jasmine": "^2.8.6"
   }
 }

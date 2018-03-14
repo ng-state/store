@@ -1,4 +1,5 @@
 export * from './src/ng-state.module';
+export * from './src/ng-state.test-bed';
 export * from './src/state/state';
 export * from './src/state/history';
 export * from './src/state/state-history';
