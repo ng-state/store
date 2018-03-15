@@ -45,6 +45,7 @@ export class StoreModule {
                 { provide: COLLECT_HISTORY, useValue: collectHistory },
                 { provide: INITIAL_STATE, useValue: initialState },
                 { provide: IS_PROD, useValue: isProd },
+                { provide: IS_TEST, useValue: false },
                 { provide: State, useFactory: stateFactory, deps: [INITIAL_STATE] },
                 { provide: Store, useFactory: storeFactory, deps: [State] },
                 { provide: StateHistory, useFactory: historyFactory, deps: [Store] },

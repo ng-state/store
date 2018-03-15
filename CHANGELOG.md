@@ -1,3 +1,6 @@
+### 3.1.1
+- Added IS_TEST provider.
+
 ### 3.1.0
 - Improved constructor ovveride by ovveriding prototype but not instance constructor.
 
