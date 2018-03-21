@@ -10,17 +10,18 @@ RxJS and ImmutableJs powered nested state management for Angular 2 applications 
 4. [Examples](#examples)
 5. [Main idea](#main-idea)
 6. [Configuration](#configuration)
-7. [InjectStore decorator](#inject-store)
-8. [Wiring things together](#together)
-9. [Subscribe stright to store](#subscribe-to-store)
-10. [When item details on different page](#details-on-different-page)
-11. [Dispatcher](#dispatcher)
-12. [Debuging](#debugging)
-13. [IsProd](#isprod)
-14. [Time travel](#time-travel)
-15. [Flow diagram](#flow)
-16. [Testing](#testing)
-17. [Contributing](#contributing)
+7. [ngOnChanges hook](#ngOnChanges)
+8. [InjectStore decorator](#inject-store)
+9. [Wiring things together](#together)
+10. [Subscribe stright to store](#subscribe-to-store)
+11. [When item details on different page](#details-on-different-page)
+12. [Dispatcher](#dispatcher)
+13. [Debuging](#debugging)
+14. [IsProd](#isprod)
+15. [Time travel](#time-travel)
+16. [Flow diagram](#flow)
+17. [Testing](#testing)
+18. [Contributing](#contributing)
 
 ## Introduction
 <a name="introduction"></a>
@@ -126,6 +127,11 @@ export class TodosStateActions extends HasStore<Immutable<List<any>>> {
 <i>To reflect data in component retrieved stright from ```this.state``` you need to pass ```ChengeDetectorRef``` to ```HasStateActions``` class which is extended by components.</i>
 
 <i>Be aware that from version 1.2.5 simple getters that returns Observable are converted to properties to get better performance by reducing calls to functions.</i>
+
+
+## ngOnChanges hook
+<a name="ngOnChanges"></a>
+Starting from version 3.2.0 ngOnChanges is not called before actions not initialized (before ngOnInit). This behaviour can be disabled passing `true` as a second param to `ComponentState` decorator.
 
 ## InjectStore decorator
 <a name="inject-store"></a>

@@ -1,6 +1,7 @@
 import { Store } from './store';
 import { distinctUntilChanged } from 'rxjs/operator/distinctUntilChanged';
 import { map } from 'rxjs/operator/map';
+import 'rxjs/add/operator/takeWhile';
 
 export class Select {
     constructor(path: any) {

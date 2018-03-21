@@ -1,12 +1,20 @@
-import { ChangeDetectorRef, Input } from '@angular/core';
 import { ServiceLocator } from './../helpers/service-locator';
+import { ChangeDetectorRef, Input } from '@angular/core';
 import { IS_PROD, IS_TEST } from '../ng-state.module';
-export function ComponentState(stateActions: any | ((T) => any)) {
-
+export function ComponentState(stateActions: any | ((T) => any), disableOnChangesBeforeActionsCreated = true) {
     return (target: any) => {
 
         let origInit = target.prototype.ngOnInit || (() => { });
         let origDestroy = target.prototype.ngOnDestroy || (() => { });
+        let origOnChanges = target.prototype.ngOnChanges || (() => { });
+
+        target.prototype.ngOnChanges = function (changes) {
+            if (disableOnChangesBeforeActionsCreated && !this.actions) {
+                return;
+            }
+
+            origOnChanges.apply(this, arguments);
+        };
 
         target.prototype.ngOnInit = function () {
             const isTest = ServiceLocator.injector.get(IS_TEST);

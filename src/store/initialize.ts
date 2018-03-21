@@ -1,6 +1,7 @@
 import * as Immutable from 'immutable';
 
 import { Helpers } from '../helpers/helpers';
+import 'rxjs/add/operator/take';
 import { _do } from 'rxjs/operator/do';
 
 export class Initialize {

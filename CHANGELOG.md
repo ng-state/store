@@ -1,3 +1,6 @@
+### 3.2.0
+- ngOnChanges is not called before actions not initialized (before ngOnInit). This behaviour can be disabled passing `true` as a second param to `ComponentState` decorator.
+
 ### 3.1.1
 - Added IS_TEST provider.
 
