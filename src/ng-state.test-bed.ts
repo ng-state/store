@@ -8,7 +8,7 @@ export class NgStateTestBed {
         ServiceLocator.injector = { get: (key) => key === IS_TEST };
     }
 
-    public static createActions(initialState: any, path: string | any[], actionsType: any) {
+    public static createActions<T>(actionsType: any, initialState: any = {}, path: string | any[] = []): T {
         const state = stateFactory(initialState);
         const store = storeFactory(state);
         const stateHistory = new StateHistory(store);
