@@ -1,5 +1,5 @@
 import { ServiceLocator } from './../helpers/service-locator';
-import { ChangeDetectorRef, Input } from '@angular/core';
+import { ChangeDetectorRef, Input, OnDestroy, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { IS_PROD, IS_TEST } from '../ng-state.module';
 export function ComponentState(stateActions: any | ((T) => any), disableOnChangesBeforeActionsCreated = true) {
     return (target: any) => {
@@ -56,7 +56,8 @@ export function ComponentState(stateActions: any | ((T) => any), disableOnChange
     };
 }
 
-export class HasStateActions<T> {
+export class HasStateActions<T> implements OnInit, OnDestroy, OnChanges {
+
     @Input() statePath: any;
     @Input() stateIndex?: string | number = null;
 
@@ -66,4 +67,8 @@ export class HasStateActions<T> {
     constructor(cd: ChangeDetectorRef) {
         this.cd = cd;
     }
+
+    ngOnInit(): void {}
+    ngOnChanges(changes: SimpleChanges): void {}
+    ngOnDestroy(): void {}
 }

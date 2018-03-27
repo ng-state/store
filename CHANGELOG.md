@@ -1,3 +1,6 @@
+### 3.3.0
+- Fixed bug with related to AOT. ngOnInit, ngOnDestory and ngOnChanges hooks were not hitted when compiled with AOT during to Angular limitations. This was not an issue with JIT. this issue relates to: https://github.com/Microsoft/vscode/issues/25853
+
 ### 3.2.2
 - Simplified TestBed. Now `initial state` and `statePath` are optional and has defult values of `{}` and `[]`. More info in Readme.
 
