@@ -1,5 +1,4 @@
-import * as Immutable from 'immutable';
-
+import { fromJS } from 'immutable';
 import { Helpers } from '../helpers/helpers';
 import 'rxjs/add/operator/take';
 import { _do } from 'rxjs/operator/do';
@@ -13,7 +12,7 @@ export class Initialize {
 
             Helpers.overrideContructor(initialState);
             initialState.constructor = Object;
-            initialState = Immutable.fromJS(initialState);
+            initialState = fromJS(initialState);
             initialState = initialState.set('__initialized', true);
 
             let newState;

@@ -1,4 +1,4 @@
-import * as Immutable from 'immutable';
+import { Map, Iterable} from 'immutable';
 
 export class Helpers {
     static overrideContructor(obj) {
@@ -17,13 +17,13 @@ export class Helpers {
     };
 
     static isImmutable(obj: any) {
-        return Immutable.Map.isMap(obj) || Immutable.Iterable.isIterable(obj);
+        return Map.isMap(obj) || Iterable.isIterable(obj);
     }
 
     static isObject(obj: any) {
         return obj !== null
             && typeof (obj) === 'object'
-            && !Immutable.Map.isMap(obj)
-            && !Immutable.Iterable.isIterable(obj);
+            && !Map.isMap(obj)
+            && !Iterable.isIterable(obj);
     }
 }

@@ -1,6 +1,6 @@
 import { Store } from './store';
 import { StateHistory } from '../state/history';
-import * as Immutable from 'immutable';
+import { fromJS } from 'immutable';
 import { _do } from 'rxjs/operator/do';
 
 export class Clear {
@@ -13,7 +13,7 @@ export class Clear {
                 .update((state: Immutable.Map<any, any>) => {
                     const router = state.get('router');
                     state.clear();
-                    state.merge(Immutable.fromJS(StateHistory.initialState));
+                    state.merge(fromJS(StateHistory.initialState));
                     state.set('router', router);
                     state.setIn(['router', 'url'], '');
                 });
