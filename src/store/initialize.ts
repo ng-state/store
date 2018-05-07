@@ -1,7 +1,7 @@
 import { fromJS } from 'immutable';
 import { Helpers } from '../helpers/helpers';
-import 'rxjs/add/operator/take';
-import { _do } from 'rxjs/operator/do';
+import { tap, take } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 export class Initialize {
     constructor(statePath, initialState: any = null) {
@@ -26,10 +26,10 @@ export class Initialize {
             (<any>this).source.next(newState);
         }.bind(this);
 
-        let done = _do.call(this, actionWrapper);
-        done
-            .take(1)
-            .subscribe();
+        (<any>this).pipe(
+            tap(actionWrapper),
+            take(1)
+        ).subscribe();
 
         return this;
     }

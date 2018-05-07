@@ -1,6 +1,6 @@
 import { InjectStore } from '../src/decorators/inject-store.decorator';
 import { ServiceLocator } from './../src/helpers/service-locator';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 
 class TestStateActions {
     store: any;
@@ -10,7 +10,7 @@ class TestStateActions {
     get isOpened() {
         return true;
     }
-};
+}
 
 const store = {
     initialize: (statePath, intialState) => { },

@@ -2,17 +2,24 @@ import { ServiceLocator } from './helpers/service-locator';
 import { IS_TEST, stateFactory, storeFactory } from './ng-state.module';
 import { HasStateActions } from './decorators/component-state.decorator';
 import { StateHistory } from './state/history';
+import { Store } from './store/store';
 
 export class NgStateTestBed {
     public static setTestEnvironment() {
         ServiceLocator.injector = { get: (key) => key === IS_TEST };
     }
 
-    public static createActions<T>(actionsType: any, initialState: any = {}, path: string | any[] = []): T {
+    public static createStore(initialState: any): Store<any> {
         const state = stateFactory(initialState);
         const store = storeFactory(state);
         const stateHistory = new StateHistory(store);
         stateHistory.init(initialState);
+
+        return store;
+    }
+
+    public static createActions<T>(actionsType: any, initialState: any = {}, path: string | any[] = []): T {
+        const store = this.createStore(initialState);
         ServiceLocator.injector = {
             get: (key) => {
                 return key === IS_TEST

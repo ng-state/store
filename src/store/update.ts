@@ -1,5 +1,5 @@
 import { Cursor } from './cursor';
-import { _do } from 'rxjs/operator/do';
+import { tap, take } from 'rxjs/operators';
 
 export class Update {
     constructor(action: (state: any) => void, wrapToWithMutations: boolean = true) {
@@ -26,10 +26,10 @@ export class Update {
 
         }.bind(this);
 
-        let done = _do.call(this, actionWrapper);
-        done
-            .take(1)
-            .subscribe();
+        (<any>this).pipe(
+            tap(actionWrapper),
+            take(1)
+        ).subscribe();
 
         return this;
     }

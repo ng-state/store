@@ -1,4 +1,5 @@
 import {Observable, Subject, Subscription} from 'rxjs';
+import { filter, share, map } from 'rxjs/operators';
 
 import { Injectable } from '@angular/core';
 
@@ -16,7 +17,7 @@ export class Dispatcher {
     }
 
     getMessagesOfType(messageType: string): Observable<Message> {
-        return this.subject.filter(msg => msg.type === messageType).share();
+        return this.subject.pipe(filter(msg => msg.type === messageType), share());
     }
 
     publish(message: Message): void;
@@ -37,7 +38,7 @@ export class Dispatcher {
             : messageType;
 
         return this.getMessagesOfType(messageType as string)
-            .map(msg =>  msg.payload)
+            .pipe(map(msg =>  msg.payload))
             .subscribe(observerOrNext, error, complete);
     }
 }

@@ -1,8 +1,8 @@
 import { StateHistory } from './../src/state/history';
 import { Store } from './../src/store/store';
 import { stateFactory, storeFactory, historyFactory } from '../src/ng-state.module';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import 'rxjs/add/operator/take';
+import { BehaviorSubject } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 describe('Store tests', () => {
     let store: Store<any>;
@@ -11,7 +11,7 @@ describe('Store tests', () => {
         it('should convert initial state classes ES6 to ES5 objects', () => {
             const state = stateFactory(new InitialState()) as BehaviorSubject<InitialState>;
             state
-                .take(1)
+                .pipe(take(1))
                 .subscribe((value: any) => {
                     const obj = value.toJS();
                     expect(obj.testProp).toBeDefined();
@@ -45,7 +45,7 @@ describe('Store tests', () => {
 
         it('should select state', (done) => {
             store.select(['layout'])
-                .take(1)
+                .pipe(take(1))
                 .subscribe((state: any) => {
                     expect(state.get('test')).toBeTruthy();
                     done();

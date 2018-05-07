@@ -2,9 +2,8 @@ import { ClearSignature, Clear } from './clear';
 import { Select, SelectSignature } from './select';
 import { Update, UpdateSignature } from './update';
 import { Initialize, InitializeSignature } from './initialize';
-import { Operator } from 'rxjs/Operator';
-import { Observable } from 'rxjs/Observable';
-import { Observer } from 'rxjs/Observer';
+import { Operator, Observable, Observer } from 'rxjs';
+import { MapSgnature, Map } from './map';
 
 export class Store<T> extends Observable<T> implements Observer<any> {
     constructor(state: Observable<any>) {
@@ -22,6 +21,7 @@ export class Store<T> extends Observable<T> implements Observer<any> {
     update: UpdateSignature<T> = Update.bind(this);
     initialize: InitializeSignature<T> = Initialize.bind(this);
     clear: ClearSignature = Clear.bind(this);
+    map: MapSgnature<T> = Map.bind(this);
 
     lift<R>(operator: Operator<T, R>): Store<R> {
         const store = new Store<R>(this);

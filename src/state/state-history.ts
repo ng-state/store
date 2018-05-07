@@ -1,9 +1,8 @@
 import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from '@angular/core';
-
 import { Router } from '@angular/router';
 import { StateHistory } from './history';
 import { Store } from '../store/store';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'state-history',

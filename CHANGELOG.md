@@ -1,3 +1,6 @@
+### 3.3.2
+- Added createStore method to NgStateTestBed
+
 ### 3.3.0
 - Fixed bug with related to AOT. ngOnInit, ngOnDestory and ngOnChanges hooks were not hitted when compiled with AOT during to Angular limitations. This was not an issue with JIT. this issue relates to: https://github.com/Microsoft/vscode/issues/25853
 
