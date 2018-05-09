@@ -1,3 +1,6 @@
+### 4.0.0
+- Migrated to Angular 6 and RxJs 6.
+
 ### 3.3.2
 - Added createStore method to NgStateTestBed
 
