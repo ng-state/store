@@ -18,10 +18,11 @@ RxJS and ImmutableJs powered nested state management for Angular 2 applications 
 12. [Dispatcher](#dispatcher)
 13. [Debuging](#debugging)
 14. [IsProd](#isprod)
-15. [Time travel](#time-travel)
-16. [Flow diagram](#flow)
-17. [Testing](#testing)
-18. [Contributing](#contributing)
+15. [Server Side Rendering and TransferState](#ssr)
+16. [Time travel](#time-travel)
+17. [Flow diagram](#flow)
+18. [Testing](#testing)
+19. [Contributing](#contributing)
 
 ## Introduction
 <a name="introduction"></a>
@@ -330,6 +331,36 @@ From version 2.6 boolean flag can be passed to StoreModule.forRoot method. When 
 - Warnings are disabled
 
 However for custom manipulations state and its manipulations can be accessed from injected StateHistory service.
+
+## Server Side Rendering and TransferState
+<a name="ssr"></a>
+In most of cases Angular TransferState HTTP interceptor does the job but sometimes you need to set your state explicitlu when client takes over.
+For this situation from version 4.2.0 boolean flag can be passed to StoreModule.forRoot method to restore state from TransferState instead of initialState.
+This can be used like this:
+Save state on server side in your ```app.module.ts``` like:
+```ts
+export class AppModule {
+    constructor(store: Store<any>, platform: PlatformService, transferState: TransferState) {
+        if (!platform.isBrowser) {
+            store
+            .pipe(
+                takeWhile(() => !platform.isBrowser)
+            )
+            .subscribe(state => {
+                transferState.set(makeStateKey<TransferHttpResponse>(TRANSFER_STATE_KEY),  state.toJS());
+            });
+        }
+    }
+}
+```
+
+and pass ```true``` to StoreModule
+
+```ts
+StoreModule.provideStore(initialState, environment.production, true)
+```
+
+On app load state that were added in AppModule on server side will be added instead of intiialState
 
 ## Time travel
 <a name="time-travel"></a>

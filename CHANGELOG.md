@@ -1,3 +1,6 @@
+### 4.2.0
+Added transfer state support for Server Side Rendering
+
 ### 4.0.0
 - Migrated to Angular 6 and RxJs 6.
 
