@@ -15,9 +15,12 @@
     "build:uglify": "uglifyjs -c --screw-ie8 --comments -o ./release/bundles/store.min.umd.js ./release/bundles/store.umd.js",
     "prebuild": "npm run clean:pre",
     "postbuild": "npm run clean:post && npm run copy",
-    "build": "npm run build:js && npm run build:umd && npm run build:uglify"
+    "build-rollup": "npm run build:js && npm run build:umd && npm run build:uglify",
+    "build": "ng build --prod --project ng-state"
   },
   "devDependencies": {
+    "@angular-devkit/build-angular": "^0.7.5",
+    "@angular-devkit/build-ng-packagr": "^0.7.5",
     "@angular/common": "^6.0.0",
     "@angular/compiler": "^6.0.0",
     "@angular/compiler-cli": "^6.0.0",
@@ -25,6 +28,7 @@
     "@angular/platform-browser": "^6.0.0",
     "@angular/router": "^6.0.0",
     "@types/es6-shim": "^0.31.32",
+    "@types/jasmine": "^2.8.8",
     "@types/jest": "^22.2.0",
     "@types/node": "^6.0.38",
     "core-js": "^2.5.1",
@@ -32,7 +36,10 @@
     "immutable": "^3.8.1",
     "immutable-cursor": "^2.0.1",
     "jest": "^22.4.2",
+    "ng-packagr": "^4.1.1",
     "rollup": "^0.34.13",
+    "rollup-plugin-node-resolve": "^3.4.0",
+    "rollup-plugin-sourcemaps": "^0.4.2",
     "rxjs": "6.0.0",
     "ts-jest": "^22.4.1",
     "ts-loader": "^4.2.0",
@@ -69,7 +76,6 @@
     ]
   },
   "dependencies": {
-    "@types/jasmine": "^2.8.6",
     "user": "0.0.0"
   }
 }

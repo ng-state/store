@@ -5,3 +5,4 @@ release/index*
 release/src/
 release/bundles/
 tests-coverage/*
+release/
