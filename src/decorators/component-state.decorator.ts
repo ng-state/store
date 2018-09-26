@@ -50,7 +50,10 @@ export function ComponentState(stateActions: any | ((T) => any), disableOnChange
         };
 
         target.prototype.ngOnDestroy = function () {
-            this.actions.onDestroy();
+            if (this.actions) {
+                this.actions.onDestroy();
+            }
+
             origDestroy.apply(this, arguments);
         };
     };
@@ -68,7 +71,7 @@ export class HasStateActions<T> implements OnInit, OnDestroy, OnChanges {
         this.cd = cd;
     }
 
-    ngOnInit(): void {}
-    ngOnChanges(changes: SimpleChanges): void {}
-    ngOnDestroy(): void {}
+    ngOnInit(): void { }
+    ngOnChanges(changes: SimpleChanges): void { }
+    ngOnDestroy(): void { }
 }

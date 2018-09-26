@@ -1,3 +1,7 @@
+### 4.2.2
+- Fixed bug with inheritacne.
+- Switched to ng build
+
 ### 4.2.0
 Added transfer state support for Server Side Rendering
 

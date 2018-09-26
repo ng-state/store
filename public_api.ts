@@ -13,3 +13,4 @@ export * from './src/helpers/service-locator';
 export * from './src/services/dispatcher';
 export * from './src/decorators/component-state.decorator';
 export * from './src/decorators/inject-store.decorator';
+export * from './src/state/router-state';

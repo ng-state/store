@@ -1,75 +1,42 @@
 {
-  "name": "ng-state",
-  "version": "4.0.0",
-  "module": "fesm5/ng-state.js",
-  "devDependencies": {
-    "@angular-devkit/build-angular": "^0.7.5",
-    "@angular-devkit/build-ng-packagr": "^0.7.5",
-    "@angular/common": "^6.0.0",
-    "@angular/compiler": "^6.0.0",
-    "@angular/compiler-cli": "^6.0.0",
-    "@angular/core": "^6.0.0",
-    "@angular/platform-browser": "^6.0.0",
-    "@angular/router": "^6.0.0",
-    "@types/es6-shim": "^0.31.32",
-    "@types/jasmine": "^2.8.8",
-    "@types/jest": "^22.2.0",
-    "@types/node": "^6.0.38",
-    "core-js": "^2.5.1",
-    "cpy-cli": "^1.0.1",
-    "immutable": "^3.8.1",
-    "immutable-cursor": "^2.0.1",
-    "jest": "^22.4.2",
-    "ng-packagr": "^4.1.1",
-    "rollup": "^0.34.13",
-    "rollup-plugin-node-resolve": "^3.4.0",
-    "rollup-plugin-sourcemaps": "^0.4.2",
-    "rxjs": "6.0.0",
-    "ts-jest": "^22.4.1",
-    "ts-loader": "^4.2.0",
-    "tsify": "^3.0.1",
-    "tslint": "^5.7.0",
-    "typescript": "~2.7.2",
-    "uglifyjs": "^2.4.10",
-    "zone.js": "^0.8.18"
-  },
-  "jest": {
-    "transform": {
-      "^.+\\.ts?$": "ts-jest"
+    "name": "ng-state",
+    "version": "4.2.2",
+    "description": "RxJS and ImmutableJs powered nested state managment for Angular2 apps inspired by @ngrx.",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ng-state/store.git"
     },
-    "testRegex": "(spec/__tests__/.*|(\\.|/)(test|spec))\\.(ts?)$",
-    "testPathIgnorePatterns": [
-      "/node_modules/"
+    "keywords": [
+        "RxJS",
+        "Angular2",
+        "Immutable Js",
+        "Nested",
+        "State"
     ],
-    "collectCoverage": false,
-    "coverageReporters": [
-      "lcov",
-      "text"
-    ],
-    "coverageDirectory": "tests-coverage",
-    "collectCoverageFrom": [
-      "src/**/*.ts"
-    ],
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ]
-  },
-  "dependencies": {
-    "user": "0.0.0",
-    "tslib": "^1.9.0"
-  },
-  "main": "bundles/ng-state.umd.js",
-  "es2015": "fesm2015/ng-state.js",
-  "esm5": "esm5/ng-state.js",
-  "esm2015": "esm2015/ng-state.js",
-  "fesm5": "fesm5/ng-state.js",
-  "fesm2015": "fesm2015/ng-state.js",
-  "typings": "ng-state.d.ts",
-  "metadata": "ng-state.metadata.json",
-  "sideEffects": false
+    "author": "Vytautas Pranskunas <vytautas.pranskunas@gmail.com>",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/ng-state/store/issues"
+    },
+    "homepage": "https://github.com/ng-state/store#readme",
+    "peerDependencies": {
+        "@angular/common": "^6.0.0",
+        "@angular/core": "^6.0.0",
+        "@angular/router": "^6.0.0",
+        "@angular/platform-browser": "^6.0.0",
+        "core-js": "^2.5.1",
+        "immutable": "^3.8.1",
+        "immutable-cursor": "^2.0.0",
+        "rxjs": "^6.0.0",
+        "zone.js": "^0.8.18"
+    },
+    "es2015": "./fesm2015/ng-state.js",
+    "esm2015": "./esm2015/ng-state.js",
+    "esm5": "./esm5/ng-state.js",
+    "fesm2015": "./fesm2015/ng-state.js",
+    "fesm5": "./fesm5/ng-state.js",
+    "main": "./bundles/ng-state.umd.min.js",
+    "module": "./fesm5/ng-state.js",
+    "metadata": "ng-state.metadata.json",
+    "typings": "ng-state.d.ts"
 }

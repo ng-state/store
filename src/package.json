@@ -1,9 +1,7 @@
 {
     "name": "ng-state",
-    "version": "4.2.1",
+    "version": "4.2.2",
     "description": "RxJS and ImmutableJs powered nested state managment for Angular2 apps inspired by @ngrx.",
-    "main": "./bundles/store.min.umd.js",
-    "module": "./index.js",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/ng-state/store.git"
@@ -31,5 +29,14 @@
         "immutable-cursor": "^2.0.0",
         "rxjs": "^6.0.0",
         "zone.js": "^0.8.18"
-    }
+    },
+    "es2015": "./fesm2015/ng-state.js",
+    "esm2015": "./esm2015/ng-state.js",
+    "esm5": "./esm5/ng-state.js",
+    "fesm2015": "./fesm2015/ng-state.js",
+    "fesm5": "./fesm5/ng-state.js",
+    "main": "./bundles/ng-state.umd.min.js",
+    "module": "./fesm5/ng-state.js",
+    "metadata": "ng-state.metadata.json",
+    "typings": "ng-state.d.ts"
 }
