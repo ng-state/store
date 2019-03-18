@@ -5,8 +5,9 @@ import { Initialize, InitializeSignature } from './initialize';
 import { Operator, Observable, Observer } from 'rxjs';
 import { MapSgnature, Map } from './map';
 import { ResetSignature, Reset } from './reset';
-import { NgFormStateManager, NgFormStateManagerSgnature } from './plugins/form-manager.plugin';
+import { NgFormStateManager } from './plugins/form-manager.plugin';
 import { PersistStateManager } from './plugins/persist-state.plugin';
+import { take } from 'rxjs/operators';
 
 export class Store<T> extends Observable<T> implements Observer<any> {
     statePath: any[];
@@ -20,7 +21,7 @@ export class Store<T> extends Observable<T> implements Observer<any> {
 
     clear: ClearSignature = Clear.bind(this);
 
-    bindForm: NgFormStateManagerSgnature;
+    form: NgFormStateManager;
     storage: PersistStateManager;
 
     constructor(state: Observable<any>) {
@@ -31,7 +32,6 @@ export class Store<T> extends Observable<T> implements Observer<any> {
     }
 
     select: SelectSignature = (statePath: string[]): Store<T> => {
-        this.rootPath = this.statePath;
         let selectStore = Select.bind(this).call(this, statePath);
         selectStore.statePath = !!this.statePath ? [...this.statePath, ...statePath] : statePath;
         selectStore.rootPath = this.rootPath;
@@ -62,7 +62,7 @@ export class Store<T> extends Observable<T> implements Observer<any> {
         storeContext.initialize = Initialize.bind(storeContext);
         storeContext.reset = Reset.bind(storeContext);
         storeContext.map = Map.bind(storeContext);
-        storeContext.bindForm = NgFormStateManager.bind(storeContext);
+        storeContext.form = new NgFormStateManager(storeContext);
         storeContext.storage = new PersistStateManager(storeContext);
     }
 }

@@ -73,7 +73,7 @@ describe('InjectStore decorator', () => {
     it('should initialize store with initial values if provided', () => {
         setup(['test', '${stateIndex}', 'path'], { test: 'test' });
         target.store = store;
-        spyOn(store, 'initialize');
+        spyOn(store, 'initialize').and.returnValue(new Subject<any>());
 
         target.createStore(['parent'], 1);
 

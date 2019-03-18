@@ -2,6 +2,7 @@ import { fromJS } from 'immutable';
 import { Helpers } from '../helpers/helpers';
 import { tap, take } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { Store } from './store';
 
 export class Initialize {
     constructor(statePath, initialState: any = null) {
@@ -19,6 +20,8 @@ export class Initialize {
 
             try {
                 newState = state.setIn(statePath, initialState);
+                (<any>this).initialState = initialState;
+                (<any>this).rootPath = statePath;
             } catch (exception) {
                 console.error(exception);
             }
@@ -31,10 +34,10 @@ export class Initialize {
             take(1)
         ).subscribe();
 
-        return this;
+        return (<any>this).select(statePath);
     }
 }
 
 export interface InitializeSignature<T> {
-    <R>(statePath, initialState?: T, addToHistory?: boolean): R;
+    <R>(statePath, initialState?: T, addToHistory?: boolean): Store<R>;
 }

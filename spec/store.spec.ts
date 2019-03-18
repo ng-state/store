@@ -65,6 +65,23 @@ describe('Store tests', () => {
             expect(StateHistory.CURRENT_STATE.getIn(['layout', 'loading'])).not.toBeDefined();
             expect(StateHistory.CURRENT_STATE.getIn(['router', 'url'])).toBe('');
         });
+
+        it('should reset state', () => {
+            store.select(['layout']).update(state => state.set('test', 'test2'));
+            expect(StateHistory.CURRENT_STATE.getIn(['layout', 'test'])).toEqual('test2');
+
+            store.select(['layout']).reset();
+            expect(StateHistory.CURRENT_STATE.getIn(['layout', 'test'])).toEqual('test');
+        });
+
+        it('should reset state when stroe has initial state', () => {
+            const intilizedStore = store.initialize(['actionStore'], { test: { url: 'home' } });
+            intilizedStore.select(['test']).update(state => state.set('url', 'home-updated'));
+            expect(StateHistory.CURRENT_STATE.getIn(['actionStore', 'test', 'url'])).toEqual('home-updated');
+
+            intilizedStore.select(['test']).reset();
+            expect(StateHistory.CURRENT_STATE.getIn(['actionStore', 'test', 'url'])).toEqual('home');
+        });
     });
 });
 
