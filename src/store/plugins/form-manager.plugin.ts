@@ -10,16 +10,17 @@ export class NgFormStateManager {
     private params: NgFormStateManagerParams;
     private store: Store<any>;
 
-
     constructor(store: Store<any>) {
         this.store = store;
     }
 
-    bind(form: FormGroupLike, params: NgFormStateManagerParams = {}) {
+    bind(form: FormGroupLike, params: NgFormStateManagerParams = {}): NgFormStateManager {
         this.form = form;
         this.params = { ... { debounceTime: 100, emitEvent: false }, ...params };
         this.setInitialValue(this.store);
         this.subscribeToFormChange(this.store);
+
+        return this;
     }
 
     reset() {

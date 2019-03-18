@@ -51,9 +51,9 @@ describe('Store tests', () => {
             layoutStore.update(state => state.set('test', 'test3'));
             expect(StateHistory.CURRENT_STATE.getIn(['layout', 'test'])).toEqual('test3');
 
-            layoutStore.form.bind(form, { debounceTime: 0 });
+            const layoutForm = layoutStore.form.bind(form, { debounceTime: 0 });
 
-            layoutStore.reset();
+            layoutForm.reset();
 
             expect(StateHistory.CURRENT_STATE.getIn(['layout', 'test'])).toEqual('test');
             expect(form.patchValue).toHaveBeenCalledWith({ test: 'test' }, { 'emitEvent': false });
