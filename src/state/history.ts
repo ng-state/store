@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Store } from '../store/store';
 import { Subject } from 'rxjs';
 
 @Injectable()
@@ -18,17 +17,11 @@ export class StateHistory {
         return StateHistory.CURRENT_STATE;
     }
 
-    constructor(private store: Store<any>) {
-    }
-
     init(initialState: any) {
         StateHistory.initialState = initialState;
-        this.store.subscribe(state => {
-            this.add(state);
-        });
     }
 
-    private add(state) {
+    add(state) {
         StateHistory.CURRENT_STATE = state;
 
         if (!StateHistory.collectHistory || StateHistory.HISTORY.indexOf(state) >= 0) {
@@ -37,7 +30,7 @@ export class StateHistory {
 
         if (StateHistory.HISTORY.length >= StateHistory.storeHistoryItems) {
             StateHistory.HISTORY.shift();
-        };
+        }
 
         StateHistory.HISTORY.push(state);
 

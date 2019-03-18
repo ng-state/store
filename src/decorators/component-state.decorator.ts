@@ -71,7 +71,7 @@ export class HasStateActions<T> implements OnInit, OnDestroy, OnChanges {
         this.cd = cd;
     }
 
-    ngOnInit(): void { }
-    ngOnChanges(changes: SimpleChanges): void { }
-    ngOnDestroy(): void { }
+    ngOnInit(): void {}
+    ngOnChanges(changes: SimpleChanges): void {}
+    ngOnDestroy(): void {}
 }

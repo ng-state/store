@@ -4,7 +4,7 @@ import { tap, take } from 'rxjs/operators';
 export class Update {
     constructor(action: (state: any) => void, wrapToWithMutations: boolean = true) {
         let updated = false;
-        let actionWrapper = function (state) {
+        let actionWrapper = function () {
             if (updated) {
                 return;
             }
@@ -30,11 +30,9 @@ export class Update {
             tap(actionWrapper),
             take(1)
         ).subscribe();
-
-        return this;
     }
 }
 
 export interface UpdateSignature<T> {
-    <R>(action: (state: T) => void, wrapToWithMutations?: boolean): R;
+    (action: (state: T) => void, wrapToWithMutations?: boolean): void;
 }

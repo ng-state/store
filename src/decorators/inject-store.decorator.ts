@@ -1,6 +1,7 @@
 import { Observable } from 'rxjs';
 import { ServiceLocator } from '../helpers/service-locator';
 import { Store } from '../store/store';
+import { take } from 'rxjs/operators';
 
 export function InjectStore(newPath: string[] | string | ((currentPath, stateIndex) => string[] | string), intialState: Object | any = null, debug: boolean = false) {
     let getStatePath = (currentPath, stateIndex, extractedPath) => {
@@ -79,6 +80,9 @@ export function InjectStore(newPath: string[] | string | ((currentPath, stateInd
 
             if (intialState) {
                 store.initialize(statePath, intialState);
+                store.select(statePath).pipe(take(1)).subscribe(state => {
+                    store.initialState = state;
+                });
             }
 
             this.store = store.select(statePath);

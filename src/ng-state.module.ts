@@ -9,6 +9,7 @@ import { State } from './state/state';
 import { StateHistory } from './state/history';
 import { StateHistoryComponent } from './state/state-history';
 import { Store } from './store/store';
+import { HistoryController } from './state/history-controller';
 
 export const RESTORE_FROM_SERVER = new InjectionToken('RESTORE_FROM_SERVER');
 export const TRANSFER_STATE_KEY = 'state';
@@ -33,8 +34,8 @@ export function storeFactory(state: State<any>) {
     return new Store(state);
 }
 
-export function historyFactory(store: Store<any>) {
-    return new StateHistory(store);
+export function historyControllerFactory(store: Store<any>, history: StateHistory) {
+    return new HistoryController(store, history);
 }
 
 export function routerStateFactory(store: Store<any>, router: Router) {
@@ -60,7 +61,8 @@ export class StoreModule {
                 { provide: RESTORE_FROM_SERVER, useValue: restoreStateFromServer },
                 { provide: State, useFactory: stateFactory, deps: [INITIAL_STATE, TransferState, RESTORE_FROM_SERVER] },
                 { provide: Store, useFactory: storeFactory, deps: [State] },
-                { provide: StateHistory, useFactory: historyFactory, deps: [Store] },
+                { provide: StateHistory, useClass: StateHistory },
+                { provide: HistoryController, useFactory: historyControllerFactory, deps: [Store, StateHistory] },
                 { provide: RouterState, useFactory: routerStateFactory, deps: [Store, Router] },
                 Dispatcher
             ]
@@ -70,6 +72,7 @@ export class StoreModule {
     constructor(
         injector: Injector,
         stateHistory: StateHistory,
+        historyController: HistoryController,
         routerState: RouterState,
         @Inject(INITIAL_STATE) initialState: any,
         @Inject(STORE_HISTORY_ITEMS) storeHistoryItems: any,
@@ -86,6 +89,7 @@ export class StoreModule {
 
         ServiceLocator.injector = injector;
         stateHistory.init(initialState);
+        historyController.init();
         routerState.init();
 
         if (!isProd) {

@@ -19,7 +19,7 @@ export class Clear {
                 });
         };
 
-        let actionWrapper = function (state: Map<any, any>) {
+        let actionWrapper = function () {
             if (clered) {
                 return;
             }

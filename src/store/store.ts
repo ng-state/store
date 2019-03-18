@@ -4,24 +4,41 @@ import { Update, UpdateSignature } from './update';
 import { Initialize, InitializeSignature } from './initialize';
 import { Operator, Observable, Observer } from 'rxjs';
 import { MapSgnature, Map } from './map';
+import { ResetSignature, Reset } from './reset';
+import { NgFormStateManager, NgFormStateManagerSgnature } from './plugins/form-manager.plugin';
+import { PersistStateManager } from './plugins/persist-state.plugin';
 
 export class Store<T> extends Observable<T> implements Observer<any> {
+    statePath: any[];
+    rootPath: any[];
+    initialState: any;
+
+    update: UpdateSignature<T>;
+    initialize: InitializeSignature<T>;
+    map: MapSgnature<T>;
+    reset: ResetSignature;
+
+    clear: ClearSignature = Clear.bind(this);
+
+    bindForm: NgFormStateManagerSgnature;
+    storage: PersistStateManager;
+
     constructor(state: Observable<any>) {
         super();
 
         this.source = state;
+        this.initializeOperators(this);
     }
 
     select: SelectSignature = (statePath: string[]): Store<T> => {
+        this.rootPath = this.statePath;
         let selectStore = Select.bind(this).call(this, statePath);
-        (<any>selectStore).statePath = statePath;
+        selectStore.statePath = !!this.statePath ? [...this.statePath, ...statePath] : statePath;
+        selectStore.rootPath = this.rootPath;
+        selectStore.initialState = this.initialState;
+        this.initializeOperators(selectStore);
         return selectStore;
     }
-
-    update: UpdateSignature<T> = Update.bind(this);
-    initialize: InitializeSignature<T> = Initialize.bind(this);
-    clear: ClearSignature = Clear.bind(this);
-    map: MapSgnature<T> = Map.bind(this);
 
     lift<R>(operator: Operator<T, R>): Store<R> {
         const store = new Store<R>(this);
@@ -38,5 +55,14 @@ export class Store<T> extends Observable<T> implements Observer<any> {
     }
 
     complete() {
+    }
+
+    initializeOperators(storeContext: Store<T>) {
+        storeContext.update = Update.bind(storeContext);
+        storeContext.initialize = Initialize.bind(storeContext);
+        storeContext.reset = Reset.bind(storeContext);
+        storeContext.map = Map.bind(storeContext);
+        storeContext.bindForm = NgFormStateManager.bind(storeContext);
+        storeContext.storage = new PersistStateManager(storeContext);
     }
 }

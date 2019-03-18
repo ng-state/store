@@ -1,8 +1,9 @@
 import { StateHistory } from './../src/state/history';
 import { Store } from './../src/store/store';
-import { stateFactory, storeFactory, historyFactory } from '../src/ng-state.module';
+import { stateFactory, storeFactory } from '../src/ng-state.module';
 import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { HistoryController } from '../src/state/history-controller';
 
 describe('Store tests', () => {
     let store: Store<any>;
@@ -26,8 +27,10 @@ describe('Store tests', () => {
             const initialState = { layout: { test: 'test' } };
             const state = stateFactory(initialState);
             store = storeFactory(state);
-            const history = historyFactory(store);
+            const history = new StateHistory();
             history.init(initialState);
+            const historyController = new HistoryController(store, history);
+            historyController.init();
         });
 
         it('should initialize state with initial value', () => {
