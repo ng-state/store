@@ -3,17 +3,12 @@ import { tap, take } from 'rxjs/operators';
 import { Store } from '../store';
 import { Observable, isObservable, from, of } from 'rxjs';
 
-// @dynamic
 export class PersistStateManager {
+    protected static customStorageConfig: PersistStateParams = {};
 
-    protected static storageDefaults = {
-        storage: localStorage,
-        getKeys: () => Object.keys(localStorage)
-    };
-
-    protected static defaults: PersistStateParams = {
+    protected defaults: PersistStateParams = {
         key: '',
-        storageConfig: PersistStateManager.storageDefaults,
+        storageConfig: {} as any,
         deserialize: JSON.parse,
         serialize: JSON.stringify
     };
@@ -24,13 +19,12 @@ export class PersistStateManager {
     }
 
     static configureStorage(storage: PersistStateStorage, getKeys: () => Promise<string[]> | Observable<string[]> | string[]) {
-        PersistStateManager.defaults.storageConfig.storage = storage;
-        PersistStateManager.defaults.storageConfig.getKeys = getKeys;
+        PersistStateManager.customStorageConfig.storageConfig = { storage: storage, getKeys: getKeys };
     }
 
     static configureSerializer(serialize: Function, deserialize: Function) {
-        PersistStateManager.defaults.serialize = serialize;
-        PersistStateManager.defaults.deserialize = deserialize;
+        PersistStateManager.customStorageConfig.serialize = serialize;
+        PersistStateManager.customStorageConfig.deserialize = deserialize;
     }
 
     save(params?: PersistStateParams) {
@@ -69,6 +63,7 @@ export class PersistStateManager {
 
     clear(params?: PersistStateParams) {
         params = this.getParams(params, this.store);
+
         this.resolve(params.storageConfig.getKeys())
             .pipe(take(1))
             .subscribe(keys => {
@@ -88,7 +83,9 @@ export class PersistStateManager {
     }
 
     private getParams(params: PersistStateParams, store: Store<any>) {
-        params = { ...PersistStateManager.defaults, ...params };
+        this.setDefaultStorage();
+
+        params = { ...this.defaults, ...PersistStateManager.customStorageConfig, ...params };
 
         if (!params.key) {
             params.key = store.statePath.join('.');
@@ -97,6 +94,15 @@ export class PersistStateManager {
         params.key = `${this.prefix}${params.key}`;
 
         return params;
+    }
+
+    private setDefaultStorage() {
+        if (!this.defaults.storageConfig) {
+            this.defaults.storageConfig = {
+                storage: localStorage,
+                getKeys: () => Object.keys(localStorage)
+            };
+        }
     }
 
     private isPromise(v: any) {
