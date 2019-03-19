@@ -78,11 +78,9 @@ export function InjectStore(newPath: string[] | string | ((currentPath, stateInd
 
             const store = ServiceLocator.injector.get(Store) as Store<any>;
 
-            if (intialState) {
-                this.store = store.initialize(statePath, intialState);
-            } else {
-                this.store = store.select(statePath);
-            }
+            this.store = intialState
+                 ? store.initialize(statePath, intialState)
+                 : store.select(statePath);
 
             this.stateChangeSubscription = this.store.subscribe((state: any) => {
                 this.state = state;
