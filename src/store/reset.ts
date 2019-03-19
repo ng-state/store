@@ -13,16 +13,11 @@ export class Reset {
                 .update((state: Map<any, any>) => {
                     state.clear();
 
-                    let initialState: Map<any, any>;
-                    let path = [];
+                    let initialState: Map<any, any> = !!store.initialState
+                        ? store.initialState
+                        : fromJS(StateHistory.initialState);
 
-                    if (!!store.initialState) {
-                        initialState = store.initialState as Map<any, any>;
-                        path = store.statePath.filter(item => !store.rootPath.includes(item));
-                    } else {
-                        initialState = fromJS(StateHistory.initialState);
-                        path = store.statePath;
-                    }
+                    let path = store.statePath.filter(item => !store.rootPath.includes(item));
 
                     state.merge(initialState.getIn(path));
                 });

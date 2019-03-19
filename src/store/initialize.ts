@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 import { Store } from './store';
 
 export class Initialize {
+    newStore: Store<any>;
+
     constructor(statePath, initialState: any = null) {
         let actionWrapper = function (state: any) {
             if (state.getIn([...statePath, '__initialized'])) {
@@ -20,8 +22,9 @@ export class Initialize {
 
             try {
                 newState = state.setIn(statePath, initialState);
-                (<any>this).initialState = initialState;
-                (<any>this).rootPath = statePath;
+                this.newStore = (<any>this).select(statePath);
+                this.newStore.initialState = initialState;
+                this.newStore.rootPath = statePath;
             } catch (exception) {
                 console.error(exception);
             }
@@ -34,7 +37,7 @@ export class Initialize {
             take(1)
         ).subscribe();
 
-        return (<any>this).select(statePath);
+        return this.newStore as any;
     }
 }
 

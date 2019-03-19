@@ -11,7 +11,7 @@ import { take } from 'rxjs/operators';
 
 export class Store<T> extends Observable<T> implements Observer<any> {
     statePath: any[];
-    rootPath: any[];
+    rootPath: any[] = [];
     initialState: any;
 
     update: UpdateSignature<T>;

@@ -82,6 +82,12 @@ describe('Store tests', () => {
             intilizedStore.select(['test']).reset();
             expect(StateHistory.CURRENT_STATE.getIn(['actionStore', 'test', 'url'])).toEqual('home');
         });
+
+        it('should rootPath and initialState vallues to store after initialization', () => {
+            const intilizedStore = store.initialize(['actionStore'], { test: { url: 'home' } });
+            expect(intilizedStore.rootPath).toContain('actionStore');
+            expect(intilizedStore.initialState.toJS().test.url).toBe('home');
+        });
     });
 });
 
