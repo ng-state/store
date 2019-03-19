@@ -3,10 +3,12 @@ import { tap, take } from 'rxjs/operators';
 import { Store } from '../store';
 import { Observable, isObservable, from, of } from 'rxjs';
 
+// @dynamic
 export class PersistStateManager {
+
     protected static storageDefaults = {
         storage: localStorage,
-        getKeys: Object.keys(localStorage)
+        getKeys: () => Object.keys(localStorage)
     };
 
     protected static defaults: PersistStateParams = {
@@ -21,7 +23,7 @@ export class PersistStateManager {
     constructor(private store: Store<any>) {
     }
 
-    static configureStorage(storage: PersistStateStorage, getKeys: Promise<string[]> | Observable<string[]> | string[]) {
+    static configureStorage(storage: PersistStateStorage, getKeys: () => Promise<string[]> | Observable<string[]> | string[]) {
         PersistStateManager.defaults.storageConfig.storage = storage;
         PersistStateManager.defaults.storageConfig.getKeys = getKeys;
     }
@@ -67,7 +69,7 @@ export class PersistStateManager {
 
     clear(params?: PersistStateParams) {
         params = this.getParams(params, this.store);
-        this.resolve(params.storageConfig.getKeys)
+        this.resolve(params.storageConfig.getKeys())
             .pipe(take(1))
             .subscribe(keys => {
                 keys.filter((e: string) => e.startsWith(this.prefix))
@@ -126,5 +128,5 @@ export interface PersistStateParams {
 
 export interface StorageConfiguartion {
     storage: PersistStateStorage;
-    getKeys: Promise<string[]> | Observable<string[]> | string[];
+    getKeys: () => Promise<string[]> | Observable<string[]> | string[];
 }

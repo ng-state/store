@@ -1,3 +1,8 @@
+### 4.3.0
+- Added new Reset operator
+- Added store.bind.form plugin for binding to reactive forms
+- Added ability to store state to external storagies like localStorage or async storagies like IndexDB
+
 ### 4.2.2
 - Fixed bug with inheritacne.
 - Switched to ng build

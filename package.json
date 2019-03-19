@@ -1,6 +1,6 @@
 {
   "name": "ng-state",
-  "version": "4.0.0",
+  "version": "4.3.0",
   "module": "./index.js",
   "scripts": {
     "ngc": "ngc",
@@ -19,8 +19,8 @@
     "build": "ng build --prod --project ng-state"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^0.11.4",
-    "@angular-devkit/build-ng-packagr": "^0.11.4",
+    "@angular-devkit/build-angular": "^0.13.6",
+    "@angular-devkit/build-ng-packagr": "^0.13.6",
     "@angular/common": "^7.1.4",
     "@angular/compiler": "^7.1.4",
     "@angular/compiler-cli": "^7.1.4",
@@ -43,9 +43,10 @@
     "rxjs": "6.3.2",
     "ts-jest": "^22.4.1",
     "ts-loader": "^4.2.0",
+    "tsickle": "^0.34.3",
     "tsify": "^3.0.1",
     "tslint": "^5.7.0",
-    "typescript": "~2.7.2",
+    "typescript": "3.1.6",
     "uglifyjs": "^2.4.10",
     "zone.js": "^0.8.18"
   },
@@ -75,8 +76,8 @@
       "node"
     ],
     "setupFiles": [
-        "./spec/localstorage.mock.ts"
-      ]
+      "./spec/localstorage.mock.ts"
+    ]
   },
   "dependencies": {
     "user": "0.0.0"

@@ -20,9 +20,11 @@ RxJS and ImmutableJs powered nested state management for Angular 2 applications 
 14. [IsProd](#isprod)
 15. [Server Side Rendering and TransferState](#ssr)
 16. [Time travel](#time-travel)
-17. [Flow diagram](#flow)
-18. [Testing](#testing)
-19. [Contributing](#contributing)
+17. [Bind to Reactive Forms](#bind-reactive-forms)
+18. [External storage](#external-storage)
+19. [Flow diagram](#flow)
+20. [Testing](#testing)
+21. [Contributing](#contributing)
 
 ## Introduction
 <a name="introduction"></a>
@@ -376,6 +378,51 @@ You can also view current state in ```window.state.CURRENT_STATE``` and whole hi
 
 History collecting can be disabled by passing ```false``` to ```StoreModule.provideStore``` second parameter.
 By default 100 history steps are stored in memory but it can be modified by passing third parameter to ```StoreModule.provideStore```.
+
+## Bind to Reactive Forms
+<a name="bind-reactive-forms"></a>
+From version 4.3.0 you can bind to Angular Reactive Forms from:
+- from actions by doing ```const form = this.actions.store.form.bindthis.myForm)```
+- from injected store from component ```const form = this.store.select(['my-form-state-path']).form.bind(myForm)```
+
+Assigned variable ```form``` has methods: ```reset``` and ```destory```
+- Reset resets form to its initial state
+- Destory should be called on ngOnDestroy method
+
+## External storage
+<a name="external-storage"></a>
+From version 4.3.0 I have added ability to save state to external storages like ```localStorage``` or async ones like ```IndexDB```
+Storage can be accessed through actions or from component:
+1) From actions: ```this.store.storage.save()```
+2) From component: ```this.store.select(['state-to-save-path']).storage.save()```
+
+Storage api:
+- save() - saves state to storage
+- load() - loads and applies state from storage (state is deleted from storage aftewards at least ```keepEntry``` is passed as ```true```)
+- removeItem() - removes item from storage
+- clear() - clears all state items from storage (clears items that keys starts with ```state::```)
+
+Additional ```PersistStateParams``` params can be passed to each API method except ```clear```:
+- custom key
+- custom storage config
+- custom deserialize function
+- custom serialize function
+
+Custom storage:
+By default localStorage is used. However you can define other storages in one of two ways:
+- Setting it globally by calling ```PersistStateManager.configureStorage({...})``` - passed object should contain ```clear```, ```getItem```, ```removeItem```, ```setItem``` methods and method to gather keys from storage ```() => Object.keys(sessionStorage)```
+
+example:
+```
+ PersistStateManager.configureStorage({
+            clear: () => timer(2000).pipe(tap(_ => localStorage.clear())),
+            getItem: (key: string) => timer(2000).pipe(map(_ => localStorage.getItem(key))),
+            removeItem: (key: string) => timer(2000).pipe(tap(_ => localStorage.removeItem(key))),
+            setItem: (key: string, value: any) => timer(2000).pipe(tap(_ => localStorage.setItem(key, value))),
+        }, () => timer(2000).pipe(map(_ => Object.keys(localStorage))));
+```
+- passing to params when calling ```save``` method for example.
+```this.store.select(['todos']).storage.save({ storageConfig: { storage: sessionStorage, getKeys: Object.keys(sessionStorage) } });```
 
 ## Flow diagram
 <a name="flow"></a>
