@@ -5,7 +5,7 @@ import { Subject } from 'rxjs';
 import { HistoryController } from '../src/state/history-controller';
 import { FormGroupLike } from '../src/store/plugins/form-manager.plugin';
 
-describe('Forms', () => {
+describe('Forms manager', () => {
     let store: Store<any>;
     let form: FormGroupLike = {
         patchValue: (state: any, params: any) => { },
@@ -27,7 +27,7 @@ describe('Forms', () => {
             historyController.init();
         });
 
-        it('should apply state on bind', () => {
+        it('should apply state on form bind', () => {
             spyOn(form, 'patchValue');
             store.select(['layout']).form.bind(form);
 
