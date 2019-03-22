@@ -1,13 +1,11 @@
 import { StateHistory } from '../src/state/history';
 import { Store } from '../src/store/store';
 import { stateFactory, storeFactory } from '../src/ng-state.module';
-import { BehaviorSubject, Subject } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 import { HistoryController } from '../src/state/history-controller';
 import { FormGroupLike } from '../src/store/plugins/form-manager.plugin';
-import { isJsObject } from '@angular/core/src/change_detection/change_detection_util';
 
-describe('Store tests', () => {
+describe('Forms', () => {
     let store: Store<any>;
     let form: FormGroupLike = {
         patchValue: (state: any, params: any) => { },
@@ -29,7 +27,7 @@ describe('Store tests', () => {
             historyController.init();
         });
 
-        it('should apply state to form', () => {
+        it('should apply state on bind', () => {
             spyOn(form, 'patchValue');
             store.select(['layout']).form.bind(form);
 
@@ -45,7 +43,7 @@ describe('Store tests', () => {
             });
         });
 
-        it('should restore reset form', () => {
+        it('should reset form', () => {
             spyOn(form, 'patchValue');
             const layoutStore = store.select(['layout']);
             layoutStore.update(state => state.set('test', 'test3'));
