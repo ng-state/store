@@ -1,9 +1,8 @@
 import { StateHistory } from '../src/state/history';
 import { Store } from '../src/store/store';
-import { stateFactory, storeFactory } from '../src/ng-state.module';
 import { Subject } from 'rxjs';
-import { HistoryController } from '../src/state/history-controller';
 import { FormGroupLike } from '../src/store/plugins/form-manager.plugin';
+import { NgStateTestBed } from '../src/ng-state.test-bed';
 
 describe('Forms manager', () => {
     let store: Store<any>;
@@ -19,12 +18,7 @@ describe('Forms manager', () => {
     describe('', () => {
         beforeEach(() => {
             const initialState = { layout: { test: 'test' } };
-            const state = stateFactory(initialState);
-            store = storeFactory(state);
-            const history = new StateHistory();
-            history.init(initialState);
-            const historyController = new HistoryController(store, history);
-            historyController.init();
+            store = NgStateTestBed.createStore(initialState);
         });
 
         it('should apply state on form bind', () => {
