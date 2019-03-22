@@ -7,11 +7,12 @@ export class StateHistory {
     static HISTORY = [];
     static collectHistory = true;
     static storeHistoryItems: number | null = 100;
-    static viewHistory = new Subject<boolean>();
     static initialState = {};
 
     private static debugMode = false;
     private static debugStatePath = null;
+
+    static viewHistory = new Subject<boolean>();
 
     get currentState(): any {
         return StateHistory.CURRENT_STATE;

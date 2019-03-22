@@ -1,3 +1,6 @@
+### 4.3.4
+- fixed bug which di dnot allow to set default storage
+
 ### 4.3.0
 - Added new Reset operator
 - Added store.bind.form plugin for binding to reactive forms

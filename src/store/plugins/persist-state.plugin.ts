@@ -8,7 +8,7 @@ export class PersistStateManager {
 
     protected defaults: PersistStateParams = {
         key: '',
-        storageConfig: {} as any,
+        storageConfig: null,
         deserialize: JSON.parse,
         serialize: JSON.stringify
     };

@@ -1,9 +1,9 @@
 import { StateHistory } from './../src/state/history';
 import { Store } from './../src/store/store';
-import { stateFactory, storeFactory } from '../src/ng-state.module';
+import { stateFactory } from '../src/ng-state.module';
 import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { HistoryController } from '../src/state/history-controller';
+import { NgStateTestBed } from '../src/ng-state.test-bed';
 
 describe('Store tests', () => {
     let store: Store<any>;
@@ -25,12 +25,7 @@ describe('Store tests', () => {
     describe('', () => {
         beforeEach(() => {
             const initialState = { layout: { test: 'test' } };
-            const state = stateFactory(initialState);
-            store = storeFactory(state);
-            const history = new StateHistory();
-            history.init(initialState);
-            const historyController = new HistoryController(store, history);
-            historyController.init();
+            store = NgStateTestBed.createStore(initialState);
         });
 
         it('should initialize state with initial value', () => {

@@ -7,7 +7,6 @@ import { MapSgnature, Map } from './map';
 import { ResetSignature, Reset } from './reset';
 import { NgFormStateManager } from './plugins/form-manager.plugin';
 import { PersistStateManager } from './plugins/persist-state.plugin';
-import { take } from 'rxjs/operators';
 
 export class Store<T> extends Observable<T> implements Observer<any> {
     statePath: any[];

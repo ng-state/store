@@ -1,52 +1,44 @@
 import { StateHistory } from './../src/state/history';
 import { Store } from './../src/store/store';
-import { stateFactory, storeFactory } from '../src/ng-state.module';
-import { HistoryController } from '../src/state/history-controller';
+import { NgStateTestBed } from '../src/ng-state.test-bed';
 
-describe('Store tests', () => {
+describe('Storages', () => {
     let store: Store<any>;
 
-    describe('', () => {
-        beforeEach(() => {
-            const initialState = { layout: { test: 'test' } };
-            const state = stateFactory(initialState);
-            store = storeFactory(state);
-            const history = new StateHistory();
-            history.init(initialState);
-            const historyController = new HistoryController(store, history);
-            historyController.init();
-        });
+    beforeEach(() => {
+        const initialState = { layout: { test: 'test' } };
+        store = NgStateTestBed.createStore(initialState);
+    });
 
-        it('should add to external storage', () => {
-            store.select(['layout']).storage.save({ key: 'testKey' });
-            expect(<any>localStorage.getItem('state::testKey')).toBe('{"test":"test"}');
-        });
+    it('should add state', () => {
+        store.select(['layout']).storage.save({ key: 'testKey' });
+        expect(<any>localStorage.getItem('state::testKey')).toBe('{"test":"test"}');
+    });
 
-        it('should load from external storage', () => {
-            const layoutStore = store.select(['layout']);
+    it('should load state', () => {
+        const layoutStore = store.select(['layout']);
 
-            layoutStore.storage.save();
-            layoutStore.update(state => state.set('test', 'test-updated'));
-            expect(StateHistory.CURRENT_STATE.getIn(['layout', 'test'])).toEqual('test-updated');
+        layoutStore.storage.save();
+        layoutStore.update(state => state.set('test', 'test-updated'));
+        expect(StateHistory.CURRENT_STATE.getIn(['layout', 'test'])).toEqual('test-updated');
 
-            layoutStore.storage.load();
-            expect(StateHistory.CURRENT_STATE.getIn(['layout', 'test'])).toEqual('test');
-        });
+        layoutStore.storage.load();
+        expect(StateHistory.CURRENT_STATE.getIn(['layout', 'test'])).toEqual('test');
+    });
 
-        it('should clear only state items', () => {
-            localStorage.setItem('should-stay-item', 'a');
-            store.select(['layout']).storage.save({ key: 'testKey' });
-            store.select(['layout']).storage.clear();
+    it('should clear state', () => {
+        localStorage.setItem('should-stay-item', 'a');
+        store.select(['layout']).storage.save({ key: 'testKey' });
+        store.select(['layout']).storage.clear();
 
-            expect(<any>localStorage.getItem('should-stay-item')).toEqual('a');
-        });
+        expect(<any>localStorage.getItem('should-stay-item')).toEqual('a');
+    });
 
-        it('should remove item', () => {
-            store.select(['layout']).storage.save({ key: 'remove-item' });
-            store.select(['layout']).storage.remove({ key: 'remove-item' });
+    it('should remove item', () => {
+        store.select(['layout']).storage.save({ key: 'remove-item' });
+        store.select(['layout']).storage.remove({ key: 'remove-item' });
 
-            expect(<any>localStorage.getItem('remove-item')).toBeNull();
-        });
+        expect(<any>localStorage.getItem('remove-item')).toBeNull();
     });
 });
 

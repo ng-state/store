@@ -14,7 +14,7 @@ export class Helpers {
                 }
             }
         }
-    };
+    }
 
     static isImmutable(obj: any) {
         return Map.isMap(obj) || Iterable.isIterable(obj);

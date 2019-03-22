@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 import { ServiceLocator } from '../helpers/service-locator';
 import { Store } from '../store/store';
-import { take } from 'rxjs/operators';
+import { StateHistory } from '../state/history';
 
 export function InjectStore(newPath: string[] | string | ((currentPath, stateIndex) => string[] | string), intialState: Object | any = null, debug: boolean = false) {
     let getStatePath = (currentPath, stateIndex, extractedPath) => {
@@ -81,6 +81,10 @@ export function InjectStore(newPath: string[] | string | ((currentPath, stateInd
             this.store = intialState
                  ? store.initialize(statePath, intialState)
                  : store.select(statePath);
+
+            if (!StateHistory.CURRENT_STATE.getIn(statePath)) {
+                console.error(`No such state in path ${statePath}. Define initial state for this path in global initial state or comonent actions.`);
+            }
 
             this.stateChangeSubscription = this.store.subscribe((state: any) => {
                 this.state = state;

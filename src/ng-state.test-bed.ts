@@ -1,6 +1,5 @@
 import { ServiceLocator } from './helpers/service-locator';
 import { IS_TEST, stateFactory, storeFactory } from './ng-state.module';
-import { HasStateActions } from './decorators/component-state.decorator';
 import { StateHistory } from './state/history';
 import { Store } from './store/store';
 import { HistoryController } from './state/history-controller';

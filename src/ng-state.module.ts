@@ -54,7 +54,6 @@ export class StoreModule {
             providers: [
                 { provide: STORE_HISTORY_ITEMS, useValue: storeHistoryItems },
                 { provide: COLLECT_HISTORY, useValue: collectHistory },
-                { provide: COLLECT_HISTORY, useValue: collectHistory },
                 { provide: INITIAL_STATE, useValue: initialState },
                 { provide: IS_PROD, useValue: isProd },
                 { provide: IS_TEST, useValue: false },
