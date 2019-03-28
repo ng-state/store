@@ -1,9 +1,13 @@
+### 4.4.0
+- persist state plugin return observable on `save`, `load`, `removeItem`, `clear` actions.
+- `onChange` and `shouldUpdateState` hooks are added to form manager plugin
+
 ### 4.3.4
 - fixed bug which di dnot allow to set default storage
 
 ### 4.3.0
 - Added new Reset operator
-- Added store.bind.form plugin for binding to reactive forms
+- Added store.form.bind plugin for binding to reactive forms
 - Added ability to store state to external storagies like localStorage or async storagies like IndexDB
 
 ### 4.2.2

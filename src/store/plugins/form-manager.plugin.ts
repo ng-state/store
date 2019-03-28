@@ -1,5 +1,5 @@
 import { distinctUntilChanged, debounceTime, takeUntil } from 'rxjs/operators';
-import { Observable, Subject } from 'rxjs';
+import { Observable,  Subject } from 'rxjs';
 import { Store } from '../store';
 import { Map, fromJS } from 'immutable';
 
@@ -9,6 +9,9 @@ export class NgFormStateManager {
     private form: FormGroupLike;
     private params: NgFormStateManagerParams;
     private store: Store<any>;
+
+    private onChangeFn: (state: any) => void;
+    private shouldUpdateStateFn: (params: ShoulUpdateStateParams) => boolean;
 
     constructor(store: Store<any>) {
         this.store = store;
@@ -33,6 +36,18 @@ export class NgFormStateManager {
 
         this.form = null;
         this.store = null;
+        this.onChangeFn = null;
+        this.shouldUpdateStateFn = null;
+    }
+
+    onChange(onChangeFn: (state: any) => void) {
+        this.onChangeFn = onChangeFn;
+        return this;
+    }
+
+    shouldUpdateState(shouldUpdateStateFn: (params: ShoulUpdateStateParams) => boolean) {
+        this.shouldUpdateStateFn = shouldUpdateStateFn;
+        return this;
     }
 
     private setInitialValue(store: Store<any>) {
@@ -55,9 +70,29 @@ export class NgFormStateManager {
             )
             .subscribe(value => {
                 store.update((state: Map<any, any>) => {
-                    state.merge(fromJS(value));
+                    this.executeUpdate(value, state);
                 });
             });
+    }
+
+    private executeUpdate(value: any, state: any) {
+        if (this.shouldUpdateStateFn) {
+            if (this.shouldUpdateStateFn({
+                form: this.form,
+                state: state,
+                value: value
+            })) {
+                state.merge(fromJS(value));
+                this.onChangeCall(state);
+            }
+        } else {
+            state.merge(fromJS(value));
+            this.onChangeCall(state);
+        }
+    }
+
+    private onChangeCall(state: any) {
+        this.onChangeFn && this.onChangeFn(state);
     }
 }
 
@@ -74,3 +109,9 @@ export type NgFormStateManagerParams = {
     debounceTime?: number;
     emitEvent?: boolean;
 };
+
+export interface ShoulUpdateStateParams {
+    form: FormGroupLike;
+    state: any;
+    value: any;
+}
