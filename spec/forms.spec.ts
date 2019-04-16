@@ -1,4 +1,4 @@
-import { StateHistory } from '../src/state/history';
+import { StateKeeper } from '../src/state/history';
 import { Store } from '../src/store/store';
 import { Subject } from 'rxjs';
 import { FormGroupLike, NgFormStateManager } from '../src/store/plugins/form-manager.plugin';
@@ -38,7 +38,7 @@ describe('Forms manager', () => {
         layoutForm = store.select(['layout']).form.bind(form, { debounceTime: 0 });
         (<Subject<any>>form.valueChanges).next({ test: 'test2' });
         setTimeout(() => {
-            expect(StateHistory.CURRENT_STATE.getIn(['layout', 'test'])).toEqual('test2');
+            expect(StateKeeper.CURRENT_STATE.getIn(['layout', 'test'])).toEqual('test2');
             done();
         });
     });
@@ -47,13 +47,13 @@ describe('Forms manager', () => {
         spyOn(form, 'patchValue');
         const layoutStore = store.select(['layout']);
         layoutStore.update(state => state.set('test', 'test3'));
-        expect(StateHistory.CURRENT_STATE.getIn(['layout', 'test'])).toEqual('test3');
+        expect(StateKeeper.CURRENT_STATE.getIn(['layout', 'test'])).toEqual('test3');
 
         layoutForm = layoutStore.form.bind(form, { debounceTime: 0 });
 
         layoutForm.reset();
 
-        expect(StateHistory.CURRENT_STATE.getIn(['layout', 'test'])).toEqual('test');
+        expect(StateKeeper.CURRENT_STATE.getIn(['layout', 'test'])).toEqual('test');
         expect(form.patchValue).toHaveBeenCalledWith({ test: 'test' }, { 'emitEvent': false });
     });
 
@@ -68,7 +68,7 @@ describe('Forms manager', () => {
 
         setTimeout(() => {
             expect(shoulUpdate.mock.calls.length).toBe(1);
-            expect(StateHistory.CURRENT_STATE.getIn(['layout', 'test'])).toEqual('test2');
+            expect(StateKeeper.CURRENT_STATE.getIn(['layout', 'test'])).toEqual('test2');
             done();
         });
 
@@ -85,7 +85,7 @@ describe('Forms manager', () => {
 
         setTimeout(() => {
             expect(shoulUpdate.mock.calls.length).toBe(1);
-            expect(StateHistory.CURRENT_STATE.getIn(['layout', 'test'])).toEqual('test');
+            expect(StateKeeper.CURRENT_STATE.getIn(['layout', 'test'])).toEqual('test');
             done();
         });
     });

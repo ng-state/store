@@ -1,9 +1,12 @@
 import { Router, NavigationCancel, NavigationEnd, RoutesRecognized } from '@angular/router';
 import { Store } from '../store/store';
+import { DebugInfo } from '../debug/debug-info';
+import { filter } from 'rxjs/operators';
 
 export class RouterState {
+    static startingRoute = '';
 
-    constructor(private store: Store<any>, private router: Router) {
+    constructor(private store: Store<any>, private router: Router, private debugInfo: DebugInfo) {
     }
 
     init() {
@@ -26,15 +29,17 @@ export class RouterState {
         }
 
         let cancelledId = -1;
-        this.router.events.subscribe((event) => {
-            if (event instanceof NavigationCancel) {
-                cancelledId = (<NavigationCancel>event).id;
-            }
-            if (event instanceof NavigationEnd && (<NavigationEnd>event).id !== cancelledId) {
-                (<Store<any>>this.store.select(['router'])).update(state => {
-                    state.set('url', event.url);
-                });
-            }
-        });
+        this.router.events
+             .pipe(filter(() => this.debugInfo && !this.debugInfo.isTimeTravel))
+            .subscribe((event) => {
+                if (event instanceof NavigationCancel) {
+                    cancelledId = (<NavigationCancel>event).id;
+                }
+                if (event instanceof NavigationEnd && (<NavigationEnd>event).id !== cancelledId) {
+                    (<Store<any>>this.store.select(['router'])).update(state => {
+                        state.set('url', event.url);
+                    });
+                }
+            });
     }
 }

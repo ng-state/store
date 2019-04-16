@@ -1,4 +1,3 @@
-import { ClearSignature, Clear } from './clear';
 import { Select, SelectSignature } from './select';
 import { Update, UpdateSignature } from './update';
 import { Initialize, InitializeSignature } from './initialize';
@@ -9,7 +8,7 @@ import { NgFormStateManager } from './plugins/form-manager.plugin';
 import { PersistStateManager } from './plugins/persist-state.plugin';
 
 export class Store<T> extends Observable<T> implements Observer<any> {
-    statePath: any[];
+    statePath: any[] = [];
     rootPath: any[] = [];
     initialState: any;
 
@@ -17,8 +16,6 @@ export class Store<T> extends Observable<T> implements Observer<any> {
     initialize: InitializeSignature<T>;
     map: MapSgnature<T>;
     reset: ResetSignature;
-
-    clear: ClearSignature = Clear.bind(this);
 
     form: NgFormStateManager;
     storage: PersistStateManager;
@@ -32,7 +29,7 @@ export class Store<T> extends Observable<T> implements Observer<any> {
 
     select: SelectSignature = (statePath: string[]): Store<T> => {
         let selectStore = Select.bind(this).call(this, statePath);
-        selectStore.statePath = !!this.statePath ? [...this.statePath, ...statePath] : statePath;
+        selectStore.statePath = [...this.statePath, ...statePath];
         selectStore.rootPath = this.rootPath;
         selectStore.initialState = this.initialState;
         this.initializeOperators(selectStore);

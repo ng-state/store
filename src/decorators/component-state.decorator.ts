@@ -1,12 +1,20 @@
-import { ServiceLocator } from './../helpers/service-locator';
+import { ServiceLocator } from '../helpers/service-locator';
 import { ChangeDetectorRef, Input, OnDestroy, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { IS_PROD, IS_TEST } from '../ng-state.module';
+import { Dispatcher } from '../services/dispatcher';
+
 export function ComponentState(stateActions: any | ((T) => any), disableOnChangesBeforeActionsCreated = true) {
     return (target: any) => {
 
         let origInit = target.prototype.ngOnInit || (() => { });
         let origDestroy = target.prototype.ngOnDestroy || (() => { });
         let origOnChanges = target.prototype.ngOnChanges || (() => { });
+
+        const ensureMarkForCheck = function() {
+            if (!this.cd) {
+                this.cd = ServiceLocator.injector.get(ChangeDetectorRef);
+            }
+        };
 
         target.prototype.ngOnChanges = function (changes) {
             if (disableOnChangesBeforeActionsCreated && !this.actions) {
@@ -23,27 +31,27 @@ export function ComponentState(stateActions: any | ((T) => any), disableOnChange
                 return;
             }
 
-            const disableWarnings = ServiceLocator.injector.get(IS_PROD);
-
             if (!this.statePath) {
                 this.statePath = [];
             }
 
             if (stateActions) {
+                ensureMarkForCheck.apply(this);
+
                 // DOC - CONVETION: only annonymous function allwed for choosing state; Actions can be only named functions;
                 const extractedStateAction = stateActions.name === ''
                     ? stateActions(this)
                     : stateActions;
 
-                const initState = new extractedStateAction();
-                this.statePath = initState.createStore(this.statePath, this.stateIndex, () => {
-                    if (this.cd) {
+                const actions = new extractedStateAction();
+                this.statePath = actions.createStore(this.statePath, this.stateIndex);
+
+                this.stateChangeSubscription = ServiceLocator.injector.get(Dispatcher)
+                    .subscribe(actions.aId, () => {
                         this.cd.markForCheck();
-                    } else if (!disableWarnings) {
-                        console.warn(`The component ${target.name} did not pass ChangeDetectionRef to HasStateActions. It might might lead to not getting latest state when using state without store. e.g: get value = () => thi.state.get('value');`);
-                    }
-                });
-                this.actions = initState;
+                    });
+
+                this.actions = actions;
             }
 
             origInit.apply(this, arguments);
@@ -52,6 +60,10 @@ export function ComponentState(stateActions: any | ((T) => any), disableOnChange
         target.prototype.ngOnDestroy = function () {
             if (this.actions) {
                 this.actions.onDestroy();
+            }
+
+            if (this.stateChangeSubscription) {
+                this.stateChangeSubscription.unsubscribe();
             }
 
             origDestroy.apply(this, arguments);
@@ -71,7 +83,7 @@ export class HasStateActions<T> implements OnInit, OnDestroy, OnChanges {
         this.cd = cd;
     }
 
-    ngOnInit(): void {}
-    ngOnChanges(changes: SimpleChanges): void {}
-    ngOnDestroy(): void {}
+    ngOnInit(): void { }
+    ngOnChanges(changes: SimpleChanges): void { }
+    ngOnDestroy(): void { }
 }

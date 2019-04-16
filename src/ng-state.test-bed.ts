@@ -3,6 +3,7 @@ import { IS_TEST, stateFactory, storeFactory } from './ng-state.module';
 import { StateHistory } from './state/history';
 import { Store } from './store/store';
 import { HistoryController } from './state/history-controller';
+import { DebugInfo } from './debug/debug-info';
 
 export class NgStateTestBed {
     public static setTestEnvironment() {
@@ -14,7 +15,11 @@ export class NgStateTestBed {
         const store = storeFactory(state);
         const stateHistory = new StateHistory();
         stateHistory.init(initialState);
-        const historyController = new HistoryController(store, stateHistory);
+        const historyController = new HistoryController(
+            store,
+            stateHistory,
+            new DebugInfo(stateHistory, { run: () => { } } as any),
+            { navigateByUrl: () => new Promise(() => { }) } as any);
         historyController.init();
 
         return store;

@@ -1,61 +1,51 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
 
 @Injectable()
 export class StateHistory {
-    static CURRENT_STATE: any = {};
-    static HISTORY = [];
-    static collectHistory = true;
-    static storeHistoryItems: number | null = 100;
     static initialState = {};
 
-    private static debugMode = false;
-    private static debugStatePath = null;
-
-    static viewHistory = new Subject<boolean>();
+    private options: StateHistoryOptions = {
+        collectHistory: true,
+        storeHistoryItems: 100
+    };
 
     get currentState(): any {
-        return StateHistory.CURRENT_STATE;
+        return StateKeeper.CURRENT_STATE;
+    }
+
+    get history(): any[] {
+        return StateKeeper.HISTORY;
     }
 
     init(initialState: any) {
         StateHistory.initialState = initialState;
     }
 
-    add(state) {
-        StateHistory.CURRENT_STATE = state;
+    changeDefaults(options: StateHistoryOptions) {
+        this.options = { ...this.options, ...options };
+    }
 
-        if (!StateHistory.collectHistory || StateHistory.HISTORY.indexOf(state) >= 0) {
+    add(state: any) {
+        StateKeeper.CURRENT_STATE = state;
+
+        if (!this.options.collectHistory) {
             return;
         }
 
-        if (StateHistory.HISTORY.length >= StateHistory.storeHistoryItems) {
-            StateHistory.HISTORY.shift();
+        if (StateKeeper.HISTORY.length >= this.options.storeHistoryItems) {
+            StateKeeper.HISTORY.shift();
         }
 
-        StateHistory.HISTORY.push(state);
-
-        if (StateHistory.debugMode) {
-            console.info((StateHistory.debugStatePath && state.getIn(StateHistory.debugStatePath) || state).toJS());
-        }
+        StateKeeper.HISTORY.push(state.toJS());
     }
+}
 
-    static showHistory() {
-        StateHistory.collectHistory = false;
-        StateHistory.viewHistory.next(true);
-    }
+export class StateKeeper {
+    static CURRENT_STATE: any = null;
+    static HISTORY = [];
+}
 
-    static hideHistory() {
-        StateHistory.collectHistory = true;
-        StateHistory.viewHistory.next(false);
-    }
-
-    static startDebugging(statePath?: any[]) {
-        StateHistory.debugStatePath = statePath;
-        StateHistory.debugMode = true;
-    }
-
-    static stopDebugging() {
-        StateHistory.debugMode = false;
-    }
+export interface StateHistoryOptions {
+    collectHistory?: boolean;
+    storeHistoryItems?: number | null;
 }

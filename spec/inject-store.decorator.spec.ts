@@ -1,7 +1,7 @@
 import { InjectStore } from '../src/decorators/inject-store.decorator';
 import { ServiceLocator } from './../src/helpers/service-locator';
 import { Subject } from 'rxjs';
-import { StateHistory } from '../src/state/history';
+import { StateHistory, StateKeeper } from '../src/state/history';
 import { fromJS } from 'immutable';
 
 class TestStateActions {
@@ -31,8 +31,8 @@ describe('InjectStore decorator', () => {
         const decorator = InjectStore(newPath, intialState);
         decorator(TestStateActions);
         target = new TestStateActions();
-        StateHistory.CURRENT_STATE = fromJS({});
-        spyOn(StateHistory.CURRENT_STATE, 'getIn').and.returnValue(true);
+        StateKeeper.CURRENT_STATE = fromJS({});
+        spyOn(StateKeeper.CURRENT_STATE, 'getIn').and.returnValue(true);
 
     };
 

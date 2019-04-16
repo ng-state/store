@@ -1,5 +1,5 @@
-import { distinctUntilChanged, debounceTime, takeUntil } from 'rxjs/operators';
-import { Observable,  Subject } from 'rxjs';
+import { map, take, distinctUntilChanged, debounceTime, takeUntil } from 'rxjs/operators';
+import { Observable, Subscription, Subject } from 'rxjs';
 import { Store } from '../store';
 import { Map, fromJS } from 'immutable';
 

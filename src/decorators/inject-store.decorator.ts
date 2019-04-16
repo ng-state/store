@@ -1,7 +1,8 @@
 import { Observable } from 'rxjs';
 import { ServiceLocator } from '../helpers/service-locator';
 import { Store } from '../store/store';
-import { StateHistory } from '../state/history';
+import { Helpers } from '../helpers/helpers';
+import { Dispatcher } from '../services/dispatcher';
 
 export function InjectStore(newPath: string[] | string | ((currentPath, stateIndex) => string[] | string), intialState: Object | any = null, debug: boolean = false) {
     let getStatePath = (currentPath, stateIndex, extractedPath) => {
@@ -67,7 +68,9 @@ export function InjectStore(newPath: string[] | string | ((currentPath, stateInd
 
     return (target: any) => {
 
-        target.prototype.createStore = function (currentPath: any[], stateIndex: (string | number) | (string | number)[], markForCheck: () => void) {
+        target.prototype.createStore = function (currentPath: any[], stateIndex: (string | number) | (string | number)[]) {
+            this.aId = Helpers.guid();
+
             let extractedPath = typeof newPath === 'function' && (<any>newPath).name === ''
                 ? (<any>newPath)(currentPath, stateIndex)
                 : newPath;
@@ -77,18 +80,15 @@ export function InjectStore(newPath: string[] | string | ((currentPath, stateInd
                 : getStatePath(currentPath, stateIndex, extractedPath);
 
             const store = ServiceLocator.injector.get(Store) as Store<any>;
+            const dispatcher = ServiceLocator.injector.get(Dispatcher);
 
             this.store = intialState
                  ? store.initialize(statePath, intialState)
                  : store.select(statePath);
 
-            if (!StateHistory.CURRENT_STATE.getIn(statePath)) {
-                console.error(`No such state in path ${statePath}. Define initial state for this path in global initial state or comonent actions.`);
-            }
-
             this.stateChangeSubscription = this.store.subscribe((state: any) => {
                 this.state = state;
-                markForCheck();
+                dispatcher.publish(this.aId);
 
                 if (debug && state.toJS) {
                     console.info(state.toJS());
@@ -100,11 +100,11 @@ export function InjectStore(newPath: string[] | string | ((currentPath, stateInd
             return statePath;
         };
 
-        target.prototype.createTestStore = function (statePath) {
+        target.prototype.createTestStore = function (statePath: any[]) {
             let store = ServiceLocator.injector.get(Store);
             this.store = store.select(statePath);
             const that = this;
-            this.stateChangeSubscription = this.store.subscribe((state) => {
+            this.stateChangeSubscription = this.store.subscribe((state: any) => {
                 that.state = state;
             });
         };
