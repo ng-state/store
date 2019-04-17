@@ -1,6 +1,6 @@
 {
     "name": "ng-state",
-    "version": "4.4.0",
+    "version": "5.0.0",
     "description": "RxJS and ImmutableJs powered nested state managment for Angular2 apps inspired by @ngrx.",
     "repository": {
         "type": "git",

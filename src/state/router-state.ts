@@ -1,7 +1,7 @@
 import { Router, NavigationCancel, NavigationEnd, RoutesRecognized } from '@angular/router';
 import { Store } from '../store/store';
 import { DebugInfo } from '../debug/debug-info';
-import { filter } from 'rxjs/operators';
+import { filter, take, skip } from 'rxjs/operators';
 
 export class RouterState {
     static startingRoute = '';
@@ -15,12 +15,14 @@ export class RouterState {
     }
 
     private initRouter() {
-        const initialRouteSubscription = this.router.events.subscribe(event => {
-            if (event instanceof RoutesRecognized) {
+        this.router.events
+            .pipe(
+                filter(event => event instanceof RoutesRecognized),
+                take(1)
+            )
+            .subscribe((event: RoutesRecognized) => {
                 this.store.initialize(['router'], { url: event.url }, false);
-                initialRouteSubscription.unsubscribe();
-            }
-        });
+            });
     }
 
     private bindRouter() {
@@ -30,7 +32,7 @@ export class RouterState {
 
         let cancelledId = -1;
         this.router.events
-             .pipe(filter(() => this.debugInfo && !this.debugInfo.isTimeTravel))
+            .pipe(filter(() => this.debugInfo && !this.debugInfo.isTimeTravel))
             .subscribe((event) => {
                 if (event instanceof NavigationCancel) {
                     cancelledId = (<NavigationCancel>event).id;

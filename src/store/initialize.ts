@@ -1,8 +1,9 @@
 import { fromJS } from 'immutable';
 import { Helpers } from '../helpers/helpers';
 import { tap, take } from 'rxjs/operators';
-import { Observable } from 'rxjs';
 import { Store } from './store';
+import { ActionType } from '../debug/debug-info-data';
+import { DebugInfo } from '../debug/debug-info';
 
 export class Initialize {
     newStore: Store<any>;
@@ -31,6 +32,9 @@ export class Initialize {
 
             (<any>this).source.next(newState);
         }.bind(this);
+
+        const defaultDebugInfo = { actionType: ActionType.Initialize, statePath: statePath };
+        DebugInfo.instance.add(defaultDebugInfo);
 
         (<any>this).pipe(
             tap(actionWrapper),

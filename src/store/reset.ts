@@ -4,9 +4,10 @@ import { Map, fromJS } from 'immutable';
 import { tap, take } from 'rxjs/operators';
 import { Helpers } from '../helpers/helpers';
 import { RouterState } from '../state/router-state';
+import { ActionType } from '../debug/debug-info-data';
 
 export class Reset {
-    constructor() {
+    constructor(debugMessage: string = null) {
         let reseted = false;
 
         const restoreState = function (store: Store<any>) {
@@ -32,7 +33,7 @@ export class Reset {
                         state.set('router', router);
                         state.setIn(['router', 'url'], RouterState.startingRoute);
                     }
-                });
+                }, true, { message: debugMessage, actionType: ActionType.Reset });
         };
 
         let actionWrapper = function (state: Map<any, any>) {
@@ -59,5 +60,5 @@ export class Reset {
 }
 
 export interface ResetSignature {
-    <R>(): void;
+    <R>(debugMessage?: string): void;
 }

@@ -18,6 +18,8 @@ export class DebugInfo {
         enableDevToolsOutput: true
     };
 
+    static instance: DebugInfo = null;
+
     isTimeTravel = false;
     onApplyHistory = new Subject<DebugHistoryItem>();
 

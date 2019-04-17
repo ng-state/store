@@ -8,5 +8,6 @@ export const enum ActionType {
     Update = 'UPDATE',
     Reset = 'RESET',
     Insert = 'INSERT',
-    Delete = 'DELETE'
+    Delete = 'DELETE',
+    Initialize = 'INITIALIZE'
 }

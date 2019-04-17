@@ -15,10 +15,12 @@ export class NgStateTestBed {
         const store = storeFactory(state);
         const stateHistory = new StateHistory();
         stateHistory.init(initialState);
+        const debugInfo = new DebugInfo(stateHistory, { run: () => { } } as any);
+        DebugInfo.instance = debugInfo;
         const historyController = new HistoryController(
             store,
             stateHistory,
-            new DebugInfo(stateHistory, { run: () => { } } as any),
+            debugInfo,
             { navigateByUrl: () => new Promise(() => { }) } as any);
         historyController.init();
 

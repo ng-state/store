@@ -108,6 +108,8 @@ export class StoreModule {
     }
 
     private initDebugger(ngStateOptions: NgStateOptions) {
+        DebugInfo.instance = this.debugInfo;
+
         if (!ngStateOptions || !ngStateOptions.debugger) {
             return;
         }
