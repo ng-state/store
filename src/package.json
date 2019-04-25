@@ -1,17 +1,24 @@
 {
     "name": "ng-state",
-    "version": "5.0.0",
+    "version": "5.0.1",
     "description": "RxJS and ImmutableJs powered nested state managment for Angular2 apps inspired by @ngrx.",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/ng-state/store.git"
     },
     "keywords": [
-        "RxJS",
-        "Angular2",
-        "Immutable Js",
-        "Nested",
-        "State"
+        "state management",
+        "rxjs",
+        "angular",
+        "immutable",
+        "immutablejs",
+        "nested state",
+        "store",
+        "observable data store",
+        "javascript",
+        "typescript",
+        "react store",
+        "redux"
     ],
     "author": "Vytautas Pranskunas <vytautas.pranskunas@gmail.com>",
     "license": "MIT",
