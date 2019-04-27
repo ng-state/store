@@ -39,7 +39,7 @@ export function InjectStore(newPath: string[] | string | ((currentPath, stateInd
 
     let getAllGetters = (target: any): any[] => {
         const targetMethods = Reflect.getPrototypeOf(target);
-        let methods = (<any>Object).entries((<any>Object).getOwnPropertyDescriptors(targetMethods))
+        let methods = Object.entries(Object.getOwnPropertyDescriptors(targetMethods))
             .map(([key, descriptor]: [string, any]) => {
                 return {
                     name: key,

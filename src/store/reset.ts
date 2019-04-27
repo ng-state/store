@@ -1,14 +1,12 @@
 import { Store } from './store';
-import { StateHistory } from '../state/history';
+import { StateHistory, StateKeeper } from '../state/history';
 import { Map, fromJS } from 'immutable';
-import { tap, take } from 'rxjs/operators';
 import { Helpers } from '../helpers/helpers';
 import { RouterState } from '../state/router-state';
 import { ActionType } from '../debug/debug-info-data';
 
 export class Reset {
     constructor(debugMessage: string = null) {
-        let reseted = false;
 
         const restoreState = function (store: Store<any>) {
             store
@@ -36,26 +34,11 @@ export class Reset {
                 }, true, { message: debugMessage, actionType: ActionType.Reset });
         };
 
-        let actionWrapper = function (state: Map<any, any>) {
-            if (reseted) {
-                return;
-            }
+        if (!Helpers.isImmutable(StateKeeper.CURRENT_STATE.getIn((this as any).statePath))) {
+            throw new Error(`Cannot resotre state at path: ${(this as any).statePath}. Maybe you are trying to restore value rather then state.`);
+        }
 
-            if (!Helpers.isImmutable(state)) {
-                console.error(`Cannot resotre state at path: ${this.statePath}. Maybe you are trying to restore value rather then state.`);
-                return;
-            }
-
-            reseted = true;
-
-            restoreState(this);
-
-        }.bind(this);
-
-        (<any>this).pipe(
-            tap(actionWrapper),
-            take(1)
-        ).subscribe();
+        restoreState((this as any));
     }
 }
 

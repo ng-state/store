@@ -1,3 +1,6 @@
+### 5.1.0
+- Simplified code and code test coverage
+
 ### 5.0.0
 - Added integration with Redux DevTools - [documentation](https://vytautas.gitbook.io/ng-state/debugging/redux-devtools)
 - Improved debugging experience

@@ -10,7 +10,7 @@
     "noEmitOnError": false,
     "outDir": "./release",
     "rootDir": ".",
-    "lib": ["es2016", "dom"],
+    "lib": ["es2017", "dom"],
     "target": "es5",
     "skipLibCheck": true,
     "types": [
