@@ -1,3 +1,7 @@
+### 5.2.0
+- Improved information of history items
+- Redux DevTools `axAge` now is set from `storeHistoryItems` property
+
 ### 5.1.0
 - Simplified code and code test coverage
 

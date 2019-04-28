@@ -5,6 +5,9 @@ import { DebugInfo } from '../debug/debug-info';
 export class Update {
     constructor(action: (state: any) => void, wrapToWithMutations: boolean = true, debugInfo: DebugInfoData = {}) {
 
+        const defaultDebugInfo = { actionType: ActionType.Update, statePath: (<any>this).statePath };
+        DebugInfo.instance.add({ ...defaultDebugInfo, ...debugInfo });
+
         const cursor = Cursor.bind(this).call(this);
 
         try {
@@ -15,9 +18,6 @@ export class Update {
             } else {
                 action(cursor);
             }
-
-            const defaultDebugInfo = { actionType: ActionType.Update, statePath: (<any>this).statePath };
-            DebugInfo.instance.add({ ...defaultDebugInfo, ...debugInfo });
         } catch (exception) {
             console.error(exception);
         }

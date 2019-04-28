@@ -91,6 +91,8 @@ export class DebugInfo {
             this.devTools.send(debugMessage, debugState);
         }
 
+        this.stateHistory.add({ message: debugMessage, state: debugState });
+
         this.debugInfo = null;
     }
 
@@ -125,7 +127,7 @@ export class DebugInfo {
         }
 
         this.zone.run(() => {
-            this.devTools = window['__REDUX_DEVTOOLS_EXTENSION__'].connect();
+            this.devTools = window['__REDUX_DEVTOOLS_EXTENSION__'].connect({ maxAge: this.stateHistory.storeHistoryItems });
         });
 
         this.devToolsSubscription = this.devTools.subscribe((message: any) => {

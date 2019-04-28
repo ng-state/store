@@ -15,7 +15,7 @@ export class HistoryController {
         this.store.subscribe(state => {
             const isIntialState = !this.history.currentState;
 
-            this.history.add(state);
+            this.history.setCurrentState(state);
             this.debugerInfo.onStateChange(state, isIntialState);
             this.onHistoryChange.next(true);
         });
