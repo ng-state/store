@@ -1,3 +1,6 @@
+### 5.2.2
+- Added type to state
+
 ### 5.2.0
 - Improved information of history items
 - Redux DevTools `maxAge` now is set from `storeHistoryItems` property
