@@ -1,0 +1,36 @@
+<div class="container">
+    <form class="form-inline">
+        <label class="sr-only" htmlFor="inlineFormInput">Name</label>
+        <input type="text" name="name" [(ngModel)]="model.name" name="name" class="form-control mb-2 mr-sm-2 mb-sm-0"
+            id="name" placeholder="Name" />
+
+        <label class="sr-only" htmlFor="inlineFormInputGroup">Username</label>
+        <input type="text" name="description" [(ngModel)]="model.description" class="form-control mb-2 mr-sm-2 mb-sm-0"
+            id="descritpion" placeholder="Description" />
+
+        <button type="button" class="btn btn-primary" (click)="addItem()">Submit</button>
+    </form>
+    <br />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let todo of actions.todos | async; let i = index; trackBy: trackById">
+                <th scope="row">{{ i + 1 }}</th>
+                <td>{{ todo.name }}</td>
+                <td>
+                    <todo-description [statePath]="statePath" [stateIndex]="i"></todo-description>
+                </td>
+                <td><button class="btn btn-danger" (click)="deleteItem(i)">X</button></td>
+            </tr>
+        </tbody>
+    </table>
+    TODOS - {{interpolationTest()}}
+    <interpolation-test></interpolation-test>
+    <subselect-test></subselect-test>
+</div>

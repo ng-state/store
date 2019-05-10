@@ -1,8 +1,9 @@
-import { StateKeeper } from '../src/state/history';
-import { Store } from '../src/store/store';
 import { Subject } from 'rxjs';
-import { FormGroupLike, NgFormStateManager } from '../src/store/plugins/form-manager.plugin';
-import { NgStateTestBed } from '../src/ng-state.test-bed';
+import { StateKeeper } from '../src/ng-state/state/history';
+import { Store } from '../src/ng-state/store/store';
+import { FormGroupLike, NgFormStateManager } from '../src/ng-state/store/plugins/form-manager.plugin';
+import { NgStateTestBed } from '../src/ng-state/ng-state.test-bed';
+import { ImmutableJsDataStrategy } from '../src/ng-state/data-strategies/immutablejs.data-strategy';
 
 describe('Forms manager', () => {
     let store: Store<any>;
@@ -18,6 +19,7 @@ describe('Forms manager', () => {
     let layoutForm: NgFormStateManager;
 
     beforeEach(() => {
+        NgStateTestBed.setTestEnvironment(new ImmutableJsDataStrategy());
         const initialState = { layout: { test: 'test' } };
         store = NgStateTestBed.createStore(initialState);
     });

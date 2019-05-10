@@ -1,7 +1,7 @@
-import { ComponentState } from '../src/decorators/component-state.decorator';
-import { ServiceLocator } from '../src/helpers/service-locator';
-import { IS_PROD } from '../src/ng-state.module';
-import { Message, Dispatcher } from '../src/services/dispatcher';
+import { ComponentState } from '../src/ng-state/decorators/component-state.decorator';
+import { ServiceLocator } from '../src/ng-state/helpers/service-locator';
+import { IS_PROD } from '../src/ng-state/ng-state.module';
+import { Message, Dispatcher } from '../src/ng-state/services/dispatcher';
 
 const actionId = 'actionId';
 class TestStateActions {

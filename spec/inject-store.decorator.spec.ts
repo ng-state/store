@@ -1,7 +1,7 @@
-import { InjectStore } from '../src/decorators/inject-store.decorator';
-import { ServiceLocator } from './../src/helpers/service-locator';
+import { InjectStore } from '../src/ng-state/decorators/inject-store.decorator';
+import { ServiceLocator } from '../src/ng-state/helpers/service-locator';
 import { Subject } from 'rxjs';
-import { StateHistory, StateKeeper } from '../src/state/history';
+import { StateKeeper } from '../src/ng-state/state/history';
 import { fromJS } from 'immutable';
 
 class TestStateActions {

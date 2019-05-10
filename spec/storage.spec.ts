@@ -1,9 +1,10 @@
-import { StateKeeper } from '../src/state/history';
-import { Store } from './../src/store/store';
-import { NgStateTestBed } from '../src/ng-state.test-bed';
 import { timer } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
-import { PersistStateStorage, PersistStateManager } from '../src/store/plugins/persist-state.plugin';
+import { StateKeeper } from '../src/ng-state/state/history';
+import { Store } from './../src/ng-state/store/store';
+import { NgStateTestBed } from '../src/ng-state/ng-state.test-bed';
+import { PersistStateStorage, PersistStateManager } from '../src/ng-state/store/plugins/persist-state.plugin';
+import { ImmutableJsDataStrategy } from '../src/ng-state/data-strategies/immutablejs.data-strategy';
 
 jest.useFakeTimers();
 
@@ -12,6 +13,7 @@ describe('Storage', () => {
     let keyValueStorage;
 
     beforeEach(() => {
+        NgStateTestBed.setTestEnvironment(new ImmutableJsDataStrategy());
         const initialState = { layout: { test: 'test' } };
         store = NgStateTestBed.createStore(initialState);
         keyValueStorage = window['customStorage'];

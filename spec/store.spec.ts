@@ -1,16 +1,17 @@
-import { StateKeeper } from '../src/state/history';
-import { Store } from './../src/store/store';
-import { stateFactory } from '../src/ng-state.module';
 import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { NgStateTestBed } from '../src/ng-state.test-bed';
+import { StateKeeper } from '../src/ng-state/state/history';
+import { Store } from './../src/ng-state/store/store';
+import { stateFactory } from '../src/ng-state/ng-state.module';
+import { NgStateTestBed } from '../src/ng-state/ng-state.test-bed';
+import { ImmutableJsDataStrategy } from '../src/ng-state/data-strategies/immutablejs.data-strategy';
 
 describe('Store tests', () => {
     let store: Store<any>;
 
     describe('', () => {
         it('should convert initial state classes ES6 to ES5 objects', () => {
-            const state = stateFactory(new InitialState()) as BehaviorSubject<InitialState>;
+            const state = stateFactory(new InitialState(), new ImmutableJsDataStrategy()) as BehaviorSubject<InitialState>;
             state
                 .pipe(take(1))
                 .subscribe((value: any) => {
@@ -24,6 +25,7 @@ describe('Store tests', () => {
 
     describe('', () => {
         beforeEach(() => {
+            NgStateTestBed.setTestEnvironment(new ImmutableJsDataStrategy());
             const initialState = { layout: { test: 'test' } };
             store = NgStateTestBed.createStore(initialState);
         });
@@ -67,6 +69,7 @@ describe('Store tests', () => {
             expect(StateKeeper.CURRENT_STATE.getIn(['layout', 'loading'])).toEqual(true);
 
             store.reset();
+
             expect(StateKeeper.CURRENT_STATE.getIn(['layout', 'test'])).toEqual('test');
             expect(StateKeeper.CURRENT_STATE.getIn(['layout', 'loading'])).not.toBeDefined();
             expect(StateKeeper.CURRENT_STATE.getIn(['router', 'url'])).toBe('');
