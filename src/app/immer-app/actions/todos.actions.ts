@@ -1,0 +1,46 @@
+import { HasStore, InjectStore } from '../../../ng-state/decorators/inject-store.decorator';
+import { TodoModel } from './todo.model';
+
+@InjectStore('todos')
+export class TodosStateActions extends HasStore<TodoModel[]> {
+
+    addTodo(item: TodoModel) {
+        this.store.update(state => {
+            state.push(item);
+        }, true, { message: 'ITEM ADDED' });
+    }
+
+    deleteTodo(index: number) {
+        this.store.update(state => {
+            if (index > -1) {
+                state.splice(index, 1);
+            }
+
+            // delete state[index];
+        }, false);
+    }
+
+    clearTodos() {
+        this.store.reset();
+    }
+
+    updateFirstItem() {
+        this.store.update(state => {
+            state[0].description = 'updated';
+        });
+    }
+
+    get todos() {
+        return this.store.map(state => {
+            return state.map(item => {
+                return {
+                    name: item.name
+                };
+            });
+        });
+    }
+
+    get todosSync() {
+        return this.state;
+    }
+}

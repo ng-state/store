@@ -1,0 +1,42 @@
+<div style="width: 400px">
+    <form [formGroup]="filters">
+        <hr />
+        <button style="margin-bottom: 15px;" class="btn btn-danger" (click)="reset()">Reset</button>
+        <button style="margin-bottom: 15px; margin-left: 15px;" class="btn btn-primary" (click)="resetRoot()">Reset Root</button>
+        <hr />
+            Selected location: {{ location }}
+        <hr />
+        <section formGroupName="condition">
+            <h6>Condition:</h6>
+            <div className="form-check">
+                <input class="form-check-input" id="new" type="checkbox" formControlName="new" />
+                <label class="form-check-label" for="new">New</label>
+            </div>
+            <div className="form-check">
+                    <input class="form-check-input" id="used" type="checkbox" formControlName="used" />
+                    <label class="form-check-label" for="used">Used</label>
+            </div>
+            <div className="form-check">
+                <input class="form-check-input" id="notspecified" type="checkbox" formControlName="notSpecified" />
+                <label class="form-check-label" for="notspecified">Not specified</label>
+            </div>
+        </section>
+
+        <hr>
+        <section>
+            <h6>Item location:</h6>
+            <div className="form-check">
+                <input class="form-check-input" id="usa" type="radio" formControlName="location" name="location" value="usa" />
+                <label class="form-check-label" for="usa">USA</label>
+            </div>
+            <div className="form-check">
+                <input class="form-check-input" id="usa" type="radio" formControlName="location" name="location" value="europe" />
+                <label class="form-check-label" for="usa">Europe</label>
+            </div>
+            <div className="form-check">
+                <input class="form-check-input" id="usa" type="radio" formControlName="location" name="location" value="asia" />
+                <label class="form-check-label" for="usa">Asia</label>
+            </div>
+        </section>
+    </form>
+</div>

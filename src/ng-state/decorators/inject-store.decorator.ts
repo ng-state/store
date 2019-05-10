@@ -3,6 +3,7 @@ import { ServiceLocator } from '../helpers/service-locator';
 import { Store } from '../store/store';
 import { Helpers } from '../helpers/helpers';
 import { Dispatcher } from '../services/dispatcher';
+import { DataStrategy } from '../data-strategies/data-strategy';
 
 export function InjectStore(newPath: string[] | string | ((currentPath, stateIndex) => string[] | string), intialState: Object | any = null, debug: boolean = false) {
     let getStatePath = (currentPath, stateIndex, extractedPath) => {
@@ -91,7 +92,8 @@ export function InjectStore(newPath: string[] | string | ((currentPath, stateInd
                 dispatcher.publish(this.aId);
 
                 if (debug && state.toJS) {
-                    console.info(state.toJS());
+                    const dataStrategy = ServiceLocator.injector.get(DataStrategy);
+                    console.info(dataStrategy.toJS(state));
                 }
             });
 
