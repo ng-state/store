@@ -1,9 +1,9 @@
 import { DataStrategy } from './data-strategy';
 import * as _Cursor from 'immutable/contrib/cursor';
-import { Store } from '../store/store';
-import { take } from 'rxjs/operators';
-import { ServiceLocator } from '../helpers/service-locator';
 import produce from 'immer';
+import deap from 'deap';
+import { StateHistory } from '../state/history';
+import { RouterState } from '../state/router-state';
 
 export class ImmerDataStrategy extends DataStrategy {
 
@@ -15,18 +15,20 @@ export class ImmerDataStrategy extends DataStrategy {
         return state[property];
     }
 
-    clear(state: any) {
-        if (!this.isObject(state)) {
-            throw new Error(`${state} is not an object`);
+    clear(state: any, path: any[]) {
+        const targetValue = this.getIn(state, path);
+
+        if (!this.isObject(targetValue)) {
+            throw new Error(`${targetValue} is not an object`);
         }
 
-        if (state.constructor === Array) {
-            state = [];
-            return state;
+        if (this.isConstructorArray(targetValue)) {
+            this.setValue(state, path, []);
+            return;
         }
 
-        if (state.__proto__.constructor = Object) {
-            state = {};
+        if (this.isConstructorObject(targetValue)) {
+            this.setValue(state, path, {});
             return state;
         }
 
@@ -42,51 +44,82 @@ export class ImmerDataStrategy extends DataStrategy {
     }
 
     set(state: any, property: string, data: any) {
-        state[property] = data; // {...state, [property]: data};
+        state[property] = data;
         return state;
     }
 
-    setIn(state: Map<any, any>, path: any[], data: any) {
-        const nextState = produce(state, (draftState: any) => {
-            if (!this.setValue(draftState, path, data)) {
+    setIn(state: any, path: any[], data: any, additionalData: any = {}) {
+        const action = (s: any, p: any, d: any) => {
+            if (!this.setValue(s, p, d)) {
                 throw new Error(`State was not set in ${path}`);
             }
+        };
+
+        if (additionalData.fromUpdate) {
+            action(state, path, data);
+        } else {
+            return produce(state, (draftState: any) => {
+                action(draftState, path, data);
+            });
+        }
+    }
+
+    merge(state: any, newState: any) {
+        const action = (s: any, ns: any) => {
+            if (this.isConstructorArray(s)) {
+                // s = [...s,];
+                s.push.apply(s, ns);
+            }
+
+            if (this.isConstructorObject(state)) {
+                deap.update(s, ns);
+            }
+        };
+
+        action(state, newState);
+    }
+
+    update(path: any[], action: (state: any) => void) {
+        const nextState = produce(this.currentState, (draftState: any) => {
+            const cursor = this.getCursor(draftState, path);
+            action(cursor);
         });
 
-        return nextState;
+        this.store.next(nextState);
+    }
+
+    overrideContructor(obj: any) {
     }
 
     isObject(obj: any) {
         return obj !== null && typeof (obj) === 'object';
     }
 
-    merge(state: any, newState: any) {
+    reset(path: any[], isRootPath: boolean): void {
+        const state = this.currentState;
+
+        let router = '';
+        if (isRootPath) {
+            router = this.get(state, 'router');
+        }
+
+        let initialState: any = !!this.store.initialState
+            ? this.store.initialState
+            : StateHistory.initialState;
+
+        const stateToMerge = this.getIn(initialState, path);
+
         const nextState = produce(state, (draftState: any) => {
-            return { ...draftState, ...newState };
+            this.clear(draftState, path);
+            this.merge(draftState, stateToMerge);
+
+            if (isRootPath) {
+                this.set(state, 'router', router);
+                this.setIn(state, ['router', 'url'], RouterState.startingRoute, { fromUpdate: true });
+            }
         });
 
-        return nextState;
-    }
-
-    update(path: any[], action: (state: any) => void) {
-        let currentState: any;
-
-        const store = ServiceLocator.injector.get(Store) as Store<any>; // TODO: injectinti storus
-
-        store.pipe(take(1))
-            .subscribe(state => {
-                currentState = state;
-            });
-
-        const nextState = produce(currentState, (draftState: any) => {
-            const cursor = this.getCursor(draftState, path);
-            action(cursor);
-        });
-
-        store.next(nextState);
-    }
-
-    overrideContructor(obj: any) {
+        this.store.next(nextState);
     }
 
     private getCursor(state: any, propertyPath: string | any[]): any {
@@ -99,6 +132,11 @@ export class ImmerDataStrategy extends DataStrategy {
 
     private setValue(state: any, propertyPath: string | any[], value: any): boolean {
         return this.cursorBase(state, propertyPath, (state: any, properties: any) => {
+           /*  if (properties.length > 0) {
+                state[properties[0]] = value;
+            } else {
+                state = value;
+            } */
             state[properties[0]] = value;
             return true;
         });
@@ -116,5 +154,13 @@ export class ImmerDataStrategy extends DataStrategy {
         } else {
             return action(state, properties);
         }
+    }
+
+    private isConstructorObject(obj: any) {
+        return obj.constructor === Object;
+    }
+
+    private isConstructorArray(obj: any) {
+        return obj.constructor === Array;
     }
 }

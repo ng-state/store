@@ -49,7 +49,7 @@ export class InterpolationTestComponent extends HasStateActions<InterpolationTes
 
     updateSharedValue() {
         this.store.select(['shareTest']).update((state) => {
-            state.set('testValue', Math.random());
+            state['testValue'] = Math.random();
         });
     }
 }

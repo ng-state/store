@@ -34,7 +34,7 @@ import { ImmerDataStrategyModule } from '../../ng-state/data-strategies/immer.da
                 storeHistoryItems: 50
             }
         }),
-        ImmerDataStrategyModule.forRoot()
+        ImmerDataStrategyModule
     ],
     declarations: [
         AppComponent,

@@ -1,7 +1,11 @@
 import { TodoModel } from './immutable-app/actions/todo.model';
 
 let initialState = <InitialState>{
-    todos: <TodoModel[]>[],
+    todos: <TodoModel[]>[{
+        id: 1,
+        name: 'test',
+        description: 'test'
+    }],
     form: {
         condition: {
             new: true,

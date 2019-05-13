@@ -77,6 +77,8 @@ export class StoreModule {
         injector: Injector,
         historyController: HistoryController,
         routerState: RouterState,
+        dataStrategy: DataStrategy,
+        store: Store<any>,
         @Inject(INITIAL_STATE) initialState: any,
         @Inject(NG_STATE_OPTIONS) ngStateOptions: any,
         @Inject(IS_PROD) isProd: any
@@ -98,6 +100,8 @@ export class StoreModule {
                 debug: debugInfo.publicApi
             };
         }
+
+        dataStrategy.init(store);
     }
 
     private initStateHistory(initialState: any, ngStateOptions: NgStateOptions) {

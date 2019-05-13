@@ -1,9 +1,8 @@
 import { DataStrategy } from './data-strategy';
 import { Map, fromJS, Collection, Iterable } from 'immutable';
 import * as _Cursor from 'immutable/contrib/cursor';
-import { Store } from '../store/store';
-import { take } from 'rxjs/operators';
-import { ServiceLocator } from '../helpers/service-locator';
+import { StateHistory } from '../state/history';
+import { RouterState } from '../state/router-state';
 
 export class ImmutableJsDataStrategy extends DataStrategy {
 
@@ -43,27 +42,14 @@ export class ImmutableJsDataStrategy extends DataStrategy {
         return state.merge(newState);
     }
 
-    update(path: any[], action: (state: any) => void, additionalData: any) {
-        let currentState: Collection<any, any>;
-
-        const store = ServiceLocator.injector.get(Store) as Store<any>;
-
-        store.pipe(take(1))
-            .subscribe(state => {
-                currentState = state;
-            });
-
-        const cursor = _Cursor.from(currentState, path, (newData) => {
-            store.next(newData);
+    update(path: any[], action: (state: any) => void) {
+        const cursor = _Cursor.from(this.currentState, path, (newData) => {
+            this.store.next(newData);
         });
 
-        if (additionalData.wrapToWithMutations) {
-            cursor.withMutations((state: any) => {
-                action(state);
-            });
-        } else {
-            action(cursor);
-        }
+        cursor.withMutations((state: any) => {
+            action(state);
+        });
     }
 
     overrideContructor(obj: any) {
@@ -79,6 +65,31 @@ export class ImmutableJsDataStrategy extends DataStrategy {
                 }
             }
         }
+    }
+
+    reset(path: any[], isRootPath: boolean): void {
+        const state = this.currentState;
+
+        let router = '';
+        if (isRootPath) {
+            router = this.get(state, 'router');
+        }
+
+        let initialState: any = !!this.store.initialState
+            ? this.store.initialState
+            : fromJS(StateHistory.initialState);
+
+        const stateToMerge = initialState.getIn(path);
+
+        this.update(path, (state: any) => {
+            state.clear();
+            state.merge(stateToMerge);
+
+            if (isRootPath) {
+                state.set('router', router);
+                state.setIn(['router', 'url'], RouterState.startingRoute, { fromUpdate: true });
+            }
+        });
     }
 
     private isNotImmutableObject(obj: any) {

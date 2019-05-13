@@ -26,7 +26,7 @@ export class SubSelectTestComponent extends HasStateActions<SubSelectTestStateAc
 
     updateSharedValue() {
         this.store.select(['form']).update(state => {
-            state.setIn(['condition', 'notSpecified'], true);
+            state['condition']['notSpecified'] = true;
         });
         this.actions.updateTest();
     }

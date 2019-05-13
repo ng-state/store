@@ -1,9 +1,9 @@
 import { Store } from './store';
-import { StateHistory, StateKeeper } from '../state/history';
-import { RouterState } from '../state/router-state';
+import { StateKeeper } from '../state/history';
 import { ActionType } from '../debug/debug-info-data';
 import { ServiceLocator } from '../helpers/service-locator';
 import { DataStrategy } from '../data-strategies/data-strategy';
+import { DebugInfo } from '../debug/debug-info';
 
 export class Reset {
     constructor(debugMessage: string = null) {
@@ -11,29 +11,13 @@ export class Reset {
         const dataStrategy = ServiceLocator.injector.get(DataStrategy);
 
         const restoreState = function (store: Store<any>) {
-            store
-                .update((state: any) => {
-                    let path = store.statePath.filter(item => !store.rootPath.includes(item));
-                    const isRootPath = Array.isArray(path) && path.length === 0;
+            let path = store.statePath.filter(item => !store.rootPath.includes(item));
+            const isRootPath = Array.isArray(path) && path.length === 0;
 
-                    let router = '';
-                    if (isRootPath) {
-                        router = dataStrategy.get(state, 'router');
-                    }
+            dataStrategy.reset(path, isRootPath);
 
-                    dataStrategy.clear(state);
-
-                    let initialState: any = !!store.initialState
-                        ? store.initialState
-                        : dataStrategy.fromJS(StateHistory.initialState);
-
-                    state.merge(dataStrategy.getIn(initialState, path));
-
-                    if (isRootPath) {
-                        dataStrategy.set(state, 'router', router);
-                        dataStrategy.setIn(state, ['router', 'url'], RouterState.startingRoute);
-                    }
-                }, true, { message: debugMessage, actionType: ActionType.Reset });
+            const defaultDebugInfo = { actionType: ActionType.Reset, statePath: path, debugMessage: debugMessage };
+            DebugInfo.instance.add(defaultDebugInfo);
         };
 
         if (!dataStrategy.isObject(dataStrategy.getIn(StateKeeper.CURRENT_STATE, ((this as any).statePath)))) {

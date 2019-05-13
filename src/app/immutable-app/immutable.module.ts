@@ -34,7 +34,7 @@ import { ImmutableJsDataStrategyModule } from '../../ng-state/data-strategies/im
                 storeHistoryItems: 50
             }
         }),
-        ImmutableJsDataStrategyModule.forRoot()
+        ImmutableJsDataStrategyModule
     ],
     declarations: [
         AppComponent,
