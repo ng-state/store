@@ -31,7 +31,7 @@ export class ShareObservableTestComponent {
         return this.shareTest
             .map(state => {
                 console.log('labas2');
-                return state.testValue;
+                return state.get('testValue');
             });
     }
 }

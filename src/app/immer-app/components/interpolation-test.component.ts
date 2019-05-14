@@ -44,6 +44,7 @@ export class InterpolationTestComponent extends HasStateActions<InterpolationTes
     }
 
     clearHistory() {
+        // this.store.select(['shareTest']).reset();
         this.store.reset();
     }
 

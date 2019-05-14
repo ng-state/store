@@ -15,26 +15,6 @@ export class ImmerDataStrategy extends DataStrategy {
         return state[property];
     }
 
-    clear(state: any, path: any[]) {
-        const targetValue = this.getIn(state, path);
-
-        if (!this.isObject(targetValue)) {
-            throw new Error(`${targetValue} is not an object`);
-        }
-
-        if (this.isConstructorArray(targetValue)) {
-            this.setValue(state, path, []);
-            return;
-        }
-
-        if (this.isConstructorObject(targetValue)) {
-            this.setValue(state, path, {});
-            return state;
-        }
-
-        throw new Error(`${state} cannot be cleared because type is not supported`);
-    }
-
     fromJS(data: any): any {
         return data;
     }
@@ -64,19 +44,28 @@ export class ImmerDataStrategy extends DataStrategy {
         }
     }
 
-    merge(state: any, newState: any) {
-        const action = (s: any, ns: any) => {
-            if (this.isConstructorArray(s)) {
-                // s = [...s,];
-                s.push.apply(s, ns);
+    merge(state: any, newState: any, path: any[], isRootPath: boolean) {
+        const targetValue = this.getIn(state, path);
+
+        if (this.isConstructorArray(targetValue)) {
+            const newArray = [...targetValue, ...newState];
+            this.setValue(state, path, newArray);
+            return;
+        }
+
+        if (this.isConstructorObject(targetValue)) {
+            const newObject = { ...targetValue, ...newState };
+            if (isRootPath) {
+                this.extend(true, state, newObject);
+                // deap.update(state, newObject);
+            } else {
+                this.setValue(state, path, newObject);
             }
 
-            if (this.isConstructorObject(state)) {
-                deap.update(s, ns);
-            }
-        };
+            return;
+        }
 
-        action(state, newState);
+        throw new Error(`${state} cannot be merged because type is not supported`);
     }
 
     update(path: any[], action: (state: any) => void) {
@@ -95,13 +84,20 @@ export class ImmerDataStrategy extends DataStrategy {
         return obj !== null && typeof (obj) === 'object';
     }
 
-    reset(path: any[], isRootPath: boolean): void {
+    resetRoot() {
         const state = this.currentState;
+        const router = this.get(state, 'router');
 
-        let router = '';
-        if (isRootPath) {
-            router = this.get(state, 'router');
-        }
+        const nextState = produce(StateHistory.initialState, (draftState: any) => {
+            this.set(draftState, 'router', router);
+            this.setIn(draftState, ['router', 'url'], RouterState.startingRoute, { fromUpdate: true });
+        });
+
+        this.store.next(nextState);
+    }
+
+    reset(path: any[]): void {
+        const state = this.currentState;
 
         let initialState: any = !!this.store.initialState
             ? this.store.initialState
@@ -110,13 +106,7 @@ export class ImmerDataStrategy extends DataStrategy {
         const stateToMerge = this.getIn(initialState, path);
 
         const nextState = produce(state, (draftState: any) => {
-            this.clear(draftState, path);
-            this.merge(draftState, stateToMerge);
-
-            if (isRootPath) {
-                this.set(state, 'router', router);
-                this.setIn(state, ['router', 'url'], RouterState.startingRoute, { fromUpdate: true });
-            }
+            this.setIn(draftState, path, stateToMerge, {fromUpdate: true});
         });
 
         this.store.next(nextState);
@@ -132,12 +122,12 @@ export class ImmerDataStrategy extends DataStrategy {
 
     private setValue(state: any, propertyPath: string | any[], value: any): boolean {
         return this.cursorBase(state, propertyPath, (state: any, properties: any) => {
-           /*  if (properties.length > 0) {
+            if (properties.length > 0) {
                 state[properties[0]] = value;
             } else {
                 state = value;
-            } */
-            state[properties[0]] = value;
+            }
+            // state[properties[0]] = value;
             return true;
         });
     }
@@ -162,5 +152,24 @@ export class ImmerDataStrategy extends DataStrategy {
 
     private isConstructorArray(obj: any) {
         return obj.constructor === Array;
+    }
+
+    extend(deep: boolean, source: any, target: any) {
+
+        // Merge the object into the extended object
+        for (let prop in target) {
+            if (target.hasOwnProperty(prop)) {
+                if (deep && Object.prototype.toString.call(target[prop]) === '[object Object]') {
+                    // If we're doing a deep merge and the property is an object
+                    source[prop] = this.extend(deep, source[prop], target[prop]);
+                } else {
+                    // Otherwise, do a regular merge
+                    source[prop] = target[prop];
+                }
+            }
+        }
+
+        return source;
+
     }
 }

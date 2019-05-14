@@ -7,8 +7,7 @@ export abstract class DataStrategy {
 
     abstract getIn(state: any, path: any[]): any;
     abstract get(state: any, property: string): any;
-    abstract merge(state: any, newState: any): any;
-    abstract clear(state: any, path: any[]): any;
+    abstract merge(state: any, newState: any, path?: any[], isRootPath?: boolean): any;
     abstract update(path: any[], action: (state: any) => void): void;
     abstract fromJS(data: any): any;
     abstract toJS(data: any): any;
@@ -17,6 +16,7 @@ export abstract class DataStrategy {
     abstract isObject(state: any): any;
     abstract overrideContructor(obj: any): any;
     abstract reset(path: any[], isRootPath: boolean): void;
+    abstract resetRoot(): void;
 
     protected get currentState() {
         let currentState: any;

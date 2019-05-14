@@ -14,10 +14,6 @@ export class ImmutableJsDataStrategy extends DataStrategy {
         return state.get(property);
     }
 
-    clear(state: Map<any, any>) {
-        return state.clear();
-    }
-
     fromJS(data: any): Collection<any, any> {
         return fromJS(data);
     }
@@ -67,14 +63,21 @@ export class ImmutableJsDataStrategy extends DataStrategy {
         }
     }
 
-    reset(path: any[], isRootPath: boolean): void {
+    resetRoot(): void {
         const state = this.currentState;
 
-        let router = '';
-        if (isRootPath) {
-            router = this.get(state, 'router');
-        }
+        const router = this.get(state, 'router');
 
+        this.update([], (state: any) => {
+            state.clear();
+            state.merge(StateHistory.initialState);
+
+            state.set('router', router);
+            state.setIn(['router', 'url'], RouterState.startingRoute, { fromUpdate: true });
+        });
+    }
+
+    reset(path: any[]): void {
         let initialState: any = !!this.store.initialState
             ? this.store.initialState
             : fromJS(StateHistory.initialState);
@@ -84,11 +87,6 @@ export class ImmutableJsDataStrategy extends DataStrategy {
         this.update(path, (state: any) => {
             state.clear();
             state.merge(stateToMerge);
-
-            if (isRootPath) {
-                state.set('router', router);
-                state.setIn(['router', 'url'], RouterState.startingRoute, { fromUpdate: true });
-            }
         });
     }
 

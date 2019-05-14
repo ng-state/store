@@ -13,8 +13,11 @@ export class Reset {
         const restoreState = function (store: Store<any>) {
             let path = store.statePath.filter(item => !store.rootPath.includes(item));
             const isRootPath = Array.isArray(path) && path.length === 0;
-
-            dataStrategy.reset(path, isRootPath);
+            if (isRootPath) {
+                dataStrategy.resetRoot();
+            } else {
+                dataStrategy.reset(path);
+            }
 
             const defaultDebugInfo = { actionType: ActionType.Reset, statePath: path, debugMessage: debugMessage };
             DebugInfo.instance.add(defaultDebugInfo);
