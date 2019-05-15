@@ -86,11 +86,11 @@ export class NgFormStateManager {
                 value: value
             })) {
                 this.dataStrategy.merge(state, this.dataStrategy.fromJS(value));
-                this.onChangeCall(state);
+                this.onChangeCall(value);
             }
         } else {
             this.dataStrategy.merge(state, this.dataStrategy.fromJS(value));
-            this.onChangeCall(state);
+            this.onChangeCall(value);
         }
     }
 

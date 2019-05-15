@@ -4,7 +4,7 @@ import { ImmerDataStrategy } from './immer.data-strategy';
 
 @NgModule({
     providers: [
-        { provide: DataStrategy, useClass: ImmerDataStrategy },
+        { provide: DataStrategy, useClass: ImmerDataStrategy }
     ]
 })
 export class ImmerDataStrategyModule {

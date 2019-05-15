@@ -12,7 +12,8 @@ let initialState = <InitialState>{
             used: false,
             notSpecified: false,
         },
-        location: 'europe'
+        location: 'europe',
+        cars: ['volvo', 'opel']
     },
     interpolationTest: 'initial',
     shareTest: <ShareTest>{

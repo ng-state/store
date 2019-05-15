@@ -36,7 +36,7 @@ export class PersistStateManager {
 
         this.store.pipe(
             tap((state: any) => {
-                this.resolve(params.storageConfig.storage.setItem(params.key, params.serialize(state.toJS())))
+                this.resolve(params.storageConfig.storage.setItem(params.key, params.serialize(dataStrategy.toJS(state))))
                     .pipe(take(1))
                     .subscribe(_ => {
                         onSaveComplete.next({

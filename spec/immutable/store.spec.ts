@@ -1,17 +1,18 @@
 import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { StateKeeper } from '../src/ng-state/state/history';
-import { Store } from './../src/ng-state/store/store';
-import { stateFactory } from '../src/ng-state/ng-state.module';
-import { NgStateTestBed } from '../src/ng-state/ng-state.test-bed';
-import { ImmutableJsDataStrategy } from '../src/ng-state/data-strategies/immutablejs.data-strategy';
+import { StateKeeper } from '../../src/ng-state/state/history';
+import { Store } from '../../src/ng-state/store/store';
+import { stateFactory } from '../../src/ng-state/ng-state.module';
+import { NgStateTestBed } from '../../src/ng-state/ng-state.test-bed';
+import { ImmutableJsDataStrategy } from '../../src/ng-state/data-strategies/immutablejs.data-strategy';
 
-describe('Store tests', () => {
+describe('Store tests - Immutable', () => {
     let store: Store<any>;
+    const dataStrategy = new ImmutableJsDataStrategy();
 
     describe('', () => {
         it('should convert initial state classes ES6 to ES5 objects', () => {
-            const state = stateFactory(new InitialState(), new ImmutableJsDataStrategy()) as BehaviorSubject<InitialState>;
+            const state = stateFactory(new InitialState(), dataStrategy) as BehaviorSubject<InitialState>;
             state
                 .pipe(take(1))
                 .subscribe((value: any) => {
@@ -25,7 +26,7 @@ describe('Store tests', () => {
 
     describe('', () => {
         beforeEach(() => {
-            NgStateTestBed.setTestEnvironment(new ImmutableJsDataStrategy());
+            NgStateTestBed.setTestEnvironment(dataStrategy);
             const initialState = { layout: { test: 'test' } };
             store = NgStateTestBed.createStore(initialState);
         });
@@ -41,17 +42,6 @@ describe('Store tests', () => {
             store.select(['layout']).update(state => state.set('loading', true));
 
             expect(StateKeeper.CURRENT_STATE.getIn(['layout', 'loading'])).toEqual(true);
-        });
-
-        it('should update state n times in a row with no muttations', (done) => {
-            for (let index = 1; index <= 3; index++) {
-                store.select(['layout']).update(state => state.set('test', index), false);
-            }
-
-            store.subscribe(state => {
-                expect(state.getIn(['layout', 'test'])).toEqual(3);
-                done();
-            });
         });
 
         it('should select state', (done) => {
@@ -87,7 +77,7 @@ describe('Store tests', () => {
             expect(() => store.select(['layout', 'test']).reset()).toThrowError();
         });
 
-        it('should reset state when stroe has initial state', () => {
+        it('should reset state when store has initial state', () => {
             const intilizedStore = store.initialize(['actionStore'], { test: { url: 'home' } });
             intilizedStore.select(['test']).update(state => state.set('url', 'home-updated'));
             expect(StateKeeper.CURRENT_STATE.getIn(['actionStore', 'test', 'url'])).toEqual('home-updated');
@@ -99,7 +89,7 @@ describe('Store tests', () => {
         it('should rootPath and initialState vallues to store after initialization', () => {
             const intilizedStore = store.initialize(['actionStore'], { test: { url: 'home' } });
             expect(intilizedStore.rootPath).toContain('actionStore');
-            expect(intilizedStore.initialState.toJS().test.url).toBe('home');
+            expect(dataStrategy.toJS(intilizedStore.initialState).test.url).toBe('home');
         });
     });
 });

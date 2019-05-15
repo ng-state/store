@@ -8,13 +8,13 @@ export class TodosStateActions extends HasStore<Immutable.List<any>> {
     addTodo(item: TodoModel) {
         this.store.update(state => {
             state.push(Immutable.fromJS(item));
-        }, true, { message: 'ITEM ADDED' });
+        }, { message: 'ITEM ADDED' });
     }
 
     deleteTodo(index: number) {
         this.store.update((state: Immutable.List<any>) => {
             state.delete(index);
-        }, false);
+        });
     }
 
     clearTodos() {

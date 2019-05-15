@@ -12,7 +12,7 @@ export class Update {
         const dataStrategy = ServiceLocator.injector.get(DataStrategy) as DataStrategy;
 
         try {
-            dataStrategy.update((<any>this).statePath, action);
+            dataStrategy.update((this as any).statePath, action);
         } catch (exception) {
             console.error(exception);
         }
@@ -20,5 +20,5 @@ export class Update {
 }
 
 export interface UpdateSignature<T> {
-    (action: (state: T) => void, wrapToWithMutations?: boolean, debugInfo?: DebugInfoData): void;
+    (action: (state: T) => void, debugInfo?: DebugInfoData): void;
 }

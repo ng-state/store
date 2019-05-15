@@ -7,7 +7,7 @@ export class TodosStateActions extends HasStore<TodoModel[]> {
     addTodo(item: TodoModel) {
         this.store.update(state => {
             state.push(item);
-        }, true, { message: 'ITEM ADDED' });
+        }, { message: 'ITEM ADDED' });
     }
 
     deleteTodo(index: number) {
@@ -17,7 +17,7 @@ export class TodosStateActions extends HasStore<TodoModel[]> {
             }
 
             // delete state[index];
-        }, false);
+        });
     }
 
     clearTodos() {

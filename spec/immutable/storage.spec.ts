@@ -1,19 +1,20 @@
 import { timer } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
-import { StateKeeper } from '../src/ng-state/state/history';
-import { Store } from './../src/ng-state/store/store';
-import { NgStateTestBed } from '../src/ng-state/ng-state.test-bed';
-import { PersistStateStorage, PersistStateManager } from '../src/ng-state/store/plugins/persist-state.plugin';
-import { ImmutableJsDataStrategy } from '../src/ng-state/data-strategies/immutablejs.data-strategy';
+import { StateKeeper } from '../../src/ng-state/state/history';
+import { Store } from '../../src/ng-state/store/store';
+import { NgStateTestBed } from '../../src/ng-state/ng-state.test-bed';
+import { PersistStateStorage, PersistStateManager } from '../../src/ng-state/store/plugins/persist-state.plugin';
+import { ImmutableJsDataStrategy } from '../../src/ng-state/data-strategies/immutablejs.data-strategy';
 
 jest.useFakeTimers();
 
-describe('Storage', () => {
+describe('Storage - Immutable', () => {
     let store: Store<any>;
     let keyValueStorage;
+    const dataStrategy = new ImmutableJsDataStrategy();
 
     beforeEach(() => {
-        NgStateTestBed.setTestEnvironment(new ImmutableJsDataStrategy());
+        NgStateTestBed.setTestEnvironment(dataStrategy);
         const initialState = { layout: { test: 'test' } };
         store = NgStateTestBed.createStore(initialState);
         keyValueStorage = window['customStorage'];

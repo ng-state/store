@@ -25,7 +25,8 @@ export class FiltersComponent implements OnInit {
                 used: new FormControl(false),
                 notSpecified: new FormControl(false)
             }),
-            location: new FormControl()
+            location: new FormControl(),
+            cars: new FormControl()
         });
 
         this.store.select(['form', 'location']).subscribe(state => this.location = state);

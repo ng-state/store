@@ -3,6 +3,7 @@ import { Map, fromJS, Collection, Iterable } from 'immutable';
 import * as _Cursor from 'immutable/contrib/cursor';
 import { StateHistory } from '../state/history';
 import { RouterState } from '../state/router-state';
+import { Store } from '../store/store';
 
 export class ImmutableJsDataStrategy extends DataStrategy {
 
@@ -40,7 +41,7 @@ export class ImmutableJsDataStrategy extends DataStrategy {
 
     update(path: any[], action: (state: any) => void) {
         const cursor = _Cursor.from(this.currentState, path, (newData) => {
-            this.store.next(newData);
+            this.rootStore.next(newData);
         });
 
         cursor.withMutations((state: any) => {
@@ -77,13 +78,7 @@ export class ImmutableJsDataStrategy extends DataStrategy {
         });
     }
 
-    reset(path: any[]): void {
-        let initialState: any = !!this.store.initialState
-            ? this.store.initialState
-            : fromJS(StateHistory.initialState);
-
-        const stateToMerge = initialState.getIn(path);
-
+    reset(path: any[], stateToMerge: any): void {
         this.update(path, (state: any) => {
             state.clear();
             state.merge(stateToMerge);

@@ -1,5 +1,4 @@
 import { DebugInfoData } from './debug-info-data';
-import { Helpers } from '../helpers/helpers';
 import { StateHistory } from '../state/history';
 import { Injectable, NgZone } from '@angular/core';
 import { Subject } from 'rxjs';
@@ -18,14 +17,13 @@ export class DebugInfo {
         enableConsoleOutput: true,
         enableDevToolsOutput: true
     };
-    private dataStrategy: DataStrategy;
 
     static instance: DebugInfo = null;
 
     isTimeTravel = false;
     onApplyHistory = new Subject<DebugHistoryItem>();
 
-    constructor(private stateHistory: StateHistory, private zone: NgZone) {
+    constructor(private stateHistory: StateHistory, private zone: NgZone, private dataStrategy: DataStrategy) {
     }
 
     get publicApi() {
@@ -40,7 +38,6 @@ export class DebugInfo {
     }
 
     init(debugMode: boolean) {
-        this.dataStrategy = ServiceLocator.injector.get(DataStrategy) as DataStrategy;
         this.debugMode = debugMode;
         this.setWithDevTools();
 
@@ -76,7 +73,7 @@ export class DebugInfo {
     }
 
     private logDebugInfo(state: any, isIntialState: boolean) {
-        let debugState = this.debugStatePath && state.getIn(this.debugStatePath) || state;
+        let debugState = this.debugStatePath && this.dataStrategy.getIn(state, this.debugStatePath) || state;
         if (this.dataStrategy.isObject(debugState)) {
             debugState = this.dataStrategy.toJS(debugState);
         }

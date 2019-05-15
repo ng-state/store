@@ -1,9 +1,9 @@
 import { DataStrategy } from './data-strategy';
 import * as _Cursor from 'immutable/contrib/cursor';
 import produce from 'immer';
-import deap from 'deap';
 import { StateHistory } from '../state/history';
 import { RouterState } from '../state/router-state';
+import { Store } from '../store/store';
 
 export class ImmerDataStrategy extends DataStrategy {
 
@@ -44,23 +44,14 @@ export class ImmerDataStrategy extends DataStrategy {
         }
     }
 
-    merge(state: any, newState: any, path: any[], isRootPath: boolean) {
-        const targetValue = this.getIn(state, path);
-
-        if (this.isConstructorArray(targetValue)) {
-            const newArray = [...targetValue, ...newState];
-            this.setValue(state, path, newArray);
+    merge(state: any, newState: any) {
+        if (this.isConstructorArray(state)) {
+            state.push.apply(newState);
             return;
         }
 
-        if (this.isConstructorObject(targetValue)) {
-            const newObject = { ...targetValue, ...newState };
-            if (isRootPath) {
-                this.extend(true, state, newObject);
-                // deap.update(state, newObject);
-            } else {
-                this.setValue(state, path, newObject);
-            }
+        if (this.isConstructorObject(state)) {
+            this.extend(state, newState);
 
             return;
         }
@@ -74,7 +65,7 @@ export class ImmerDataStrategy extends DataStrategy {
             action(cursor);
         });
 
-        this.store.next(nextState);
+        this.rootStore.next(nextState);
     }
 
     overrideContructor(obj: any) {
@@ -93,23 +84,17 @@ export class ImmerDataStrategy extends DataStrategy {
             this.setIn(draftState, ['router', 'url'], RouterState.startingRoute, { fromUpdate: true });
         });
 
-        this.store.next(nextState);
+        this.rootStore.next(nextState);
     }
 
-    reset(path: any[]): void {
+    reset(path: any[], stateToMerge: any): void {
         const state = this.currentState;
 
-        let initialState: any = !!this.store.initialState
-            ? this.store.initialState
-            : StateHistory.initialState;
-
-        const stateToMerge = this.getIn(initialState, path);
-
         const nextState = produce(state, (draftState: any) => {
-            this.setIn(draftState, path, stateToMerge, {fromUpdate: true});
+            this.setIn(draftState, path, stateToMerge, { fromUpdate: true });
         });
 
-        this.store.next(nextState);
+        this.rootStore.next(nextState);
     }
 
     private getCursor(state: any, propertyPath: string | any[]): any {
@@ -121,13 +106,13 @@ export class ImmerDataStrategy extends DataStrategy {
     }
 
     private setValue(state: any, propertyPath: string | any[], value: any): boolean {
+        if (propertyPath.length === 0) {
+            this.merge(state, value);
+            return true;
+        }
+
         return this.cursorBase(state, propertyPath, (state: any, properties: any) => {
-            if (properties.length > 0) {
-                state[properties[0]] = value;
-            } else {
-                state = value;
-            }
-            // state[properties[0]] = value;
+            state[properties[0]] = value;
             return true;
         });
     }
@@ -154,22 +139,19 @@ export class ImmerDataStrategy extends DataStrategy {
         return obj.constructor === Array;
     }
 
-    extend(deep: boolean, source: any, target: any) {
-
-        // Merge the object into the extended object
+    private extend(source: any, target: any, deep: boolean = true) {
         for (let prop in target) {
             if (target.hasOwnProperty(prop)) {
-                if (deep && Object.prototype.toString.call(target[prop]) === '[object Object]') {
-                    // If we're doing a deep merge and the property is an object
-                    source[prop] = this.extend(deep, source[prop], target[prop]);
+                if (this.isConstructorArray(target[prop])) {
+                    source[prop] = [...target[prop]];
+                } else if (deep && this.isConstructorObject(target[prop])) {
+                    source[prop] = this.extend(source[prop], target[prop], deep);
                 } else {
-                    // Otherwise, do a regular merge
                     source[prop] = target[prop];
                 }
             }
         }
 
         return source;
-
     }
 }

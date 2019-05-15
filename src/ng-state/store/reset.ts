@@ -1,5 +1,5 @@
 import { Store } from './store';
-import { StateKeeper } from '../state/history';
+import { StateKeeper, StateHistory } from '../state/history';
 import { ActionType } from '../debug/debug-info-data';
 import { ServiceLocator } from '../helpers/service-locator';
 import { DataStrategy } from '../data-strategies/data-strategy';
@@ -14,9 +14,15 @@ export class Reset {
             let path = store.statePath.filter(item => !store.rootPath.includes(item));
             const isRootPath = Array.isArray(path) && path.length === 0;
             if (isRootPath) {
-                dataStrategy.resetRoot();
+                dataStrategy.resetRoot(store);
             } else {
-                dataStrategy.reset(path);
+                let initialState: any = !!store.initialState
+                    ? store.initialState
+                    : dataStrategy.fromJS(StateHistory.initialState);
+
+                initialState = dataStrategy.getIn(initialState, (path));
+
+                dataStrategy.reset(store.statePath, initialState);
             }
 
             const defaultDebugInfo = { actionType: ActionType.Reset, statePath: path, debugMessage: debugMessage };

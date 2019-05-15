@@ -51,7 +51,7 @@ export class StorageTestComponent {
 
     change() {
         this.store.select(['shareTest']).update(state => {
-            state.set('testValue', 'aaaaaa');
+            state['testValue'] = 'aaaaaa';
         });
     }
 }

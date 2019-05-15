@@ -18,7 +18,7 @@ describe('TodoDescription', () => {
     it('should get description', () => {
         initialState.todos.push(<TodoModel>{description: 'test description'});
 
-        const actions = NgStateTestBed.createActions(TodoStateActions, initialState, ['todos', 0], ) as TodoStateActions;
+        const actions = NgStateTestBed.createActions(TodoStateActions, initialState, ['todos', 1], ) as TodoStateActions;
         expect(actions.todoDescription).toEqual('test description');
     });
 
@@ -27,14 +27,14 @@ describe('TodoDescription', () => {
         todo.description = 'test description';
         initialState.todos.push(todo);
 
-        const actions = NgStateTestBed.createActions(TodoStateActions, initialState, ['todos', 0]) as TodoStateActions;
+        const actions = NgStateTestBed.createActions(TodoStateActions, initialState, ['todos', 1]) as TodoStateActions;
         expect(actions.todoDescription).toEqual('test description');
     });
 
-    it ('should set actions to component', () => {
+    it ('should set actions to component - immutable', () => {
         initialState.todos.push(<TodoModel>{description: 'test description'});
 
-        const actions = NgStateTestBed.createActions(TodoStateActions, initialState, ['todos', 0]) as TodoStateActions;
+        const actions = NgStateTestBed.createActions(TodoStateActions, initialState, ['todos', 1]) as TodoStateActions;
         NgStateTestBed.setActionsToComponent(actions, component);
 
         expect(component.actions.todoDescription).toEqual('test description');

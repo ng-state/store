@@ -4,11 +4,12 @@ import { Subject } from 'rxjs';
 import { DebugInfo, DebugHistoryItem } from '../debug/debug-info';
 import { Router } from '@angular/router';
 import { take } from 'rxjs/operators';
+import { DataStrategy } from '../data-strategies/data-strategy';
 
 export class HistoryController {
     private onHistoryChange = new Subject();
 
-    constructor(private store: Store<any>, private history: StateHistory, private debugerInfo: DebugInfo, private router: Router) {
+    constructor(private store: Store<any>, private history: StateHistory, private debugerInfo: DebugInfo, private router: Router, private dataStrategy: DataStrategy) {
     }
 
     init() {
@@ -26,7 +27,7 @@ export class HistoryController {
     private applyHistory = (debugHistoryItem: DebugHistoryItem) => {
         this.debugerInfo.turnOnTimeTravel();
 
-        const targetRoute = debugHistoryItem.state.getIn(['router', 'url']);
+        const targetRoute = this.dataStrategy.getIn(debugHistoryItem.state, ['router', 'url']);
         if (targetRoute && this.router.url !== targetRoute) {
             this.router.navigateByUrl(targetRoute).then(_ => {
                 this.applyState(debugHistoryItem.state, debugHistoryItem.statePath);
@@ -43,10 +44,13 @@ export class HistoryController {
     }
 
     private applyState(targetState: any, statePath: string[]) {
-        this.store.select(statePath)
-            .update((state: any) => {
-                state.clear();
-                state.merge(targetState);
-            }, true);
+        if (statePath.length === 0) {
+            this.store.next(targetState);
+        } else {
+            this.store
+                .update((state: any) => {
+                    this.dataStrategy.setIn(state, statePath, targetState, { fromUpdate: true });
+                });
+        }
     }
 }

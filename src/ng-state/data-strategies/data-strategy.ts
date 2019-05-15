@@ -1,9 +1,11 @@
 import { Store } from '../store/store';
 import { take } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
 
+@Injectable({providedIn: 'root'})
 export abstract class DataStrategy {
 
-    protected store: Store<any>;
+    rootStore: Store<any>;
 
     abstract getIn(state: any, path: any[]): any;
     abstract get(state: any, property: string): any;
@@ -15,13 +17,13 @@ export abstract class DataStrategy {
     abstract setIn(state: any, path: any[], data: any, additionalData?: { fromUpdate: boolean }): any;
     abstract isObject(state: any): any;
     abstract overrideContructor(obj: any): any;
-    abstract reset(path: any[], isRootPath: boolean): void;
+    abstract reset(path: any[], stateToMerge: any): void;
     abstract resetRoot(): void;
 
     protected get currentState() {
         let currentState: any;
 
-        this.store.pipe(take(1))
+        this.rootStore.pipe(take(1))
             .subscribe(state => {
                 currentState = state;
             });
@@ -30,6 +32,6 @@ export abstract class DataStrategy {
     }
 
     init(store: Store<any>) {
-        this.store = store;
+        this.rootStore = store;
     }
 }

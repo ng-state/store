@@ -34,16 +34,16 @@ export function storeFactory(state: State<any>) {
     return new Store(state);
 }
 
-export function historyControllerFactory(store: Store<any>, history: StateHistory, debugerInfo: DebugInfo, router: Router) {
-    return new HistoryController(store, history, debugerInfo, router);
+export function historyControllerFactory(store: Store<any>, history: StateHistory, debugerInfo: DebugInfo, router: Router, dataStrategy: DataStrategy) {
+    return new HistoryController(store, history, debugerInfo, router, dataStrategy);
 }
 
 export function routerStateFactory(store: Store<any>, router: Router, debugerInfo: DebugInfo) {
     return new RouterState(store, router, debugerInfo);
 }
 
-export function debugInfoFactory(history: StateHistory, zone: NgZone) {
-    return new DebugInfo(history, zone);
+export function debugInfoFactory(history: StateHistory, zone: NgZone, dataStrategy: DataStrategy) {
+    return new DebugInfo(history, zone, dataStrategy);
 }
 
 
@@ -63,8 +63,8 @@ export class StoreModule {
                 { provide: State, useFactory: stateFactory, deps: [INITIAL_STATE, DataStrategy, TransferState, RESTORE_FROM_SERVER] },
                 { provide: Store, useFactory: storeFactory, deps: [State] },
                 { provide: StateHistory, useClass: StateHistory },
-                { provide: DebugInfo, useFactory: debugInfoFactory, deps: [StateHistory, NgZone] },
-                { provide: HistoryController, useFactory: historyControllerFactory, deps: [Store, StateHistory, DebugInfo, Router] },
+                { provide: DebugInfo, useFactory: debugInfoFactory, deps: [StateHistory, NgZone, DataStrategy] },
+                { provide: HistoryController, useFactory: historyControllerFactory, deps: [Store, StateHistory, DebugInfo, Router, DataStrategy] },
                 { provide: RouterState, useFactory: routerStateFactory, deps: [Store, Router, DebugInfo] },
                 Dispatcher
             ]

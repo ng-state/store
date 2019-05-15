@@ -34,15 +34,18 @@ export class NgStateTestBed {
     public static createStore(initialState: any): Store<any> {
         const state = stateFactory(initialState, this.dataStrategy);
         const store = storeFactory(state);
+        this.dataStrategy.init(store);
+
         const stateHistory = new StateHistory();
         stateHistory.init(initialState);
-        const debugInfo = new DebugInfo(stateHistory, { run: () => { } } as any);
+        const debugInfo = new DebugInfo(stateHistory, { run: () => { } } as any, this.dataStrategy);
         DebugInfo.instance = debugInfo;
         const historyController = new HistoryController(
             store,
             stateHistory,
             debugInfo,
-            { navigateByUrl: () => new Promise(() => { }) } as any);
+            { navigateByUrl: () => new Promise(() => { }) } as any,
+            this.dataStrategy);
         historyController.init();
 
         this.dependencyInjection.push({ key: this.getMockName(Store), value: store });

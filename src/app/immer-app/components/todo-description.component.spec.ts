@@ -3,7 +3,7 @@ import { NgStateTestBed } from '../../../ng-state/ng-state.test-bed';
 import { initialState } from '../../initial-state';
 import { TodoStateActions } from '../actions/todo.actions';
 import { TodoModel } from '../actions/todo.model';
-import { ImmutableJsDataStrategy } from '../../../ng-state/data-strategies/immutablejs.data-strategy';
+import { ImmerDataStrategy } from '../../..//ng-state/data-strategies/immer.data-strategy';
 
 describe('TodoDescription', () => {
 
@@ -11,14 +11,14 @@ describe('TodoDescription', () => {
     const cd = { markForCheck: () => { } };
 
     beforeEach(() => {
-        NgStateTestBed.setTestEnvironment(new ImmutableJsDataStrategy());
+        NgStateTestBed.setTestEnvironment(new ImmerDataStrategy());
         component = new TodoDescription(cd as any);
     });
 
     it('should get description', () => {
         initialState.todos.push(<TodoModel>{description: 'test description'});
 
-        const actions = NgStateTestBed.createActions(TodoStateActions, initialState, ['todos', 0], ) as TodoStateActions;
+        const actions = NgStateTestBed.createActions(TodoStateActions, initialState, ['todos', 1], ) as TodoStateActions;
         expect(actions.todoDescription).toEqual('test description');
     });
 
@@ -27,14 +27,14 @@ describe('TodoDescription', () => {
         todo.description = 'test description';
         initialState.todos.push(todo);
 
-        const actions = NgStateTestBed.createActions(TodoStateActions, initialState, ['todos', 0]) as TodoStateActions;
+        const actions = NgStateTestBed.createActions(TodoStateActions, initialState, ['todos', 1]) as TodoStateActions;
         expect(actions.todoDescription).toEqual('test description');
     });
 
-    it ('should set actions to component', () => {
+    it ('should set actions to component - immer', () => {
         initialState.todos.push(<TodoModel>{description: 'test description'});
 
-        const actions = NgStateTestBed.createActions(TodoStateActions, initialState, ['todos', 0]) as TodoStateActions;
+        const actions = NgStateTestBed.createActions(TodoStateActions, initialState, ['todos', 1]) as TodoStateActions;
         NgStateTestBed.setActionsToComponent(actions, component);
 
         expect(component.actions.todoDescription).toEqual('test description');

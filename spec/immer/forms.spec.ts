@@ -1,11 +1,11 @@
 import { Subject } from 'rxjs';
-import { StateKeeper } from '../src/ng-state/state/history';
-import { Store } from '../src/ng-state/store/store';
-import { FormGroupLike, NgFormStateManager } from '../src/ng-state/store/plugins/form-manager.plugin';
-import { NgStateTestBed } from '../src/ng-state/ng-state.test-bed';
-import { ImmutableJsDataStrategy } from '../src/ng-state/data-strategies/immutablejs.data-strategy';
+import { StateKeeper } from '../../src/ng-state/state/history';
+import { Store } from '../../src/ng-state/store/store';
+import { FormGroupLike, NgFormStateManager } from '../../src/ng-state/store/plugins/form-manager.plugin';
+import { NgStateTestBed } from '../../src/ng-state/ng-state.test-bed';
+import { ImmerDataStrategy } from '../../src/ng-state/data-strategies/immer.data-strategy';
 
-describe('Forms manager', () => {
+describe('Forms manager - Immer', () => {
     let store: Store<any>;
     let form: FormGroupLike = {
         patchValue: (state: any, params: any) => { },
@@ -17,9 +17,10 @@ describe('Forms manager', () => {
     };
 
     let layoutForm: NgFormStateManager;
+    const dataStrategy = new ImmerDataStrategy();
 
     beforeEach(() => {
-        NgStateTestBed.setTestEnvironment(new ImmutableJsDataStrategy());
+        NgStateTestBed.setTestEnvironment(dataStrategy);
         const initialState = { layout: { test: 'test' } };
         store = NgStateTestBed.createStore(initialState);
     });
@@ -40,7 +41,7 @@ describe('Forms manager', () => {
         layoutForm = store.select(['layout']).form.bind(form, { debounceTime: 0 });
         (<Subject<any>>form.valueChanges).next({ test: 'test2' });
         setTimeout(() => {
-            expect(StateKeeper.CURRENT_STATE.getIn(['layout', 'test'])).toEqual('test2');
+            expect(StateKeeper.CURRENT_STATE['layout']['test']).toEqual('test2');
             done();
         });
     });
@@ -48,14 +49,14 @@ describe('Forms manager', () => {
     it('should reset form', () => {
         spyOn(form, 'patchValue');
         const layoutStore = store.select(['layout']);
-        layoutStore.update(state => state.set('test', 'test3'));
-        expect(StateKeeper.CURRENT_STATE.getIn(['layout', 'test'])).toEqual('test3');
+        layoutStore.update(state => state['test'] = 'test3');
+        expect(StateKeeper.CURRENT_STATE['layout']['test']).toEqual('test3');
 
         layoutForm = layoutStore.form.bind(form, { debounceTime: 0 });
 
         layoutForm.reset();
 
-        expect(StateKeeper.CURRENT_STATE.getIn(['layout', 'test'])).toEqual('test');
+        expect(StateKeeper.CURRENT_STATE['layout']['test']).toEqual('test');
         expect(form.patchValue).toHaveBeenCalledWith({ test: 'test' }, { 'emitEvent': false });
     });
 
@@ -70,7 +71,7 @@ describe('Forms manager', () => {
 
         setTimeout(() => {
             expect(shoulUpdate.mock.calls.length).toBe(1);
-            expect(StateKeeper.CURRENT_STATE.getIn(['layout', 'test'])).toEqual('test2');
+            expect(StateKeeper.CURRENT_STATE['layout']['test']).toEqual('test2');
             done();
         });
 
@@ -87,12 +88,12 @@ describe('Forms manager', () => {
 
         setTimeout(() => {
             expect(shoulUpdate.mock.calls.length).toBe(1);
-            expect(StateKeeper.CURRENT_STATE.getIn(['layout', 'test'])).toEqual('test');
+            expect(StateKeeper.CURRENT_STATE['layout']['test']).toEqual('test');
             done();
         });
     });
 
-    it('should call onChange hook after state change', (done) => {
+    it('should call onChange hook after state change - immer', (done) => {
         const onChange = jest.fn();
 
         layoutForm = store.select(['layout']).form
@@ -103,7 +104,7 @@ describe('Forms manager', () => {
 
         setTimeout(() => {
             expect(onChange.mock.calls.length).toBe(1);
-            expect(onChange.mock.calls[0][0].toJS()).toMatchObject({ test: 'test2' });
+            expect(onChange.mock.calls[0][0]).toMatchObject({ test: 'test2' });
             done();
         });
     });
