@@ -1,7 +1,7 @@
 import { distinctUntilChanged, debounceTime, takeUntil, take } from 'rxjs/operators';
 import { Observable, Subject } from 'rxjs';
 import { Store } from '../store';
-import { DataStrategy } from '../../data-strategies/data-strategy';
+import { DataStrategy } from '@ng-state/data-strategy';
 import { ServiceLocator } from '../../helpers/service-locator';
 
 export class NgFormStateManager {

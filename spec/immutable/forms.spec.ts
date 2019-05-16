@@ -3,7 +3,7 @@ import { StateKeeper } from '../../src/ng-state/state/history';
 import { Store } from '../../src/ng-state/store/store';
 import { FormGroupLike, NgFormStateManager } from '../../src/ng-state/store/plugins/form-manager.plugin';
 import { NgStateTestBed } from '../../src/ng-state/ng-state.test-bed';
-import { ImmutableJsDataStrategy } from '../../src/ng-state/data-strategies/immutablejs.data-strategy';
+import { ImmutableJsDataStrategy } from '@ng-state/immutablejs-data-strategy';
 
 describe('Forms manager - Immutable', () => {
     let store: Store<any>;

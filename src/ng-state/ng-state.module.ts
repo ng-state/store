@@ -10,7 +10,7 @@ import { StateHistory, StateHistoryOptions, StateKeeper } from './state/history'
 import { Store } from './store/store';
 import { HistoryController } from './state/history-controller';
 import { DebugInfo, DebugOptions } from './debug/debug-info';
-import { DataStrategy } from './data-strategies/data-strategy';
+import { DataStrategy } from '@ng-state/data-strategy';
 
 export const RESTORE_FROM_SERVER = new InjectionToken('RESTORE_FROM_SERVER');
 export const TRANSFER_STATE_KEY = 'state';

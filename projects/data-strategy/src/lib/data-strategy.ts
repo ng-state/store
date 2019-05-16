@@ -1,10 +1,9 @@
-import { Store } from '../store/store';
 import { take } from 'rxjs/operators';
-import { BehaviorSubject } from 'rxjs';
+import { StoreLike } from './store-like';
 
 export abstract class DataStrategy {
 
-    rootStore: BehaviorSubject<any>;
+    rootStore: StoreLike<any>;
 
     abstract getIn(state: any, path: any[]): any;
     abstract get(state: any, property: string): any;
@@ -30,7 +29,7 @@ export abstract class DataStrategy {
         return currentState;
     }
 
-    init(store: BehaviorSubject<any>) {
+    init(store: StoreLike<any>) {
         this.rootStore = store;
     }
 }

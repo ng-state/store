@@ -3,7 +3,7 @@ import { NgStateTestBed } from '../../../ng-state/ng-state.test-bed';
 import { initialState } from '../../initial-state';
 import { TodoStateActions } from '../actions/todo.actions';
 import { TodoModel } from '../actions/todo.model';
-import { ImmutableJsDataStrategy } from '../../../ng-state/data-strategies/immutablejs.data-strategy';
+import { ImmutableJsDataStrategy } from '@ng-state/immutablejs-data-strategy';
 
 describe('TodoDescription', () => {
 

@@ -88,7 +88,6 @@ describe('InjectStore decorator', () => {
     it('should convert getters to properties', () => {
         setup((currentPath, stateIndex) => 'new path');
         componentInstance = target;
-        const newPath = target.createStore();
 
         expect(typeof (<any>componentInstance).isOpened).toEqual('boolean');
     });

@@ -1,6 +1,6 @@
 import { NgStateTestBed } from '../../src/ng-state/ng-state.test-bed';
 import { HasStore, InjectStore } from '../../src/ng-state/decorators/inject-store.decorator';
-import { ImmerDataStrategy } from '../../src/ng-state/data-strategies/immer.data-strategy';
+import { ImmerDataStrategy } from '@ng-state/immer-data-strategy';
 
 describe('NgStateTestBed - Immer', () => {
 

@@ -1,4 +1,4 @@
-import { DataStrategy } from './data-strategy';
+import { DataStrategy } from '@ng-state/data-strategy';
 import produce from 'immer';
 
 export class ImmerDataStrategy extends DataStrategy {

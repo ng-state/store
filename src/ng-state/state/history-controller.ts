@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 import { DebugInfo, DebugHistoryItem } from '../debug/debug-info';
 import { Router } from '@angular/router';
 import { take } from 'rxjs/operators';
-import { DataStrategy } from '../data-strategies/data-strategy';
+import { DataStrategy } from '@ng-state/data-strategy';
 
 export class HistoryController {
     private onHistoryChange = new Subject();

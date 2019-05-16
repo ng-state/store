@@ -3,7 +3,7 @@ import { NgStateTestBed } from '../../../ng-state/ng-state.test-bed';
 import { initialState } from '../../initial-state';
 import { TodoStateActions } from '../actions/todo.actions';
 import { TodoModel } from '../actions/todo.model';
-import { ImmerDataStrategy } from '../../..//ng-state/data-strategies/immer.data-strategy';
+import { ImmerDataStrategy } from '@ng-state/immer-data-strategy';
 
 describe('TodoDescription', () => {
 

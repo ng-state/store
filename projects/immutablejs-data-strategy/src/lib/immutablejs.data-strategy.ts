@@ -1,4 +1,4 @@
-import { DataStrategy } from './data-strategy';
+import { DataStrategy } from '@ng-state/data-strategy';
 import { Map, fromJS, Collection, Iterable } from 'immutable';
 import * as _Cursor from 'immutable/contrib/cursor';
 

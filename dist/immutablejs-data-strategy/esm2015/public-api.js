@@ -1,0 +1,7 @@
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+export { ImmutableJsDataStrategy } from './lib/immutablejs.data-strategy';
+export { ImmutableJsDataStrategyModule } from './lib/immutablejs.data-strategy.module';
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicHVibGljLWFwaS5qcyIsInNvdXJjZVJvb3QiOiJuZzovL0BuZy1zdGF0ZS9pbW11dGFibGVqcy1kYXRhLXN0cmF0ZWd5LyIsInNvdXJjZXMiOlsicHVibGljLWFwaS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7O0FBQUEsd0NBQWMsaUNBQWlDLENBQUM7QUFDaEQsOENBQWMsd0NBQXdDLENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgKiBmcm9tICcuL2xpYi9pbW11dGFibGVqcy5kYXRhLXN0cmF0ZWd5JztcbmV4cG9ydCAqIGZyb20gJy4vbGliL2ltbXV0YWJsZWpzLmRhdGEtc3RyYXRlZ3kubW9kdWxlJztcbiJdfQ==

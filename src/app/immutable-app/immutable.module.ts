@@ -15,7 +15,7 @@ import { ProductsComponent } from './components/products/products.component';
 import { FiltersComponent } from './components/products/filters/filters.component';
 import { StorageTestComponent } from './components/storage-test.component';
 import { initialState } from '../initial-state';
-import { ImmutableJsDataStrategyModule } from '../../ng-state/data-strategies/immutablejs.data-strategy.module';
+import { ImmutableJsDataStrategyModule } from '@ng-state/immutablejs-data-strategy';
 
 @NgModule({
     imports: [

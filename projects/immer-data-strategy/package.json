@@ -1,0 +1,32 @@
+{
+    "name": "@ng-state/immer-data-strategy",
+    "version": "1.0.0",
+    "description": "Immer data strategy for @ng-state/store",
+    "homepage": "https://github.com/ng-state/store#readme",
+    "keywords": [
+        "ng-state",
+        "rxjs",
+        "immer",
+        "immutablejs",
+        "angular",
+        "state",
+        "management",
+        "typescript",
+        "angular",
+        "store",
+        "store",
+        "observable",
+        "data",
+        "store",
+        "redux"
+    ],
+    "author": "Vytautas Pranskunas",
+    "license": "ISC",
+    "peerDependencies": {
+        "@angular/common": "^7.2.0",
+        "@angular/core": "^7.2.0",
+        "@ng-state/data-strategy": "^1.0.3",
+        "immer": "^3.1.2",
+        "rxjs": "^6.3.2"
+    }
+}

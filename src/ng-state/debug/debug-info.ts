@@ -2,8 +2,7 @@ import { DebugInfoData } from './debug-info-data';
 import { StateHistory } from '../state/history';
 import { Injectable, NgZone } from '@angular/core';
 import { Subject } from 'rxjs';
-import { ServiceLocator } from '../helpers/service-locator';
-import { DataStrategy } from '../data-strategies/data-strategy';
+import { DataStrategy } from '@ng-state/data-strategy';
 
 @Injectable()
 export class DebugInfo {

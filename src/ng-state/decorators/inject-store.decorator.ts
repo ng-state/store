@@ -3,7 +3,7 @@ import { ServiceLocator } from '../helpers/service-locator';
 import { Store } from '../store/store';
 import { Helpers } from '../helpers/helpers';
 import { Dispatcher } from '../services/dispatcher';
-import { DataStrategy } from '../data-strategies/data-strategy';
+import { DataStrategy } from '@ng-state/data-strategy';
 
 export function InjectStore(newPath: string[] | string | ((currentPath, stateIndex) => string[] | string), intialState: Object | any = null, debug: boolean = false) {
     let getStatePath = (currentPath, stateIndex, extractedPath) => {

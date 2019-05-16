@@ -4,7 +4,7 @@ import { StateKeeper } from '../../src/ng-state/state/history';
 import { Store } from '../../src/ng-state/store/store';
 import { NgStateTestBed } from '../../src/ng-state/ng-state.test-bed';
 import { PersistStateStorage, PersistStateManager } from '../../src/ng-state/store/plugins/persist-state.plugin';
-import { ImmerDataStrategy } from '../../src/ng-state/data-strategies/immer.data-strategy';
+import { ImmerDataStrategy } from '@ng-state/immer-data-strategy';
 
 jest.useFakeTimers();
 

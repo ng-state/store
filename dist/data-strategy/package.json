@@ -1,0 +1,41 @@
+{
+  "name": "@ng-state/data-strategy",
+  "version": "1.0.3",
+  "description": "Contract for different data stratgies",
+  "homepage": "https://github.com/ng-state/store#readme",
+  "keywords": [
+    "ng-state",
+    "rxjs",
+    "immer",
+    "immutablejs",
+    "angular",
+    "state",
+    "management",
+    "typescript",
+    "angular",
+    "store",
+    "store",
+    "observable",
+    "data",
+    "store",
+    "redux"
+  ],
+  "author": "Vytautas Pranskunas <vytautas.pranskunas@gmail.com>",
+  "license": "MIT",
+  "peerDependencies": {
+    "rxjs": "^6.3.2"
+  },
+  "main": "bundles/ng-state-data-strategy.umd.js",
+  "module": "fesm5/ng-state-data-strategy.js",
+  "es2015": "fesm2015/ng-state-data-strategy.js",
+  "esm5": "esm5/ng-state-data-strategy.js",
+  "esm2015": "esm2015/ng-state-data-strategy.js",
+  "fesm5": "fesm5/ng-state-data-strategy.js",
+  "fesm2015": "fesm2015/ng-state-data-strategy.js",
+  "typings": "ng-state-data-strategy.d.ts",
+  "metadata": "ng-state-data-strategy.metadata.json",
+  "sideEffects": false,
+  "dependencies": {
+    "tslib": "^1.9.0"
+  }
+}

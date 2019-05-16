@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
-import { DataStrategy } from './data-strategy';
 import { ImmerDataStrategy } from './immer.data-strategy';
+import { DataStrategy } from '@ng-state/data-strategy';
 
 @NgModule({
     providers: [

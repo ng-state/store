@@ -4,7 +4,7 @@ import { StateHistory } from './state/history';
 import { Store } from './store/store';
 import { HistoryController } from './state/history-controller';
 import { DebugInfo } from './debug/debug-info';
-import { DataStrategy } from './data-strategies/data-strategy';
+import { DataStrategy } from '@ng-state/data-strategy';
 
 export class NgStateTestBed {
 

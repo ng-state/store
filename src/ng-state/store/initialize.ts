@@ -4,7 +4,7 @@ import { Store } from './store';
 import { ActionType } from '../debug/debug-info-data';
 import { DebugInfo } from '../debug/debug-info';
 import { ServiceLocator } from '../helpers/service-locator';
-import { DataStrategy } from '../data-strategies/data-strategy';
+import { DataStrategy } from '@ng-state/data-strategy';
 
 export class Initialize {
     newStore: Store<any>;

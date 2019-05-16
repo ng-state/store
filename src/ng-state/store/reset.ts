@@ -2,7 +2,7 @@ import { Store } from './store';
 import { StateKeeper, StateHistory } from '../state/history';
 import { ActionType } from '../debug/debug-info-data';
 import { ServiceLocator } from '../helpers/service-locator';
-import { DataStrategy } from '../data-strategies/data-strategy';
+import { DataStrategy } from '@ng-state/data-strategy';
 import { DebugInfo } from '../debug/debug-info';
 import { RouterState } from '../state/router-state';
 

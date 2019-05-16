@@ -2,7 +2,7 @@ import { tap, take } from 'rxjs/operators';
 import { Store } from '../store';
 import { Observable, isObservable, from, of, ReplaySubject, forkJoin } from 'rxjs';
 import { ServiceLocator } from '../../helpers/service-locator';
-import { DataStrategy } from '../../data-strategies/data-strategy';
+import { DataStrategy } from '@ng-state/data-strategy';
 
 export class PersistStateManager {
     private prefix = 'state::';

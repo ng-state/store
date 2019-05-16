@@ -15,7 +15,7 @@ import { ProductsComponent } from './components/products/products.component';
 import { FiltersComponent } from './components/products/filters/filters.component';
 import { StorageTestComponent } from './components/storage-test.component';
 import { initialState } from '../initial-state';
-import { ImmerDataStrategyModule } from '../../ng-state/data-strategies/immer.data-strategy.module';
+import { ImmerDataStrategyModule } from '@ng-state/immer-data-strategy';
 
 @NgModule({
     imports: [

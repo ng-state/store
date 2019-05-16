@@ -3,7 +3,7 @@ import { Store } from '../store/store';
 import { DebugInfo } from '../debug/debug-info';
 import { filter, take } from 'rxjs/operators';
 import { ServiceLocator } from '../helpers/service-locator';
-import { DataStrategy } from '../data-strategies/data-strategy';
+import { DataStrategy } from '@ng-state/data-strategy';
 
 export class RouterState {
     static startingRoute = '';

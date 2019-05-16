@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { DataStrategy } from './data-strategy';
+import { DataStrategy } from '@ng-state/data-strategy';
 import { ImmutableJsDataStrategy } from './immutablejs.data-strategy';
 
 @NgModule({

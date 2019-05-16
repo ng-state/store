@@ -18,7 +18,11 @@
         "build:server:prod": "ng run example-app:server:prod",
         "compile:server": "tsc -p server.tsconfig.json",
         "build:ssr:prod": "npm run build:prod && npm run build:server:prod && npm run compile:server",
-        "serve:ssr": "set NODE_ENV=production&&node dist/server"
+        "serve:ssr": "set NODE_ENV=production&&node dist/server",
+        "build:data-strategy": "ng build data-strategy && cpy logo.png dist/data-strategy",
+        "build:immer-data-strategy": "ng build immer-data-strategy && cpy logo.png dist/immer-data-strategy",
+        "build:immutablejs-data-strategy": "ng build immutablejs-data-strategy && cpy logo.png dist/immutablejs-data-strategy",
+        "build:strategies": "npm run build:data-strategy && npm run build:immer-data-strategy && npm run build:immutablejs-data-strategy"
     },
     "devDependencies": {
         "@angular-devkit/build-angular": "^0.13.6",
@@ -61,6 +65,7 @@
         "ts-jest": "^24.0.0",
         "ts-node": "1.2.1",
         "tsickle": "^0.35.0",
+        "tslib": "^1.9.0",
         "tslint": "^5.7.0",
         "typescript": "3.1.6",
         "zone.js": "^0.8.18"
@@ -92,7 +97,13 @@
         ],
         "setupFiles": [
             "./spec/localstorage.mock.ts"
-        ]
+        ],
+        "modulePathIgnorePatterns" : [
+            "<rootDir>/dist/"
+        ],
+        "moduleNameMapper": {
+            "^@ng-state/(.*)$": "<rootDir>/dist/$1"
+          }
     },
     "dependencies": {
         "user": "0.0.0"

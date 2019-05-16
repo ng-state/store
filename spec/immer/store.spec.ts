@@ -4,7 +4,7 @@ import { StateKeeper } from '../../src/ng-state/state/history';
 import { Store } from '../../src/ng-state/store/store';
 import { stateFactory } from '../../src/ng-state/ng-state.module';
 import { NgStateTestBed } from '../../src/ng-state/ng-state.test-bed';
-import { ImmerDataStrategy } from '../../src/ng-state/data-strategies/immer.data-strategy';
+import { ImmerDataStrategy } from '@ng-state/immer-data-strategy';
 
 describe('Store tests - Immer', () => {
     let store: Store<any>;

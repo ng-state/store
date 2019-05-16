@@ -1,6 +1,6 @@
 import { NgStateTestBed } from '../../src/ng-state/ng-state.test-bed';
 import { HasStore, InjectStore } from '../../src/ng-state/decorators/inject-store.decorator';
-import { ImmutableJsDataStrategy } from '../../src/ng-state/data-strategies/immutablejs.data-strategy';
+import { ImmutableJsDataStrategy } from '@ng-state/immutablejs-data-strategy';
 
 describe('NgStateTestBed - Immutable', () => {
 
