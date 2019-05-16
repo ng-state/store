@@ -1,9 +1,6 @@
 import { DataStrategy } from './data-strategy';
 import { Map, fromJS, Collection, Iterable } from 'immutable';
 import * as _Cursor from 'immutable/contrib/cursor';
-import { StateHistory } from '../state/history';
-import { RouterState } from '../state/router-state';
-import { Store } from '../store/store';
 
 export class ImmutableJsDataStrategy extends DataStrategy {
 
@@ -64,17 +61,17 @@ export class ImmutableJsDataStrategy extends DataStrategy {
         }
     }
 
-    resetRoot(): void {
+    resetRoot(initialState: any, startingRoute: string): void {
         const state = this.currentState;
 
         const router = this.get(state, 'router');
 
         this.update([], (state: any) => {
             state.clear();
-            state.merge(StateHistory.initialState);
+            state.merge(initialState);
 
             state.set('router', router);
-            state.setIn(['router', 'url'], RouterState.startingRoute, { fromUpdate: true });
+            state.setIn(['router', 'url'], startingRoute, { fromUpdate: true });
         });
     }
 

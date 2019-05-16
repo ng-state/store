@@ -8,7 +8,7 @@ import { DataStrategy } from './data-strategies/data-strategy';
 
 export class NgStateTestBed {
 
-    private static dataStrategy: DataStrategy;
+    private static dataStrategy: DataStrategy = null;
     private static dependencyInjection = <{ key: any, value: any }[]>[];
 
     public static setTestEnvironment(dataStrategy: DataStrategy) {

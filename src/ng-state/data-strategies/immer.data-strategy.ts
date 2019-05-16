@@ -1,9 +1,5 @@
 import { DataStrategy } from './data-strategy';
-import * as _Cursor from 'immutable/contrib/cursor';
 import produce from 'immer';
-import { StateHistory } from '../state/history';
-import { RouterState } from '../state/router-state';
-import { Store } from '../store/store';
 
 export class ImmerDataStrategy extends DataStrategy {
 
@@ -75,13 +71,13 @@ export class ImmerDataStrategy extends DataStrategy {
         return obj !== null && typeof (obj) === 'object';
     }
 
-    resetRoot() {
+    resetRoot(initialState: any, startingRoute: string) {
         const state = this.currentState;
         const router = this.get(state, 'router');
 
-        const nextState = produce(StateHistory.initialState, (draftState: any) => {
+        const nextState = produce(initialState, (draftState: any) => {
             this.set(draftState, 'router', router);
-            this.setIn(draftState, ['router', 'url'], RouterState.startingRoute, { fromUpdate: true });
+            this.setIn(draftState, ['router', 'url'], startingRoute, { fromUpdate: true });
         });
 
         this.rootStore.next(nextState);

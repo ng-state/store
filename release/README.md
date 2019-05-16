@@ -1,6 +1,6 @@
 # ng-state
 
-![ng-state](/logo.png)
+![ng-state](logo.png)
 
 RxJS and ImmutableJs powered nested state management for Angular 2 applications inspired by [@ngrx/store](https://github.com/ngrx/store). It is simple, fast, reliable with no boilerplate.
 

@@ -1,11 +1,10 @@
 import { Store } from '../store/store';
 import { take } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
-@Injectable({providedIn: 'root'})
 export abstract class DataStrategy {
 
-    rootStore: Store<any>;
+    rootStore: BehaviorSubject<any>;
 
     abstract getIn(state: any, path: any[]): any;
     abstract get(state: any, property: string): any;
@@ -18,7 +17,7 @@ export abstract class DataStrategy {
     abstract isObject(state: any): any;
     abstract overrideContructor(obj: any): any;
     abstract reset(path: any[], stateToMerge: any): void;
-    abstract resetRoot(): void;
+    abstract resetRoot(initialState: any, startingRoute: string): void;
 
     protected get currentState() {
         let currentState: any;
@@ -31,7 +30,7 @@ export abstract class DataStrategy {
         return currentState;
     }
 
-    init(store: Store<any>) {
+    init(store: BehaviorSubject<any>) {
         this.rootStore = store;
     }
 }

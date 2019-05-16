@@ -4,6 +4,7 @@ import { ActionType } from '../debug/debug-info-data';
 import { ServiceLocator } from '../helpers/service-locator';
 import { DataStrategy } from '../data-strategies/data-strategy';
 import { DebugInfo } from '../debug/debug-info';
+import { RouterState } from '../state/router-state';
 
 export class Reset {
     constructor(debugMessage: string = null) {
@@ -14,7 +15,7 @@ export class Reset {
             let path = store.statePath.filter(item => !store.rootPath.includes(item));
             const isRootPath = Array.isArray(path) && path.length === 0;
             if (isRootPath) {
-                dataStrategy.resetRoot(store);
+                dataStrategy.resetRoot(StateHistory.initialState, RouterState.startingRoute);
             } else {
                 let initialState: any = !!store.initialState
                     ? store.initialState
