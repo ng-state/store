@@ -1,4 +1,4 @@
-import { distinctUntilChanged, debounceTime, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, debounceTime, takeUntil, take } from 'rxjs/operators';
 import { Observable, Subject } from 'rxjs';
 import { Store } from '../store';
 import { DataStrategy } from '../../data-strategies/data-strategy';
@@ -23,8 +23,8 @@ export class NgFormStateManager {
         this.dataStrategy = ServiceLocator.injector.get(DataStrategy);
         this.form = form;
         this.params = { ... { debounceTime: 100, emitEvent: false }, ...params };
-        this.setInitialValue(this.store);
-        this.subscribeToFormChange(this.store);
+        this.setInitialValue();
+        this.subscribeToFormChange();
 
         return this;
     }
@@ -53,8 +53,8 @@ export class NgFormStateManager {
         return this;
     }
 
-    private setInitialValue(store: Store<any>) {
-        store
+    private setInitialValue() {
+        this.store
             .pipe(
                 distinctUntilChanged(),
                 takeUntil(this.unsubscribe)
@@ -64,21 +64,28 @@ export class NgFormStateManager {
             });
     }
 
-    private subscribeToFormChange(store: Store<any>) {
+    private subscribeToFormChange() {
+
         this.form.valueChanges
-             .pipe(
+            .pipe(
                 debounceTime(this.params.debounceTime),
                 distinctUntilChanged(),
                 takeUntil(this.unsubscribe)
             )
             .subscribe(value => {
-                store.update((state: any) => {
-                    this.executeUpdate(value, state);
+                let stateUpdated = false;
+
+                this.store.update((state: any) => {
+                    stateUpdated = this.executeUpdate(value, state);
                 });
+
+                if (stateUpdated) {
+                    this.onChangeCall();
+                }
             });
     }
 
-    private executeUpdate(value: any, state: any) {
+    private executeUpdate(value: any, state: any): boolean {
         if (this.shouldUpdateStateFn) {
             if (this.shouldUpdateStateFn({
                 form: this.form,
@@ -86,16 +93,24 @@ export class NgFormStateManager {
                 value: value
             })) {
                 this.dataStrategy.merge(state, this.dataStrategy.fromJS(value));
-                this.onChangeCall(value);
+                return true;
             }
         } else {
             this.dataStrategy.merge(state, this.dataStrategy.fromJS(value));
-            this.onChangeCall(value);
+            return true;
         }
+
+        return false;
     }
 
-    private onChangeCall(state: any) {
-        this.onChangeFn && this.onChangeFn(state);
+    private onChangeCall() {
+        if (this.onChangeFn) {
+            this.store
+                .pipe(take(1))
+                .subscribe(state => {
+                    this.onChangeFn(this.dataStrategy.toJS(state));
+                });
+        }
     }
 }
 
