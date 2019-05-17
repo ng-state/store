@@ -1,5 +1,5 @@
 import { TodoDescription } from './todo-description.component';
-import { NgStateTestBed } from '../../../ng-state/ng-state.test-bed';
+import { NgStateTestBed } from '@ng-state/store';
 import { initialState } from '../../initial-state';
 import { TodoStateActions } from '../actions/todo.actions';
 import { TodoModel } from '../actions/todo.model';

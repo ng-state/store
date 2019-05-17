@@ -1,198 +1,190 @@
 {
-  "$schema": "./node_modules/@angular-devkit/core/src/workspace/workspace-schema.json",
-  "version": 1,
-  "newProjectRoot": "projects",
-  "projects": {
-    "ng-state": {
-      "root": "",
-      "sourceRoot": "src",
-      "projectType": "library",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "tsconfig.build.json",
-            "project": "ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "project": "ng-package.prod.json"
-            }
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "tsconfig.build.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    },
-    "example-app": {
-      "root": "",
-      "sourceRoot": "src",
-      "projectType": "application",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:browser",
-          "options": {
-            "outputPath": "dist/browser",
-            "index": "./src/index.html",
-            "main": "./src/main.ts",
-            "tsConfig": "./src/tsconfig.json",
-            "assets": [
-              "src/assets",
-              "src/favicon.ico"
-            ],
-            "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap.css"
-            ],
-            "scripts": []
-          },
-          "configurations": {
-            "prod": {
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "serviceWorker": true,
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
+    "$schema": "./node_modules/@angular-devkit/core/src/workspace/workspace-schema.json",
+    "version": 1,
+    "newProjectRoot": "projects",
+    "projects": {
+        "ng-state": {
+            "root": "projects/ng-state",
+            "sourceRoot": "projects/ng-state/src",
+            "projectType": "library",
+            "architect": {
+                "build": {
+                    "builder": "@angular-devkit/build-ng-packagr:build",
+                    "options": {
+                        "tsConfig": "projects/ng-state/tsconfig.lib.json",
+                        "project": "projects/ng-state/ng-package.json"
+                    }
+                },
+                "lint": {
+                    "builder": "@angular-devkit/build-angular:tslint",
+                    "options": {
+                        "tsConfig": [
+                            "projects/ng-state/tsconfig.lib.json"
+                        ],
+                        "exclude": [
+                            "**/node_modules/**"
+                        ]
+                    }
                 }
-              ]
             }
-          }
         },
-        "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "example-app:build"
-          },
-          "configurations": {
-            "prod": {
-              "browserTarget": "example-app:build:prod"
-            }
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [],
-            "exclude": []
-          }
-        },
-        "server": {
-          "builder": "@angular-devkit/build-angular:server",
-          "options": {
-            "outputPath": "dist/server",
-            "main": "src/main.server.ts",
-            "tsConfig": "src/tsconfig.server.json"
-          },
-          "configurations": {
-            "prod": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
+        "immer-data-strategy": {
+            "root": "projects/immer-data-strategy",
+            "sourceRoot": "projects/immer-data-strategy/src",
+            "projectType": "library",
+            "prefix": "lib",
+            "architect": {
+                "build": {
+                    "builder": "@angular-devkit/build-ng-packagr:build",
+                    "options": {
+                        "tsConfig": "projects/immer-data-strategy/tsconfig.lib.json",
+                        "project": "projects/immer-data-strategy/ng-package.json"
+                    }
+                },
+                "lint": {
+                    "builder": "@angular-devkit/build-angular:tslint",
+                    "options": {
+                        "tsConfig": [
+                            "projects/immer-data-strategy/tsconfig.lib.json"
+                        ],
+                        "exclude": [
+                            "**/node_modules/**"
+                        ]
+                    }
                 }
-              ]
             }
-          }
-        }
-      }
-    },
-    "immer-data-strategy": {
-      "root": "projects/immer-data-strategy",
-      "sourceRoot": "projects/immer-data-strategy/src",
-      "projectType": "library",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "projects/immer-data-strategy/tsconfig.lib.json",
-            "project": "projects/immer-data-strategy/ng-package.json"
-          }
         },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/immer-data-strategy/tsconfig.lib.json",
-              "projects/immer-data-strategy/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    },
-    "immutablejs-data-strategy": {
-      "root": "projects/immutablejs-data-strategy",
-      "sourceRoot": "projects/immutablejs-data-strategy/src",
-      "projectType": "library",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "projects/immutablejs-data-strategy/tsconfig.lib.json",
-            "project": "projects/immutablejs-data-strategy/ng-package.json"
-          }
+        "immutablejs-data-strategy": {
+            "root": "projects/immutablejs-data-strategy",
+            "sourceRoot": "projects/immutablejs-data-strategy/src",
+            "projectType": "library",
+            "prefix": "lib",
+            "architect": {
+                "build": {
+                    "builder": "@angular-devkit/build-ng-packagr:build",
+                    "options": {
+                        "tsConfig": "projects/immutablejs-data-strategy/tsconfig.lib.json",
+                        "project": "projects/immutablejs-data-strategy/ng-package.json"
+                    }
+                },
+                "lint": {
+                    "builder": "@angular-devkit/build-angular:tslint",
+                    "options": {
+                        "tsConfig": [
+                            "projects/immutablejs-data-strategy/tsconfig.lib.json"
+                        ],
+                        "exclude": [
+                            "**/node_modules/**"
+                        ]
+                    }
+                }
+            }
         },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/immutablejs-data-strategy/tsconfig.lib.json",
-              "projects/immutablejs-data-strategy/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    },
-    "data-strategy": {
-      "root": "projects/data-strategy",
-      "sourceRoot": "projects/data-strategy/src",
-      "projectType": "library",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "projects/data-strategy/tsconfig.lib.json",
-            "project": "projects/data-strategy/ng-package.json"
-          }
+        "data-strategy": {
+            "root": "projects/data-strategy",
+            "sourceRoot": "projects/data-strategy/src",
+            "projectType": "library",
+            "prefix": "lib",
+            "architect": {
+                "build": {
+                    "builder": "@angular-devkit/build-ng-packagr:build",
+                    "options": {
+                        "tsConfig": "projects/data-strategy/tsconfig.lib.json",
+                        "project": "projects/data-strategy/ng-package.json"
+                    }
+                },
+                "lint": {
+                    "builder": "@angular-devkit/build-angular:tslint",
+                    "options": {
+                        "tsConfig": [
+                            "projects/data-strategy/tsconfig.lib.json"
+                        ],
+                        "exclude": [
+                            "**/node_modules/**"
+                        ]
+                    }
+                }
+            }
         },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/data-strategy/tsconfig.lib.json",
-              "projects/data-strategy/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
+        "example-app": {
+            "root": "",
+            "sourceRoot": "src",
+            "projectType": "application",
+            "architect": {
+                "build": {
+                    "builder": "@angular-devkit/build-angular:browser",
+                    "options": {
+                        "outputPath": "dist/browser",
+                        "index": "./src/index.html",
+                        "main": "./src/main.ts",
+                        "tsConfig": "./src/tsconfig.json",
+                        "assets": [
+                            "src/assets",
+                            "src/favicon.ico"
+                        ],
+                        "styles": [
+                            "node_modules/bootstrap/dist/css/bootstrap.css"
+                        ],
+                        "scripts": []
+                    },
+                    "configurations": {
+                        "production": {
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "extractCss": true,
+                            "namedChunks": false,
+                            "aot": true,
+                            "extractLicenses": true,
+                            "vendorChunk": false,
+                            "buildOptimizer": true,
+                            "serviceWorker": true,
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.prod.ts"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "serve": {
+                    "builder": "@angular-devkit/build-angular:dev-server",
+                    "options": {
+                        "browserTarget": "example-app:build"
+                    },
+                    "configurations": {
+                        "prod": {
+                            "browserTarget": "example-app:build:prod"
+                        }
+                    }
+                },
+                "lint": {
+                    "builder": "@angular-devkit/build-angular:tslint",
+                    "options": {
+                        "tsConfig": [],
+                        "exclude": []
+                    }
+                },
+                "server": {
+                    "builder": "@angular-devkit/build-angular:server",
+                    "options": {
+                        "outputPath": "dist/server",
+                        "main": "src/main.server.ts",
+                        "tsConfig": "src/tsconfig.server.json"
+                    },
+                    "configurations": {
+                        "prod": {
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.prod.ts"
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
         }
-      }
     }
-  }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { Store } from '../../../../../ng-state/store/store';
-import { NgFormStateManager, ShoulUpdateStateParams } from '../../../../../ng-state/store/plugins/form-manager.plugin';
+import { Store } from '@ng-state/store';
+import { NgFormStateManager, ShoulUpdateStateParams } from '@ng-state/store';
 import { Observable } from 'rxjs';
 
 @Component({

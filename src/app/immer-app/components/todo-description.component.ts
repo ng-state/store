@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, ChangeDetectorRef, OnChanges, SimpleChanges, OnInit } from '@angular/core';
-import { ComponentState, HasStateActions } from '../../../ng-state/decorators/component-state.decorator';
+import { ChangeDetectionStrategy, Component, ChangeDetectorRef, OnChanges, SimpleChanges, OnInit, Input } from '@angular/core';
+import { ComponentState, HasStateActions } from '@ng-state/store';
 
 import { TodoStateActions } from './../actions/todo.actions';
 
@@ -7,9 +7,11 @@ import { TodoStateActions } from './../actions/todo.actions';
 @Component({
     selector: 'todo-description',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    template: `<div>{{ actions.todoDescription }} {{ interpolationTest() }}</div>`
+    template: `<div>{{ actions.todoDescription }} {{ interpolationTest() }} {{testImmerMutation?.aa?.kk}}</div>`
 })
 export class TodoDescription extends HasStateActions<TodoStateActions> implements OnChanges, OnInit {
+
+    @Input() testImmerMutation: any = {aa: { kk: 'bu' }};
 
     constructor(cd: ChangeDetectorRef) {
         super(cd);

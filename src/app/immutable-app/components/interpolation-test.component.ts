@@ -1,9 +1,9 @@
-import { Store } from '../../../ng-state/store/store';
+import { Store } from '@ng-state/store';
 import { ChangeDetectionStrategy, Component, ChangeDetectorRef } from '@angular/core';
 
-import { ComponentState, HasStateActions } from '../../../ng-state/decorators/component-state.decorator';
+import { ComponentState, HasStateActions } from '@ng-state/store';
 import { ClearTodoMessage } from './../actions/todo.model';
-import { Dispatcher } from '../../../ng-state/services/dispatcher';
+import { Dispatcher } from '@ng-state/store';
 import { InterpolationTestStateActions } from '../actions/interpolation-test.actions';
 
 

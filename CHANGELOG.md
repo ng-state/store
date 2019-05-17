@@ -1,3 +1,10 @@
+### 6.0.0
+- Intorduced immer support
+
+##### BREAKING CHANGES
+- In order to use ng-state now you have to import `@ng-state/store` instead of `ng-state` and immer of immutable strategy module: `ImmerDataStrategyModule` or `ImmutableJsDataStrategyModule`
+- Also for test bed you need to place `NgStateTestBed.setTestEnvironment(new ImmerDataStrategy());` to beforeEach and provide immer or immutable data strategy.
+
 ### 5.2.2
 - Added type to state
 

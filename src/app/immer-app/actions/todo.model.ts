@@ -1,4 +1,4 @@
-import { Message } from './../../../ng-state/services/dispatcher';
+import { Message } from '@ng-state/store';
 
 export class TodoModel {
     id: any;

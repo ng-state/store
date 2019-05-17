@@ -1,0 +1,47 @@
+{
+    "name": "@ng-state/store",
+    "version": "6.0.0",
+    "description": "RxJS and ImmutableJs powered nested state managment for Angular2 apps inspired by @ngrx.",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ng-state/store.git"
+    },
+    "keywords": [
+        "ng-state",
+        "rxjs",
+        "immer",
+        "immutablejs",
+        "angular",
+        "state",
+        "management",
+        "typescript",
+        "angular",
+        "store",
+        "store",
+        "observable",
+        "data",
+        "store",
+        "redux",
+        "javascript",
+        "observable store",
+        "angular store"
+    ],
+    "author": "Vytautas Pranskunas <vytautas.pranskunas@gmail.com>",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/ng-state/store/issues"
+    },
+    "homepage": "https://github.com/ng-state/store#readme",
+    "dependencies": {
+        "@ng-state/data-strategy": "^1.0.3"
+    },
+    "peerDependencies": {
+        "@angular/common": "^7.2.0",
+        "@angular/core": "^7.2.0",
+        "@angular/router": "^7.2.0",
+        "@angular/platform-browser": "^7.2.0",
+        "core-js": "^2.5.1",
+        "rxjs": "^6.3.2",
+        "zone.js": "^0.8.18"
+    }
+}

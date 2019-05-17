@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { ClearTodoMessage, TodoModel } from './../actions/todo.model';
 
-import { ComponentState, HasStateActions } from '../../../ng-state/decorators/component-state.decorator';
-import { Dispatcher, Message } from './../../../ng-state/services/dispatcher';
+import { ComponentState, HasStateActions } from '@ng-state/store';
+import { Dispatcher, Message } from '@ng-state/store';
 import { Subscription } from 'rxjs';
 import { TodosStateActions } from './../actions/todos.actions';
-import { Store } from '../../../ng-state/store/store';
+import produce from 'immer';
 
 @ComponentState(TodosStateActions)
 @Component({
@@ -22,6 +22,8 @@ export class TodosComponent extends HasStateActions<TodosStateActions> implement
     };
 
     subscription: Subscription;
+
+    mutateImmerObject = { aa: { kk: 'bu' } };
 
     constructor(dispatcher: Dispatcher, cd: ChangeDetectorRef) {
         super(cd);
@@ -57,5 +59,12 @@ export class TodosComponent extends HasStateActions<TodosStateActions> implement
 
     trackById(item: TodoModel) {
         return item.id;
+    }
+
+    mutateImmer() {
+        this.mutateImmerObject = produce(this.mutateImmerObject, (draftState: any) => {
+            draftState.aa.kk = 'ttt';
+        });
+        // this.mutateImmerObject.aa.kk = 'ttt';
     }
 }

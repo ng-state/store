@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, ChangeDetectorRef, OnChanges, SimpleChanges, OnInit } from '@angular/core';
-import { ComponentState, HasStateActions } from '../../../ng-state/decorators/component-state.decorator';
+import { ComponentState, HasStateActions } from '@ng-state/store';
 
 import { TodoStateActions } from './../actions/todo.actions';
 

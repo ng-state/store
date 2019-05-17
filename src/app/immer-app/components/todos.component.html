@@ -24,12 +24,13 @@
                 <th scope="row">{{ i + 1 }}</th>
                 <td>{{ todo.name }}</td>
                 <td>
-                    <todo-description [statePath]="statePath" [stateIndex]="i"></todo-description>
+                    <todo-description [statePath]="statePath" [stateIndex]="i" [testImmerMutation]="mutateImmerObject"></todo-description>
                 </td>
                 <td><button class="btn btn-danger" (click)="deleteItem(i)">X</button></td>
             </tr>
         </tbody>
     </table>
+    <button (click)="mutateImmer()">Mutate immer</button>
     TODOS - {{interpolationTest()}}
     <interpolation-test></interpolation-test>
     <subselect-test></subselect-test>

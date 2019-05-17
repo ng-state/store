@@ -1,7 +1,7 @@
-import { Store } from '../../../ng-state/store/store';
+import { Store } from '@ng-state/store';
 import { ChangeDetectionStrategy, Component, ChangeDetectorRef } from '@angular/core';
-import { ComponentState, HasStateActions } from '../../../ng-state/decorators/component-state.decorator';
-import { Dispatcher } from '../../../ng-state/services/dispatcher';
+import { ComponentState, HasStateActions } from '@ng-state/store';
+import { Dispatcher } from '@ng-state/store';
 import { SubSelectTestStateActions } from '../actions/subselect-test.actions';
 
 @ComponentState(SubSelectTestStateActions)

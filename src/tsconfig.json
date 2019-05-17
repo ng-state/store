@@ -8,20 +8,14 @@
             "@ng-state/immer-data-strategy": [
                 "../dist/immer-data-strategy"
             ],
-            "@ng-state/immer-data-strategy/*": [
-                "../dist/immer-data-strategy/*"
-            ],
             "@ng-state/immutablejs-data-strategy": [
                 "../dist/immutablejs-data-strategy"
-            ],
-            "@ng-state/immutablejs-data-strategy/*": [
-                "../dist/immutablejs-data-strategy/*"
             ],
             "@ng-state/data-strategy": [
                 "../dist/data-strategy"
             ],
-            "@ng-state/data-strategy/*": [
-                "../dist/data-strategy/*"
+            "@ng-state/store": [
+                "../dist/ng-state"
             ],
         },
         "outDir": "../../dist/app",

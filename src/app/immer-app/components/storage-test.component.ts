@@ -1,6 +1,6 @@
-import { Store } from '../../../ng-state/store/store';
+import { Store } from '@ng-state/store';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { PersistStateManager } from '../../../ng-state/store/plugins/persist-state.plugin';
+import { PersistStateManager } from '@ng-state/store';
 import { timer } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 

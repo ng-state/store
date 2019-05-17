@@ -1,53 +1,47 @@
 {
-  "compilerOptions": {
-    "baseUrl": ".",
-    "declaration": true,
-    "stripInternal": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "noEmitOnError": false,
-    "outDir": "./release",
-    "rootDir": ".",
-    "lib": [
-      "es2017",
-      "dom"
-    ],
-    "target": "es5",
-    "skipLibCheck": true,
-    "types": [
-      "node",
-      "jest"
-    ],
-    "paths": {
-      "@ng-state/immer-data-strategy": [
-        "dist/immer-data-strategy"
-      ],
-      "@ng-state/immer-data-strategy/*": [
-        "dist/immer-data-strategy/*"
-      ],
-      "@ng-state/immutablejs-data-strategy": [
-        "dist/immutablejs-data-strategy"
-      ],
-      "@ng-state/immutablejs-data-strategy/*": [
-        "dist/immutablejs-data-strategy/*"
-      ],
-      "@ng-state/data-strategy": [
-        "dist/data-strategy"
-      ],
-      "@ng-state/data-strategy/*": [
-        "dist/data-strategy/*"
-      ],
-      "@angular/*": [
-        "./node_modules/@angular/*"
-      ],
-      "immer/*": [
-        "./node_modules/immer/*"
-      ]
-    }
-  },
-  "exclude": [
-    "node_modules"
-  ]
+    "compilerOptions": {
+        "baseUrl": ".",
+        "declaration": true,
+        "stripInternal": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "noEmitOnError": false,
+        "outDir": "./release",
+        "rootDir": ".",
+        "lib": [
+            "es2017",
+            "dom"
+        ],
+        "target": "es5",
+        "skipLibCheck": true,
+        "types": [
+            "node",
+            "jest"
+        ],
+        "paths": {
+            "@ng-state/immer-data-strategy": [
+                "dist/immer-data-strategy"
+            ],
+            "@ng-state/immutablejs-data-strategy": [
+                "dist/immutablejs-data-strategy"
+            ],
+            "@ng-state/data-strategy": [
+                "dist/data-strategy"
+            ],
+            "@ng-state/store": [
+                "dist/ng-state"
+            ],
+            "@angular/*": [
+                "./node_modules/@angular/*"
+            ],
+            "immer/*": [
+                "./node_modules/immer/*"
+            ]
+        }
+    },
+    "exclude": [
+        "node_modules"
+    ]
 }

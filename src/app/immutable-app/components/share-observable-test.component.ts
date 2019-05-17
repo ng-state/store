@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { Store } from '../../../ng-state/store/store';
+import { Store } from '@ng-state/store';
 import { tap, map, publishReplay, refCount } from 'rxjs/operators';
 
 @Component({

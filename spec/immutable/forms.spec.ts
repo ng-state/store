@@ -1,8 +1,8 @@
 import { Subject } from 'rxjs';
-import { StateKeeper } from '../../src/ng-state/state/history';
-import { Store } from '../../src/ng-state/store/store';
-import { FormGroupLike, NgFormStateManager } from '../../src/ng-state/store/plugins/form-manager.plugin';
-import { NgStateTestBed } from '../../src/ng-state/ng-state.test-bed';
+import { StateKeeper } from '@ng-state/store';
+import { Store } from '@ng-state/store';
+import { FormGroupLike, NgFormStateManager } from '@ng-state/store';
+import { NgStateTestBed } from '@ng-state/store';
 import { ImmutableJsDataStrategy } from '@ng-state/immutablejs-data-strategy';
 
 describe('Forms manager - Immutable', () => {

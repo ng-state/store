@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { ClearTodoMessage, TodoModel } from './../actions/todo.model';
 
-import { ComponentState, HasStateActions } from '../../../ng-state/decorators/component-state.decorator';
-import { Dispatcher, Message } from './../../../ng-state/services/dispatcher';
+import { ComponentState, HasStateActions } from '@ng-state/store';
+import { Dispatcher, Message } from '@ng-state/store';
 import { Subscription } from 'rxjs';
 import { TodosStateActions } from './../actions/todos.actions';
-import { Store } from '../../../ng-state/store/store';
+import { Store } from '@ng-state/store';
 
 @ComponentState(TodosStateActions)
 @Component({

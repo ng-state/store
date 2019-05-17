@@ -1,4 +1,4 @@
-import { HasStore, InjectStore } from '../../../ng-state/decorators/inject-store.decorator';
+import { HasStore, InjectStore } from '@ng-state/store';
 import { TodoModel } from './todo.model';
 
 @InjectStore(['${stateIndex}'])

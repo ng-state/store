@@ -18,7 +18,10 @@
         "observable",
         "data",
         "store",
-        "redux"
+        "redux",
+        "javascript",
+        "observable store",
+        "angular store"
     ],
     "author": "Vytautas Pranskunas",
     "license": "ISC",

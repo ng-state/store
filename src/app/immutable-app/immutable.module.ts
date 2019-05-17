@@ -5,7 +5,7 @@ import { InterpolationTestComponent } from './components/interpolation-test.comp
 import { NgModule } from '@angular/core';
 import { RouterHistoryTestComponent } from './components/router-history-test.component';
 import { RouterModule } from '@angular/router';
-import { StoreModule } from '../../ng-state/ng-state.module';
+import { StoreModule } from '@ng-state/store';
 import { TodoDescription } from './components/todo-description.component';
 import { TodosComponent } from './components/todos.component';
 import { routes } from './routes';
