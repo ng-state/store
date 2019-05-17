@@ -40,6 +40,9 @@
         "@angular/pwa": "^0.13.6",
         "@angular/router": "^7.1.4",
         "@angular/service-worker": "^7.1.4",
+        "@ng-state/data-strategy": "^1.0.3",
+        "@ng-state/immer-data-strategy": "^1.0.0",
+        "@ng-state/immutablejs-data-strategy": "^1.0.0",
         "@nguniversal/common": "^7.1.1",
         "@nguniversal/express-engine": "^7.1.1",
         "@nguniversal/module-map-ngfactory-loader": "^7.1.1",
@@ -98,12 +101,12 @@
         "setupFiles": [
             "./spec/localstorage.mock.ts"
         ],
-        "modulePathIgnorePatterns" : [
+        "modulePathIgnorePatterns": [
             "<rootDir>/dist/"
         ],
         "moduleNameMapper": {
             "^@ng-state/(.*)$": "<rootDir>/dist/$1"
-          }
+        }
     },
     "dependencies": {
         "user": "0.0.0"

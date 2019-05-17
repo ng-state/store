@@ -1,7 +1,29 @@
 {
     "extends": "../tsconfig.json",
     "compilerOptions": {
-        "paths": { "*": ["types/*"] },
+        "paths": {
+            "*": [
+                "types/*"
+            ],
+            "@ng-state/immer-data-strategy": [
+                "../dist/immer-data-strategy"
+            ],
+            "@ng-state/immer-data-strategy/*": [
+                "../dist/immer-data-strategy/*"
+            ],
+            "@ng-state/immutablejs-data-strategy": [
+                "../dist/immutablejs-data-strategy"
+            ],
+            "@ng-state/immutablejs-data-strategy/*": [
+                "../dist/immutablejs-data-strategy/*"
+            ],
+            "@ng-state/data-strategy": [
+                "../dist/data-strategy"
+            ],
+            "@ng-state/data-strategy/*": [
+                "../dist/data-strategy/*"
+            ],
+        },
         "outDir": "../../dist/app",
         "baseUrl": "./",
         "module": "esnext",

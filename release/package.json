@@ -26,14 +26,15 @@
         "url": "https://github.com/ng-state/store/issues"
     },
     "homepage": "https://github.com/ng-state/store#readme",
+    "dependencies": {
+        "@ng-state/data-strategy": "^1.0.3"
+    },
     "peerDependencies": {
-        "@angular/common": "^6.0.0",
-        "@angular/core": "^6.0.0",
-        "@angular/router": "^6.0.0",
-        "@angular/platform-browser": "^6.0.0",
+        "@angular/common": "^7.2.0",
+        "@angular/core": "^7.2.0",
+        "@angular/router": "^7.2.0",
+        "@angular/platform-browser": "^7.2.0",
         "core-js": "^2.5.1",
-        "immutable": "^3.8.1",
-        "immutable-cursor": "^2.0.0",
         "rxjs": "^6.3.2",
         "zone.js": "^0.8.18"
     },
