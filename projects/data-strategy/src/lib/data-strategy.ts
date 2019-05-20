@@ -6,7 +6,6 @@ export abstract class DataStrategy {
     rootStore: StoreLike<any>;
 
     abstract getIn(state: any, path: any[]): any;
-    abstract get(state: any, property: string): any;
     abstract merge(state: any, newState: any, path?: any[], isRootPath?: boolean): any;
     abstract update(path: any[], action: (state: any) => void): void;
     abstract fromJS(data: any): any;
@@ -17,6 +16,7 @@ export abstract class DataStrategy {
     abstract overrideContructor(obj: any): any;
     abstract reset(path: any[], stateToMerge: any): void;
     abstract resetRoot(initialState: any, startingRoute: string): void;
+    abstract equals(objOne: any, objTwo: any): boolean;
 
     protected get currentState() {
         let currentState: any;

@@ -2,7 +2,6 @@ import { DataStrategy } from '@ng-state/data-strategy';
 export declare class ImmerDataStrategy extends DataStrategy {
     init(store: any, isProd: boolean): void;
     getIn(state: any, path: any[]): any;
-    get(state: any, property: string): any;
     fromJS(data: any): any;
     toJS(data: any): any;
     set(state: any, property: string, data: any): any;
@@ -13,6 +12,7 @@ export declare class ImmerDataStrategy extends DataStrategy {
     isObject(obj: any): boolean;
     resetRoot(initialState: any, startingRoute: string): void;
     reset(path: any[], stateToMerge: any): void;
+    equals(objOne: any, objTwo: any): boolean;
     private getCursor;
     private setValue;
     private cursorBase;

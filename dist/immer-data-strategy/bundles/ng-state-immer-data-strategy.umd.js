@@ -99,19 +99,6 @@
                 return this.getCursor(state, path);
             };
         /**
-         * @param {?} state
-         * @param {?} property
-         * @return {?}
-         */
-        ImmerDataStrategy.prototype.get = /**
-         * @param {?} state
-         * @param {?} property
-         * @return {?}
-         */
-            function (state, property) {
-                return state[property];
-            };
-        /**
          * @param {?} data
          * @return {?}
          */
@@ -271,7 +258,7 @@
                 /** @type {?} */
                 var state = this.currentState;
                 /** @type {?} */
-                var router = this.get(state, 'router');
+                var router = state['router'];
                 /** @type {?} */
                 var nextState = immer.produce(initialState, ( /**
                  * @param {?} draftState
@@ -304,6 +291,19 @@
                     _this.setIn(draftState, path, stateToMerge, { fromUpdate: true });
                 }));
                 this.rootStore.next(nextState);
+            };
+        /**
+         * @param {?} objOne
+         * @param {?} objTwo
+         * @return {?}
+         */
+        ImmerDataStrategy.prototype.equals = /**
+         * @param {?} objOne
+         * @param {?} objTwo
+         * @return {?}
+         */
+            function (objOne, objTwo) {
+                throw new Error('Method not implemented.');
             };
         /**
          * @private
