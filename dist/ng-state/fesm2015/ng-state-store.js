@@ -1788,7 +1788,7 @@ function InjectStore(newPath, intialState = null, debug = false) {
             (state) => {
                 this.state = state;
                 dispatcher.publish(this.aId);
-                if (debug && state.toJS) {
+                if (debug) {
                     /** @type {?} */
                     const dataStrategy = ServiceLocator.injector.get(DataStrategy);
                     console.info(dataStrategy.toJS(state));

@@ -16,14 +16,6 @@ class ImmerDataStrategy extends DataStrategy {
         return this.getCursor(state, path);
     }
     /**
-     * @param {?} state
-     * @param {?} property
-     * @return {?}
-     */
-    get(state, property) {
-        return state[property];
-    }
-    /**
      * @param {?} data
      * @return {?}
      */
@@ -136,7 +128,7 @@ class ImmerDataStrategy extends DataStrategy {
         /** @type {?} */
         const state = this.currentState;
         /** @type {?} */
-        const router = this.get(state, 'router');
+        const router = state['router'];
         /** @type {?} */
         const nextState = produce(initialState, (/**
          * @param {?} draftState
@@ -165,6 +157,14 @@ class ImmerDataStrategy extends DataStrategy {
             this.setIn(draftState, path, stateToMerge, { fromUpdate: true });
         }));
         this.rootStore.next(nextState);
+    }
+    /**
+     * @param {?} objOne
+     * @param {?} objTwo
+     * @return {?}
+     */
+    equals(objOne, objTwo) {
+        throw new Error('Method not implemented.');
     }
     /**
      * @private

@@ -60,7 +60,7 @@ export class ImmutableJsDataStrategy extends DataStrategy {
     resetRoot(initialState: any, startingRoute: string): void {
         const state = this.currentState;
 
-        const router = this.get(state, 'router');
+        const router = state.get('router');
 
         this.update([], (state: any) => {
             state.clear();
@@ -76,6 +76,10 @@ export class ImmutableJsDataStrategy extends DataStrategy {
             state.clear();
             state.merge(stateToMerge);
         });
+    }
+
+    equals(objOne: any, objTwo: any): boolean {
+        throw new Error('Method not implemented.');
     }
 
     private isNotImmutableObject(obj: any) {

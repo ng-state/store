@@ -27,19 +27,6 @@ var ImmutableJsDataStrategy = /** @class */ (function (_super) {
         return state.getIn(path);
     };
     /**
-     * @param {?} state
-     * @param {?} property
-     * @return {?}
-     */
-    ImmutableJsDataStrategy.prototype.get = /**
-     * @param {?} state
-     * @param {?} property
-     * @return {?}
-     */
-    function (state, property) {
-        return state.get(property);
-    };
-    /**
      * @param {?} data
      * @return {?}
      */
@@ -180,7 +167,7 @@ var ImmutableJsDataStrategy = /** @class */ (function (_super) {
         /** @type {?} */
         var state = this.currentState;
         /** @type {?} */
-        var router = this.get(state, 'router');
+        var router = state.get('router');
         this.update([], (/**
          * @param {?} state
          * @return {?}
@@ -211,6 +198,19 @@ var ImmutableJsDataStrategy = /** @class */ (function (_super) {
             state.clear();
             state.merge(stateToMerge);
         }));
+    };
+    /**
+     * @param {?} objOne
+     * @param {?} objTwo
+     * @return {?}
+     */
+    ImmutableJsDataStrategy.prototype.equals = /**
+     * @param {?} objOne
+     * @param {?} objTwo
+     * @return {?}
+     */
+    function (objOne, objTwo) {
+        throw new Error('Method not implemented.');
     };
     /**
      * @private

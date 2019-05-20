@@ -17,14 +17,6 @@ class ImmutableJsDataStrategy extends DataStrategy {
         return state.getIn(path);
     }
     /**
-     * @param {?} state
-     * @param {?} property
-     * @return {?}
-     */
-    get(state, property) {
-        return state.get(property);
-    }
-    /**
      * @param {?} data
      * @return {?}
      */
@@ -121,7 +113,7 @@ class ImmutableJsDataStrategy extends DataStrategy {
         /** @type {?} */
         const state = this.currentState;
         /** @type {?} */
-        const router = this.get(state, 'router');
+        const router = state.get('router');
         this.update([], (/**
          * @param {?} state
          * @return {?}
@@ -147,6 +139,14 @@ class ImmutableJsDataStrategy extends DataStrategy {
             state.clear();
             state.merge(stateToMerge);
         }));
+    }
+    /**
+     * @param {?} objOne
+     * @param {?} objTwo
+     * @return {?}
+     */
+    equals(objOne, objTwo) {
+        throw new Error('Method not implemented.');
     }
     /**
      * @private

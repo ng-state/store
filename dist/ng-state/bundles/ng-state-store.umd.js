@@ -2124,7 +2124,7 @@
                  */function (state) {
                     _this.state = state;
                     dispatcher.publish(_this.aId);
-                    if (debug && state.toJS) {
+                    if (debug) {
                         /** @type {?} */
                         var dataStrategy$$1 = ServiceLocator.injector.get(dataStrategy.DataStrategy);
                         console.info(dataStrategy$$1.toJS(state));

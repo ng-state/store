@@ -91,7 +91,7 @@ export function InjectStore(newPath: string[] | string | ((currentPath, stateInd
                 this.state = state;
                 dispatcher.publish(this.aId);
 
-                if (debug && state.toJS) {
+                if (debug) {
                     const dataStrategy = ServiceLocator.injector.get(DataStrategy);
                     console.info(dataStrategy.toJS(state));
                 }
