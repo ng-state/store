@@ -34,7 +34,7 @@ export class NgStateTestBed {
     public static createStore(initialState: any): Store<any> {
         const state = stateFactory(initialState, this.dataStrategy);
         const store = storeFactory(state);
-        this.dataStrategy.init(store);
+        this.dataStrategy.init(store, false);
 
         const stateHistory = new StateHistory();
         stateHistory.init(initialState);

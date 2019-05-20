@@ -1,5 +1,6 @@
 import { DataStrategy } from '@ng-state/data-strategy';
 export declare class ImmerDataStrategy extends DataStrategy {
+    init(store: any, isProd: boolean): void;
     getIn(state: any, path: any[]): any;
     get(state: any, property: string): any;
     fromJS(data: any): any;

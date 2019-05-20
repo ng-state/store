@@ -36,13 +36,15 @@ DataStrategy = /** @class */ (function () {
     });
     /**
      * @param {?} store
+     * @param {?} isProd
      * @return {?}
      */
     DataStrategy.prototype.init = /**
      * @param {?} store
+     * @param {?} isProd
      * @return {?}
      */
-    function (store) {
+    function (store, isProd) {
         this.rootStore = store;
     };
     return DataStrategy;

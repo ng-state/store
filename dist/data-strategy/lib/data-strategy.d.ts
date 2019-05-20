@@ -16,5 +16,5 @@ export declare abstract class DataStrategy {
     abstract reset(path: any[], stateToMerge: any): void;
     abstract resetRoot(initialState: any, startingRoute: string): void;
     protected readonly currentState: any;
-    init(store: StoreLike<any>): void;
+    init(store: StoreLike<any>, isProd: boolean): void;
 }

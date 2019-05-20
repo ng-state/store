@@ -29,7 +29,7 @@ export abstract class DataStrategy {
         return currentState;
     }
 
-    init(store: StoreLike<any>) {
+    init(store: StoreLike<any>, isProd: boolean) {
         this.rootStore = store;
     }
 }

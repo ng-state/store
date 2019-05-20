@@ -17,7 +17,8 @@
         "build:data-strategy": "ng build data-strategy && cpy logo.png dist/data-strategy",
         "build:immer-data-strategy": "ng build immer-data-strategy && cpy logo.png dist/immer-data-strategy",
         "build:immutablejs-data-strategy": "ng build immutablejs-data-strategy && cpy logo.png dist/immutablejs-data-strategy",
-        "build:strategies": "npm run build:data-strategy && npm run build:immer-data-strategy && npm run build:immutablejs-data-strategy"
+        "build:strategies": "npm run build:data-strategy && npm run build:immer-data-strategy && npm run build:immutablejs-data-strategy",
+        "build:all-libs": "npm run build:strategies && npm run build:ng-state"
     },
     "devDependencies": {
         "@angular-devkit/build-angular": "^0.13.6",

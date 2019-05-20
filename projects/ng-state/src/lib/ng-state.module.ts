@@ -91,17 +91,13 @@ export class StoreModule {
         routerState.init();
 
         if (!isProd) {
-            (<any>window).state = StateHistory;
-        }
-
-        if (!isProd) {
             (<any>window).state = {
                 history: StateKeeper,
                 debug: debugInfo.publicApi
             };
         }
 
-        dataStrategy.init(store);
+        dataStrategy.init(store, isProd);
     }
 
     private initStateHistory(initialState: any, ngStateOptions: NgStateOptions) {

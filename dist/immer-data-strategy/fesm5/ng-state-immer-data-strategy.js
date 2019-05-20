@@ -1,5 +1,5 @@
 import { __extends, __spread } from 'tslib';
-import produce from 'immer';
+import { produce, setAutoFreeze } from 'immer';
 import { NgModule } from '@angular/core';
 import { DataStrategy } from '@ng-state/data-strategy';
 
@@ -12,6 +12,20 @@ var ImmerDataStrategy = /** @class */ (function (_super) {
     function ImmerDataStrategy() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    /**
+     * @param {?} store
+     * @param {?} isProd
+     * @return {?}
+     */
+    ImmerDataStrategy.prototype.init = /**
+     * @param {?} store
+     * @param {?} isProd
+     * @return {?}
+     */
+    function (store, isProd) {
+        _super.prototype.init.call(this, store, isProd);
+        setAutoFreeze(!isProd);
+    };
     /**
      * @param {?} state
      * @param {?} path

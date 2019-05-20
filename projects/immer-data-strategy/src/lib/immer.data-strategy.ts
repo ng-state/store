@@ -1,7 +1,12 @@
 import { DataStrategy } from '@ng-state/data-strategy';
-import produce from 'immer';
+import { produce, setAutoFreeze } from 'immer';
 
 export class ImmerDataStrategy extends DataStrategy {
+
+    init(store: any, isProd: boolean) {
+        super.init(store, isProd);
+        setAutoFreeze(!isProd);
+    }
 
     getIn(state: any, path: any[]): any {
         return this.getCursor(state, path);

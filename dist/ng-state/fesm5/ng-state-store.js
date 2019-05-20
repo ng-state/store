@@ -1522,16 +1522,13 @@ var StoreModule = /** @class */ (function () {
         this.initDebugger(ngStateOptions);
         historyController.init();
         routerState.init();
-        if (!isProd) {
-            ((/** @type {?} */ (window))).state = StateHistory;
-        }
-        if (!isProd) {
-            ((/** @type {?} */ (window))).state = {
-                history: StateKeeper,
-                debug: debugInfo.publicApi
-            };
-        }
-        dataStrategy.init(store);
+        // if (!isProd) {
+        ((/** @type {?} */ (window))).state = {
+            history: StateKeeper,
+            debug: debugInfo.publicApi
+        };
+        // }
+        dataStrategy.init(store, isProd);
     }
     /**
      * @param {?} initialState
@@ -1683,7 +1680,7 @@ var NgStateTestBed = /** @class */ (function () {
         var state = stateFactory(initialState, this.dataStrategy);
         /** @type {?} */
         var store = storeFactory(state);
-        this.dataStrategy.init(store);
+        this.dataStrategy.init(store, false);
         /** @type {?} */
         var stateHistory = new StateHistory();
         stateHistory.init(initialState);

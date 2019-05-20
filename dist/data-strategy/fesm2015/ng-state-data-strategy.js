@@ -27,9 +27,10 @@ class DataStrategy {
     }
     /**
      * @param {?} store
+     * @param {?} isProd
      * @return {?}
      */
-    init(store) {
+    init(store, isProd) {
         this.rootStore = store;
     }
 }

@@ -1557,16 +1557,13 @@
             this.initDebugger(ngStateOptions);
             historyController.init();
             routerState.init();
-            if (!isProd) {
-                (( /** @type {?} */(window))).state = StateHistory;
-            }
-            if (!isProd) {
-                (( /** @type {?} */(window))).state = {
-                    history: StateKeeper,
-                    debug: debugInfo.publicApi
-                };
-            }
-            dataStrategy$$1.init(store);
+            // if (!isProd) {
+            (( /** @type {?} */(window))).state = {
+                history: StateKeeper,
+                debug: debugInfo.publicApi
+            };
+            // }
+            dataStrategy$$1.init(store, isProd);
         }
         /**
          * @param {?} initialState
@@ -1720,7 +1717,7 @@
                 var state = stateFactory(initialState, this.dataStrategy);
                 /** @type {?} */
                 var store = storeFactory(state);
-                this.dataStrategy.init(store);
+                this.dataStrategy.init(store, false);
                 /** @type {?} */
                 var stateHistory = new StateHistory();
                 stateHistory.init(initialState);

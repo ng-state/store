@@ -1,4 +1,4 @@
-import produce from 'immer';
+import { produce, setAutoFreeze } from 'immer';
 import { NgModule } from '@angular/core';
 import { DataStrategy } from '@ng-state/data-strategy';
 
@@ -7,6 +7,15 @@ import { DataStrategy } from '@ng-state/data-strategy';
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class ImmerDataStrategy extends DataStrategy {
+    /**
+     * @param {?} store
+     * @param {?} isProd
+     * @return {?}
+     */
+    init(store, isProd) {
+        super.init(store, isProd);
+        setAutoFreeze(!isProd);
+    }
     /**
      * @param {?} state
      * @param {?} path

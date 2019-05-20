@@ -1,10 +1,8 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('immer'), require('@angular/core'), require('@ng-state/data-strategy')) :
     typeof define === 'function' && define.amd ? define('@ng-state/immer-data-strategy', ['exports', 'immer', '@angular/core', '@ng-state/data-strategy'], factory) :
-    (factory((global['ng-state'] = global['ng-state'] || {}, global['ng-state']['immer-data-strategy'] = {}),global.produce,global.ng.core,global.dataStrategy));
-}(this, (function (exports,produce,core,dataStrategy) { 'use strict';
-
-    produce = produce && produce.hasOwnProperty('default') ? produce['default'] : produce;
+    (factory((global['ng-state'] = global['ng-state'] || {}, global['ng-state']['immer-data-strategy'] = {}),global.immer,global.ng.core,global.dataStrategy));
+}(this, (function (exports,immer,core,dataStrategy) { 'use strict';
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation. All rights reserved.
@@ -73,6 +71,20 @@
         function ImmerDataStrategy() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
+        /**
+         * @param {?} store
+         * @param {?} isProd
+         * @return {?}
+         */
+        ImmerDataStrategy.prototype.init = /**
+         * @param {?} store
+         * @param {?} isProd
+         * @return {?}
+         */
+            function (store, isProd) {
+                _super.prototype.init.call(this, store, isProd);
+                immer.setAutoFreeze(!isProd);
+            };
         /**
          * @param {?} state
          * @param {?} path
@@ -171,7 +183,7 @@
                     action(state, path, data);
                 }
                 else {
-                    return produce(state, ( /**
+                    return immer.produce(state, ( /**
                      * @param {?} draftState
                      * @return {?}
                      */function (draftState) {
@@ -213,7 +225,7 @@
             function (path, action) {
                 var _this = this;
                 /** @type {?} */
-                var nextState = produce(this.currentState, ( /**
+                var nextState = immer.produce(this.currentState, ( /**
                  * @param {?} draftState
                  * @return {?}
                  */function (draftState) {
@@ -261,7 +273,7 @@
                 /** @type {?} */
                 var router = this.get(state, 'router');
                 /** @type {?} */
-                var nextState = produce(initialState, ( /**
+                var nextState = immer.produce(initialState, ( /**
                  * @param {?} draftState
                  * @return {?}
                  */function (draftState) {
@@ -285,7 +297,7 @@
                 /** @type {?} */
                 var state = this.currentState;
                 /** @type {?} */
-                var nextState = produce(state, ( /**
+                var nextState = immer.produce(state, ( /**
                  * @param {?} draftState
                  * @return {?}
                  */function (draftState) {
