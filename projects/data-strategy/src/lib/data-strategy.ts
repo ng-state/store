@@ -6,7 +6,6 @@ export abstract class DataStrategy {
     rootStore: StoreLike<any>;
 
     abstract getIn(state: any, path: any[]): any;
-    abstract get(state: any, property: string): any;
     abstract merge(state: any, newState: any, path?: any[], isRootPath?: boolean): any;
     abstract update(path: any[], action: (state: any) => void): void;
     abstract fromJS(data: any): any;

@@ -7,10 +7,6 @@ export class ImmerDataStrategy extends DataStrategy {
         return this.getCursor(state, path);
     }
 
-    get(state: any, property: string) {
-        return state[property];
-    }
-
     fromJS(data: any): any {
         return data;
     }

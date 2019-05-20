@@ -8,10 +8,6 @@ export class ImmutableJsDataStrategy extends DataStrategy {
         return state.getIn(path);
     }
 
-    get(state: any, property: string) {
-        return state.get(property);
-    }
-
     fromJS(data: any): Collection<any, any> {
         return fromJS(data);
     }
