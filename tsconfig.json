@@ -22,16 +22,16 @@
         ],
         "paths": {
             "@ng-state/immer-data-strategy": [
-                "dist/immer-data-strategy"
+                "release/immer-data-strategy"
             ],
             "@ng-state/immutablejs-data-strategy": [
-                "dist/immutablejs-data-strategy"
+                "release/immutablejs-data-strategy"
             ],
             "@ng-state/data-strategy": [
-                "dist/data-strategy"
+                "release/data-strategy"
             ],
             "@ng-state/store": [
-                "dist/ng-state"
+                "release/ng-state"
             ],
             "@angular/*": [
                 "./node_modules/@angular/*"
