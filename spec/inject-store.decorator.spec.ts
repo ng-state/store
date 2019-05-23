@@ -1,8 +1,12 @@
-import { InjectStore } from '@ng-state/store';
-import { ServiceLocator } from '@ng-state/store';
 import { Subject } from 'rxjs';
-import { StateKeeper } from '@ng-state/store';
 import { fromJS } from 'immutable';
+import { NgStateTestBed } from '../projects/ng-state/src/lib/ng-state.test-bed';
+import { Store } from '../projects/ng-state/src/lib/store/store';
+import { ImmerDataStrategy } from '../projects/immer-data-strategy/src/lib/immer.data-strategy';
+import { IS_TEST, IS_PROD } from '../projects/ng-state/src/lib/inject-constants';
+import { InjectStore } from '../projects/ng-state/src/lib/decorators/inject-store.decorator';
+import { StateKeeper, StateHistory } from '../projects/ng-state/src/lib/state/history';
+import { Dispatcher } from '../projects/ng-state/src/lib/services/dispatcher';
 
 class TestStateActions {
     store: any;
@@ -19,16 +23,20 @@ const store = {
     select: (statePath: string[]) => new Subject()
 };
 
-ServiceLocator.injector = <any>{
-    get: () => store
-};
 
 describe('InjectStore decorator', () => {
     let target;
     let componentInstance = {};
 
-    let setup = (newPath: string[] | string | ((currentPath, stateIndex) => string[] | string), intialState?: Object | any) => {
-        const decorator = InjectStore(newPath, intialState);
+    beforeEach(() => {
+        NgStateTestBed.setTestEnvironment(new ImmerDataStrategy());
+    });
+
+    let setup = (newPath: string[] | string | ((currentPath, stateIndex) => string[] | string), intialState?: Object | any, debug: boolean = false) => {
+        NgStateTestBed.registerDependency(Store, store);
+        NgStateTestBed.registerDependency(Dispatcher, new Dispatcher());
+        NgStateTestBed.registerDependency(StateHistory, new StateHistory());
+        const decorator = InjectStore(newPath, intialState, debug);
         decorator(TestStateActions);
         target = new TestStateActions();
         StateKeeper.CURRENT_STATE = fromJS({});
@@ -67,11 +75,9 @@ describe('InjectStore decorator', () => {
     });
 
     it('should create store', () => {
-        spyOn(ServiceLocator.injector, 'get').and.callThrough();
         setup(['test', '${stateIndex}', 'path']);
         target.createStore(['parent'], 1);
 
-        expect(ServiceLocator.injector.get).toHaveBeenCalled();
         expect(target.store).toBeDefined();
     });
 
@@ -90,5 +96,28 @@ describe('InjectStore decorator', () => {
         componentInstance = target;
 
         expect(typeof (<any>componentInstance).isOpened).toEqual('boolean');
+    });
+
+    it('should check path', () => {
+        NgStateTestBed.registerDependency(IS_TEST, false);
+        spyOn(console, 'error');
+        setup(['test']);
+        target.createStore(['parent']);
+        expect(console.error).toHaveBeenCalled();
+    });
+
+    it('should check path if debug is set', () => {
+        spyOn(console, 'error');
+        setup(['test'], null, true);
+        target.createStore(['parent']);
+        expect(console.error).toHaveBeenCalled();
+    });
+
+    it('should not check path for prod', () => {
+        NgStateTestBed.registerDependency(IS_PROD, true);
+        spyOn(console, 'error');
+        setup(['test'], null, true);
+        target.createStore(['parent']);
+        expect(console.error).not.toHaveBeenCalled();
     });
 });

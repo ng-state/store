@@ -1,10 +1,10 @@
 import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { StateKeeper } from '@ng-state/store';
-import { Store } from '@ng-state/store';
-import { stateFactory } from '@ng-state/store';
-import { NgStateTestBed } from '@ng-state/store';
 import { ImmutableJsDataStrategy } from '@ng-state/immutablejs-data-strategy';
+import { Store } from '../../projects/ng-state/src/lib/store/store';
+import { stateFactory } from '../../projects/ng-state/src/lib/ng-state.module';
+import { NgStateTestBed } from '../../projects/ng-state/src/lib/ng-state.test-bed';
+import { StateKeeper } from '../../projects/ng-state/src/lib/state/history';
 
 describe('Store tests - Immutable', () => {
     let store: Store<any>;

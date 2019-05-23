@@ -1,10 +1,10 @@
 import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { StateKeeper } from '@ng-state/store';
-import { Store } from '@ng-state/store';
-import { stateFactory } from '@ng-state/store';
-import { NgStateTestBed } from '@ng-state/store';
-import { ImmerDataStrategy } from '@ng-state/immer-data-strategy';
+import { Store } from '../../projects/ng-state/src/lib/store/store';
+import { ImmerDataStrategy } from '../../projects/immer-data-strategy/src/lib/immer.data-strategy';
+import { stateFactory } from '../../projects/ng-state/src/lib/ng-state.module';
+import { NgStateTestBed } from '../../projects/ng-state/src/lib/ng-state.test-bed';
+import { StateKeeper } from '../../projects/ng-state/src/lib/state/history';
 
 describe('Store tests - Immer', () => {
     let store: Store<any>;
@@ -31,7 +31,6 @@ describe('Store tests - Immer', () => {
 
         it('should initialize state with initial value - immer', () => {
             store.initialize([], { test: 'test' });
-            const t = StateKeeper.CURRENT_STATE;
             expect(StateKeeper.CURRENT_STATE['test']).toEqual('test');
             expect(StateKeeper.CURRENT_STATE['__initialized']).toEqual(true);
         });

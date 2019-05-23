@@ -1,7 +1,7 @@
 import { ServiceLocator } from '../helpers/service-locator';
 import { ChangeDetectorRef, Input, OnDestroy, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { IS_PROD, IS_TEST } from '../ng-state.module';
 import { Dispatcher } from '../services/dispatcher';
+import { IS_TEST } from '../inject-constants';
 
 export function ComponentState(stateActions: any | ((T) => any), disableOnChangesBeforeActionsCreated = true) {
     return (target: any) => {

@@ -1,9 +1,9 @@
 import { Subject } from 'rxjs';
-import { StateKeeper } from '@ng-state/store';
-import { Store } from '@ng-state/store';
-import { FormGroupLike, NgFormStateManager } from '@ng-state/store';
-import { NgStateTestBed } from '@ng-state/store';
-import { ImmerDataStrategy } from '@ng-state/immer-data-strategy';
+import { Store } from '../../projects/ng-state/src/lib/store/store';
+import { FormGroupLike, NgFormStateManager } from '../../projects/ng-state/src/lib/store/plugins/form-manager.plugin';
+import { ImmerDataStrategy } from '../../projects/immer-data-strategy/src/lib/immer.data-strategy';
+import { NgStateTestBed } from '../../projects/ng-state/src/lib/ng-state.test-bed';
+import { StateKeeper } from '../../projects/ng-state/src/lib/state/history';
 
 describe('Forms manager - Immer', () => {
     let store: Store<any>;

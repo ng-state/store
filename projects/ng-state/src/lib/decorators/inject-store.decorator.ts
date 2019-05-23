@@ -4,6 +4,8 @@ import { Store } from '../store/store';
 import { Helpers } from '../helpers/helpers';
 import { Dispatcher } from '../services/dispatcher';
 import { DataStrategy } from '@ng-state/data-strategy';
+import { IS_PROD, IS_TEST } from '../inject-constants';
+import { StateHistory } from '../state/history';
 
 export function InjectStore(newPath: string[] | string | ((currentPath, stateIndex) => string[] | string), intialState: Object | any = null, debug: boolean = false) {
     let getStatePath = (currentPath, stateIndex, extractedPath) => {
@@ -67,6 +69,25 @@ export function InjectStore(newPath: string[] | string | ((currentPath, stateInd
         });
     };
 
+    const checkPath = (): boolean => {
+        const isProd = ServiceLocator.injector.get(IS_PROD) as boolean;
+        if (isProd) {
+            return false;
+        }
+
+        const isTest = ServiceLocator.injector.get(IS_TEST) as boolean;
+
+        if (isTest && debug) {
+            return true;
+        }
+
+        if (isTest) {
+            return false;
+        }
+
+        return true;
+    };
+
     return (target: any) => {
 
         target.prototype.createStore = function (currentPath: any[], stateIndex: (string | number) | (string | number)[]) {
@@ -82,17 +103,22 @@ export function InjectStore(newPath: string[] | string | ((currentPath, stateInd
 
             const store = ServiceLocator.injector.get(Store) as Store<any>;
             const dispatcher = ServiceLocator.injector.get(Dispatcher);
+            const dataStrategy = ServiceLocator.injector.get(DataStrategy);
+            const stateHistory = ServiceLocator.injector.get(StateHistory);
 
             this.store = intialState
-                 ? store.initialize(statePath, intialState)
-                 : store.select(statePath);
+                ? store.initialize(statePath, intialState)
+                : store.select(statePath);
+
+            if (checkPath() && !dataStrategy.getIn(stateHistory.currentState, statePath)) {
+                console.error(`No such state in path ${statePath}. Define initial state for this path in global initial state or comonent actions.`);
+            }
 
             this.stateChangeSubscription = this.store.subscribe((state: any) => {
                 this.state = state;
                 dispatcher.publish(this.aId);
 
                 if (debug) {
-                    const dataStrategy = ServiceLocator.injector.get(DataStrategy);
                     console.info(dataStrategy.toJS(state));
                 }
             });

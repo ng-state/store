@@ -11,13 +11,7 @@ import { Store } from './store/store';
 import { HistoryController } from './state/history-controller';
 import { DebugInfo, DebugOptions } from './debug/debug-info';
 import { DataStrategy } from '@ng-state/data-strategy';
-
-export const RESTORE_FROM_SERVER = new InjectionToken('RESTORE_FROM_SERVER');
-export const TRANSFER_STATE_KEY = 'state';
-export const INITIAL_STATE = new InjectionToken('INITIAL_STATE');
-export const NG_STATE_OPTIONS = new InjectionToken('NG_STATE_OPTIONS');
-export const IS_PROD = new InjectionToken('IS_PROD');
-export const IS_TEST = new InjectionToken('IS_TEST');
+import { TRANSFER_STATE_KEY, NG_STATE_OPTIONS, INITIAL_STATE, IS_PROD, IS_TEST, RESTORE_FROM_SERVER } from './inject-constants';
 
 export function stateFactory(initialState, dataStrategy: DataStrategy, transferState?: TransferState, restoreFromServer?: boolean) {
     if (transferState && restoreFromServer) {

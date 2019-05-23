@@ -1,6 +1,7 @@
-import { NgStateTestBed } from '@ng-state/store';
-import { HasStore, InjectStore } from '@ng-state/store';
-import { ImmutableJsDataStrategy } from '@ng-state/immutablejs-data-strategy';
+import { ImmerDataStrategy } from '../../projects/immer-data-strategy/src/lib/immer.data-strategy';
+import { NgStateTestBed } from '../../projects/ng-state/src/lib/ng-state.test-bed';
+import { InjectStore, HasStore } from '../../projects/ng-state/src/lib/decorators/inject-store.decorator';
+import { ImmutableJsDataStrategy } from '../../projects/immutablejs-data-strategy/src/lib/immutablejs.data-strategy';
 
 describe('NgStateTestBed - Immutable', () => {
 

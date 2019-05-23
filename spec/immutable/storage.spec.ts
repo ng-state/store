@@ -1,10 +1,10 @@
 import { timer } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
-import { StateKeeper } from '@ng-state/store';
-import { Store } from '@ng-state/store';
-import { NgStateTestBed } from '@ng-state/store';
-import { PersistStateStorage, PersistStateManager } from '@ng-state/store';
-import { ImmutableJsDataStrategy } from '@ng-state/immutablejs-data-strategy';
+import { NgStateTestBed } from '../../projects/ng-state/src/lib/ng-state.test-bed';
+import { Store } from '../../projects/ng-state/src/lib/store/store';
+import { PersistStateManager, PersistStateStorage } from '../../projects/ng-state/src/lib/store/plugins/persist-state.plugin';
+import { StateKeeper } from '../../projects/ng-state/src/lib/state/history';
+import { ImmutableJsDataStrategy } from '../../projects/immutablejs-data-strategy/src/lib/immutablejs.data-strategy';
 
 jest.useFakeTimers();
 
