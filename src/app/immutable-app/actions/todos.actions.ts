@@ -27,7 +27,7 @@ export class TodosStateActions extends HasStore<Immutable.List<any>> {
         });
     }
 
-    get todos() {
+    get todos(): any {
         return this.store.map(state => {
             return state.map(item => {
                 return {

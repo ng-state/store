@@ -26,6 +26,7 @@
         "**/*.spec.ts"
     ],
     "angularCompilerOptions": {
+        "enableIvy": true,
         "entryModule": "./app/app.server.module#AppServerModule"
     }
 }

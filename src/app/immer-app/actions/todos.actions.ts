@@ -30,7 +30,7 @@ export class TodosStateActions extends HasStore<TodoModel[]> {
         });
     }
 
-    get todos() {
+    get todos(): any {
         return this.store.map(state => {
             return state.map(item => {
                 return {
