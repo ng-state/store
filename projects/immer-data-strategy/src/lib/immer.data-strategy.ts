@@ -72,13 +72,15 @@ export class ImmerDataStrategy extends DataStrategy {
         return obj !== null && typeof (obj) === 'object';
     }
 
-    resetRoot(initialState: any, startingRoute: string) {
+    resetRoot(initialState: any, startingRoute: string = null) {
         const state = this.currentState;
         const router = state['router'];
 
         const nextState = produce(initialState, (draftState: any) => {
-            this.set(draftState, 'router', router);
-            this.setIn(draftState, ['router', 'url'], startingRoute, { fromUpdate: true });
+            if (startingRoute !== null) {
+                this.set(draftState, 'router', router);
+                this.setIn(draftState, ['router', 'url'], startingRoute, { fromUpdate: true });
+            }
         });
 
         this.rootStore.next(nextState);

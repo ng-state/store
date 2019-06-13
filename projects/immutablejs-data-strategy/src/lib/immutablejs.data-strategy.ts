@@ -57,7 +57,7 @@ export class ImmutableJsDataStrategy extends DataStrategy {
         }
     }
 
-    resetRoot(initialState: any, startingRoute: string): void {
+    resetRoot(initialState: any, startingRoute: string = null): void {
         const state = this.currentState;
 
         const router = state.get('router');
@@ -66,8 +66,10 @@ export class ImmutableJsDataStrategy extends DataStrategy {
             state.clear();
             state.merge(initialState);
 
-            state.set('router', router);
-            state.setIn(['router', 'url'], startingRoute, { fromUpdate: true });
+            if (startingRoute !== null) {
+                state.set('router', router);
+                state.setIn(['router', 'url'], startingRoute, { fromUpdate: true });
+            }
         });
     }
 

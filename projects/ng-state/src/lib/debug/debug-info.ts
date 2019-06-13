@@ -90,8 +90,6 @@ export class DebugInfo {
             this.devTools.send(debugMessage, debugState);
         }
 
-        this.stateHistory.add({ message: debugMessage, state: debugState });
-
         this.debugInfo = null;
     }
 

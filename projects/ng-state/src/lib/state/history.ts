@@ -4,6 +4,8 @@ import { Injectable } from '@angular/core';
 export class StateHistory {
     static initialState = {};
 
+    private collectHistroyPaused = false;
+
     private options: StateHistoryOptions = {
         collectHistory: true,
         storeHistoryItems: 100
@@ -13,12 +15,20 @@ export class StateHistory {
         return StateKeeper.CURRENT_STATE;
     }
 
-    get history(): any[] {
+    get history(): HistoryItem[] {
         return StateKeeper.HISTORY;
     }
 
     get storeHistoryItems() {
         return this.options.storeHistoryItems;
+    }
+
+    pauseCollectingHistory() {
+        this.collectHistroyPaused = true;
+    }
+
+    resumeCollectingHistory() {
+        this.collectHistroyPaused = false;
     }
 
     init(initialState: any) {
@@ -31,10 +41,11 @@ export class StateHistory {
 
     setCurrentState(state: any) {
         StateKeeper.CURRENT_STATE = state;
+        this.add({ state: state });
     }
 
-    add(item: HistoryItem) {
-        if (!this.options.collectHistory) {
+    private add(item: HistoryItem) {
+        if (!this.options.collectHistory || this.collectHistroyPaused) {
             return;
         }
 
@@ -57,6 +68,6 @@ export interface StateHistoryOptions {
 }
 
 export interface HistoryItem {
-    message: string;
+    tag?: string;
     state: any;
 }
