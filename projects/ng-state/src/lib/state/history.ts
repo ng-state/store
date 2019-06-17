@@ -19,6 +19,10 @@ export class StateHistory {
         return StateKeeper.HISTORY;
     }
 
+    set history(history: HistoryItem[]) {
+        StateKeeper.HISTORY = history;
+    }
+
     get storeHistoryItems() {
         return this.options.storeHistoryItems;
     }
@@ -41,7 +45,7 @@ export class StateHistory {
 
     setCurrentState(state: any) {
         StateKeeper.CURRENT_STATE = state;
-        this.add({ state: state });
+        this.add({ state: state, tag: null });
     }
 
     private add(item: HistoryItem) {
