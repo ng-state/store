@@ -36,7 +36,6 @@ export class OptimistaicUpdatesManager {
     }
 
     revertToLastTag() {
-        this.stateHistory.pauseCollectingHistory();
         const targetState = this.stateHistory.history.filter(item => !!item.tag);
         if (targetState.length === 0) {
             throw new Error(OptimistaicUpdatesManager.nonTagsMessage);
@@ -44,27 +43,22 @@ export class OptimistaicUpdatesManager {
 
         const tageRevertTo = targetState[targetState.length - 1];
         this.restoreState(tageRevertTo);
-        this.stateHistory.resumeCollectingHistory();
     }
 
     revertToTag(tag: string): void {
-        this.stateHistory.pauseCollectingHistory();
         const targetState = this.stateHistory.history.find(item => item.tag === tag);
         if (!targetState) {
             throw new Error(OptimistaicUpdatesManager.nonExistingTagMessage(tag));
         }
         this.restoreState(targetState);
-        this.stateHistory.resumeCollectingHistory();
     }
 
     revertLastChanges(count: number): void {
-        this.stateHistory.pauseCollectingHistory();
         const targetState = this.stateHistory.history[this.stateHistory.history.length - 1 - count];
         if (!targetState) {
             throw new Error(OptimistaicUpdatesManager.nonExistingChangeMessage(count));
         }
         this.restoreState(targetState);
-        this.stateHistory.resumeCollectingHistory();
     }
 
     private restoreState(state: HistoryItem) {

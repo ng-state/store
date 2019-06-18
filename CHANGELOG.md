@@ -1,3 +1,6 @@
+### 6.1.0
+- Added optimistic updates API. Can be accessed via: ```store.optimisticUpdates.```
+
 ### 6.0.0
 - Intorduced immer support
 

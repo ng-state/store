@@ -1,5 +1,6 @@
 import { HasStore, InjectStore } from '@ng-state/store';
 import { TodoModel } from './todo.model';
+import { Observable } from 'rxjs';
 
 @InjectStore('todos')
 export class TodosStateActions extends HasStore<TodoModel[]> {
@@ -30,7 +31,7 @@ export class TodosStateActions extends HasStore<TodoModel[]> {
         });
     }
 
-    get todos() {
+    get todos(): Observable<any> {
         return this.store.map(state => {
             return state.map(item => {
                 return {

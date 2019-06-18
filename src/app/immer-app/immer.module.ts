@@ -16,6 +16,7 @@ import { FiltersComponent } from './components/products/filters/filters.componen
 import { StorageTestComponent } from './components/storage-test.component';
 import { initialState } from '../initial-state';
 import { ImmerDataStrategyModule } from '@ng-state/immer-data-strategy';
+import { OptimisticUpdatesComponent } from './components/optimistic-updates.component';
 
 @NgModule({
     imports: [
@@ -46,7 +47,8 @@ import { ImmerDataStrategyModule } from '@ng-state/immer-data-strategy';
         SubSelectTestComponent,
         ProductsComponent,
         FiltersComponent,
-        StorageTestComponent
+        StorageTestComponent,
+        OptimisticUpdatesComponent
     ]
 })
 export class ImmerAppModule {
