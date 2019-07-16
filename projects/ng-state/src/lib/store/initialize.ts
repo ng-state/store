@@ -25,7 +25,7 @@ export class Initialize {
                 initialState = dataStrategy.fromJS(initialState);
                 initialState = dataStrategy.set(initialState, initialized, true);
 
-                let newState;
+                let newState: T;
 
                 try {
                     newState = dataStrategy.setIn(state, statePath, initialState);
