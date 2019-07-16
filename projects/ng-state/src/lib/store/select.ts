@@ -4,13 +4,13 @@ import { ServiceLocator } from '../helpers/service-locator';
 import { DataStrategy } from '@ng-state/data-strategy';
 
 export class Select {
-    constructor(path: any) {
-        let mapped$;
+    static execute(store: Store<any>, path: any) {
+        let mapped$: any;
 
         const dataStrategy = ServiceLocator.injector.get(DataStrategy);
 
         if (typeof path === 'object') {
-            mapped$ = (<any>this).pipe(
+            mapped$ = store.pipe(
                 map((state: any) => dataStrategy.getIn(state, path)),
                 takeWhile((state: any) => state !== undefined),
                 distinctUntilChanged()

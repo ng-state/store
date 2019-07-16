@@ -1,3 +1,6 @@
+### 6.2.0
+- made library compatible with any compile targets like es2015...esnext
+
 ### 6.1.0
 - Added optimistic updates API. Can be accessed via: ```store.optimisticUpdates.```
 

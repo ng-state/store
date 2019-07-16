@@ -30,7 +30,7 @@ export class Store<T> extends Observable<T> implements Observer<any> {
     }
 
     select: SelectSignature = (statePath: string[]): Store<T> => {
-        let selectStore = Select.bind(this).call(this, statePath);
+        let selectStore = Select.execute(this, statePath);
         selectStore.statePath = [...this.statePath, ...statePath];
         selectStore.rootPath = this.rootPath;
         selectStore.initialState = this.initialState;
@@ -56,10 +56,10 @@ export class Store<T> extends Observable<T> implements Observer<any> {
     }
 
     initializeOperators(storeContext: Store<T>) {
-        storeContext.update = Update.bind(storeContext);
-        storeContext.initialize = Initialize.bind(storeContext);
-        storeContext.reset = Reset.bind(storeContext);
-        storeContext.map = Map.bind(storeContext);
+        storeContext.update = Update.execute<T>(storeContext);
+        storeContext.initialize = Initialize.execute<T>(storeContext);
+        storeContext.reset = Reset.execute(storeContext);
+        storeContext.map = Map.execute<T>(storeContext);
         storeContext.form = new NgFormStateManager(storeContext);
         storeContext.storage = new PersistStateManager(storeContext);
         storeContext.optimisticUpdates = new OptimistaicUpdatesManager(storeContext);

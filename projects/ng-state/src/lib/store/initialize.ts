@@ -1,52 +1,56 @@
-import { Helpers } from '../helpers/helpers';
 import { tap, take } from 'rxjs/operators';
 import { Store } from './store';
 import { ActionType } from '../debug/debug-info-data';
 import { DebugInfo } from '../debug/debug-info';
 import { ServiceLocator } from '../helpers/service-locator';
 import { DataStrategy } from '@ng-state/data-strategy';
+import { BehaviorSubject } from 'rxjs';
 
 export class Initialize {
-    newStore: Store<any>;
+    static execute<T>(store: Store<T>) {
+        let newStore: Store<any>;
 
-    constructor(statePath: any[], initialState: any = null) {
-        const initialized = '__initialized';
+        const intiailize = function (statePath: any[], initialState: any = null) {
+            const initialized = '__initialized';
 
-        let actionWrapper = function (state: any) {
-            const dataStrategy = ServiceLocator.injector.get(DataStrategy);
+            let actionWrapper = (state: any) => {
+                const dataStrategy = ServiceLocator.injector.get(DataStrategy);
 
-            if (dataStrategy.getIn(state, [...statePath, initialized])) {
-                return;
-            }
+                if (dataStrategy.getIn(state, [...statePath, initialized])) {
+                    return;
+                }
 
-            dataStrategy.overrideContructor(initialState);
-            initialState.constructor = Object;
-            initialState = dataStrategy.fromJS(initialState);
-            initialState = dataStrategy.set(initialState, initialized, true);
+                dataStrategy.overrideContructor(initialState);
+                initialState.constructor = Object;
+                initialState = dataStrategy.fromJS(initialState);
+                initialState = dataStrategy.set(initialState, initialized, true);
 
-            let newState;
+                let newState;
 
-            try {
-                newState = dataStrategy.setIn(state, statePath, initialState);
-                this.newStore = (<any>this).select(statePath);
-                this.newStore.initialState = initialState;
-                this.newStore.rootPath = statePath;
-            } catch (exception) {
-                console.error(exception);
-            }
+                try {
+                    newState = dataStrategy.setIn(state, statePath, initialState);
+                    newStore = store.select(statePath);
+                    newStore.initialState = initialState;
+                    newStore.rootPath = statePath;
+                } catch (exception) {
+                    console.error(exception);
+                }
 
-            (<any>this).source.next(newState);
-        }.bind(this);
+                (store.source as BehaviorSubject<T>).next(newState);
+            };
 
-        const defaultDebugInfo = { actionType: ActionType.Initialize, statePath: statePath };
-        DebugInfo.instance.add(defaultDebugInfo);
+            const defaultDebugInfo = { actionType: ActionType.Initialize, statePath: statePath };
+            DebugInfo.instance.add(defaultDebugInfo);
 
-        (<any>this).pipe(
-            tap(actionWrapper),
-            take(1)
-        ).subscribe();
+            store.pipe(
+                tap(actionWrapper),
+                take(1)
+            ).subscribe();
 
-        return this.newStore as any;
+            return newStore as any;
+        };
+
+        return intiailize;
     }
 }
 

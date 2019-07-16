@@ -1,9 +1,14 @@
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { Store } from './store';
 
-export class Map<T, R> {
-    constructor(action: (state: any) => Observable<R>) {
-        return (<any>this).pipe(map((state: any) => action(state)));
+export class Map {
+    static execute<T>(store: Store<T>): MapSgnature<T> {
+        const mapFunc = function <R>(action: (state: T) => R): Observable<R> {
+            return store.pipe(map((state: any) => action(state)));
+        };
+
+        return mapFunc;
     }
 }
 
