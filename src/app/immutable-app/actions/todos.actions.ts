@@ -1,8 +1,7 @@
 import * as Immutable from 'immutable';
-import { HasStore, InjectStore } from '@ng-state/store';
+import { HasStore, InjectStore, } from '@ng-state/store';
 import { TodoModel } from './todo.model';
 import { Observable } from 'rxjs';
-import { ImmutableUpdateActionAdditionalSettings } from '../../../../release/immutablejs-data-strategy/public-api';
 
 @InjectStore('todos')
 export class TodosStateActions extends HasStore<Immutable.List<any>> {

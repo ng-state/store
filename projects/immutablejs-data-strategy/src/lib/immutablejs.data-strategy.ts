@@ -74,14 +74,14 @@ export class ImmutableJsDataStrategy extends DataStrategy {
                 state.set('router', router);
                 state.setIn(['router', 'url'], startingRoute, { fromUpdate: true });
             }
-        });
+        }, { withMutations: true });
     }
 
     reset(path: any[], stateToMerge: any): void {
         this.update(path, (state: any) => {
             state.clear();
             state.merge(stateToMerge);
-        });
+        }, { withMutations: true });
     }
 
     equals(objOne: any, objTwo: any): boolean {
