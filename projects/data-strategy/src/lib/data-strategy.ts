@@ -7,7 +7,7 @@ export abstract class DataStrategy {
 
     abstract getIn(state: any, path: any[]): any;
     abstract merge(state: any, newState: any, path?: any[], isRootPath?: boolean): any;
-    abstract update(path: any[], action: (state: any) => void): void;
+    abstract update(path: any[], action: (state: any) => void, additionalSettings: UpdateActionAdditionalSettings): void;
     abstract fromJS(data: any): any;
     abstract toJS(data: any): any;
     abstract set(state: any, property: string, data: any): any;
@@ -33,3 +33,5 @@ export abstract class DataStrategy {
         this.rootStore = store;
     }
 }
+
+export interface UpdateActionAdditionalSettings {}

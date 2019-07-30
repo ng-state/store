@@ -1,4 +1,4 @@
-import { DataStrategy } from '@ng-state/data-strategy';
+import { DataStrategy, UpdateActionAdditionalSettings } from '@ng-state/data-strategy';
 import { Map, fromJS, Collection, Iterable } from 'immutable';
 import * as _Cursor from 'immutable/contrib/cursor';
 
@@ -32,14 +32,18 @@ export class ImmutableJsDataStrategy extends DataStrategy {
         return state.merge(newState);
     }
 
-    update(path: any[], action: (state: any) => void) {
+    update(path: any[], action: (state: any) => void, additionalSettings: ImmutableUpdateActionAdditionalSettings = { withMutations: false }) {
         const cursor = _Cursor.from(this.currentState, path, (newData) => {
             this.rootStore.next(newData);
         });
 
-        cursor.withMutations((state: any) => {
-            action(state);
-        });
+        if (additionalSettings.withMutations) {
+            cursor.withMutations((state: any) => {
+                action(state);
+            });
+        } else {
+            action(cursor);
+        }
     }
 
     overrideContructor(obj: any) {
@@ -90,4 +94,8 @@ export class ImmutableJsDataStrategy extends DataStrategy {
             && !Map.isMap(obj)
             && !Iterable.isIterable(obj);
     }
+}
+
+export interface ImmutableUpdateActionAdditionalSettings extends UpdateActionAdditionalSettings {
+    withMutations?: boolean;
 }
