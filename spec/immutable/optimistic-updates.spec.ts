@@ -3,7 +3,7 @@ import { NgStateTestBed } from '../../projects/ng-state/src/lib/ng-state.test-be
 import { StateHistory } from '../../projects/ng-state/src/lib/state/history';
 import { ServiceLocator } from '../../projects/ng-state/src/public-api';
 import { OptimistaicUpdatesManager } from '../../projects/ng-state/src/lib/store/plugins/optimistic-updates.plugin';
-import { ImmutableJsDataStrategy, ImmutableJsDataStrategyModule } from '../../projects/immutablejs-data-strategy/src/public-api';
+import { ImmutableJsDataStrategy, ImmutableUpdateActionAdditionalSettings } from '../../projects/immutablejs-data-strategy/src/public-api';
 
 describe('Optimistic updates - Immutable', () => {
     let store: Store<any>;
@@ -51,7 +51,7 @@ describe('Optimistic updates - Immutable', () => {
         store.update(state => {
             state.setIn(['layout', 'test'], 'test3');
             state.set('counter', 2);
-        }, { withMutations: true } as ImmutableJsDataStrategyModule);
+        }, {}, { withMutations: true } as ImmutableUpdateActionAdditionalSettings);
 
         expect(stateHistory.currentState.getIn(['layout', 'test'])).toEqual('test3');
         expect(stateHistory.currentState.get('counter')).toEqual(2);
