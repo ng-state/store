@@ -20,8 +20,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         ReactiveFormsModule,
         RouterModule.forRoot([
             { path: '', pathMatch: 'full', redirectTo: 'immutable' },
-            { path: 'immutable', loadChildren: './immutable-app/immutable.module#ImmutableAppModule' },
-            { path: 'immer', loadChildren: './immer-app/immer.module#ImmerAppModule' }
+            { path: 'immutable', loadChildren: () => import('./immutable-app/immutable.module').then(m => m.ImmutableAppModule) },
+            { path: 'immer', loadChildren: () => import('./immer-app/immer.module').then(m => m.ImmerAppModule) }
         ], { useHash: false })
     ],
     declarations: [
