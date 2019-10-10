@@ -26,6 +26,6 @@
     "author": "Vytautas Pranskunas <vytautas.pranskunas@gmail.com>",
     "license": "MIT",
     "peerDependencies": {
-        "rxjs": "^6.3.2"
+        "rxjs": "^6.5.3"
     }
 }

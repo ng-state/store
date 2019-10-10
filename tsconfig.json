@@ -1,6 +1,7 @@
+
 {
     "compilerOptions": {
-        "baseUrl": ".",
+        "baseUrl": "./",
         "declaration": true,
         "stripInternal": true,
         "emitDecoratorMetadata": true,
@@ -43,5 +44,9 @@
     },
     "exclude": [
         "node_modules"
-    ]
+    ],
+    "angularCompilerOptions": {
+        "preserveWhitespaces": false,
+        "enableIvy": true
+    }
 }
