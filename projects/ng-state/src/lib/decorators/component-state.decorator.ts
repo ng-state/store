@@ -2,6 +2,7 @@ import { ServiceLocator } from '../helpers/service-locator';
 import { ChangeDetectorRef, Input, OnDestroy, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Dispatcher } from '../services/dispatcher';
 import { IS_TEST } from '../inject-constants';
+import { NgStateTestBed } from '../ng-state.test-bed';
 
 export function ComponentState(stateActions: any | ((T) => any), disableOnChangesBeforeActionsCreated = true) {
     return (target: any) => {
@@ -27,6 +28,7 @@ export function ComponentState(stateActions: any | ((T) => any), disableOnChange
         target.prototype.ngOnInit = function () {
             const isTest = ServiceLocator.injector.get(IS_TEST);
             if (isTest) {
+                this.actions = NgStateTestBed.getActionsInstance(stateActions, NgStateTestBed.strictActionsCheck);
                 origInit.apply(this, arguments);
                 return;
             }

@@ -11,11 +11,15 @@ class TestStateActions {
     }
 }
 
+@ComponentState(TestStateActions)
 class TargetComponent {
     statePath: string[];
     stateIndex: number | null;
     actions: any;
     cd: { markForCheck: () => void };
+
+    constructor() {
+    }
 
     ngOnInit() { }
 }
@@ -43,28 +47,23 @@ ServiceLocator.injector = <any>{
 describe('ComponentState decorator', () => {
     let target: TargetComponent;
 
-    let beforeEach = function (actions?) {
-        const decorator = ComponentState(actions);
-        decorator(TargetComponent);
+    beforeEach(() => {
         target = new TargetComponent();
-    };
+    });
 
     it('should resolve stateActions', () => {
-        beforeEach(TestStateActions);
         target.ngOnInit();
         expect(target.statePath[0]).toBe('newStatePath');
         expect(target.actions instanceof TestStateActions).toBeTruthy();
     });
 
     it('should resolve stateActions from anonymous function', () => {
-        beforeEach(() => TestStateActions);
         target.ngOnInit();
         expect(target.statePath[0]).toBe('newStatePath');
         expect(target.actions instanceof TestStateActions).toBeTruthy();
     });
 
     it('should call markForCheck after state change', () => {
-        beforeEach(TestStateActions);
         target.ngOnInit();
         jest.spyOn(target.cd, 'markForCheck');
 
@@ -74,7 +73,6 @@ describe('ComponentState decorator', () => {
     });
 
     it('should ensure change detector ref is injected', () => {
-        beforeEach(TestStateActions);
         target.ngOnInit();
         expect(target.cd.markForCheck).toBeDefined();
     });

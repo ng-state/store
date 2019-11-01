@@ -13,7 +13,8 @@
         "build:ssr:prod": "npm run build:prod && npm run build:server:prod && npm run compile:server",
         "serve:ssr": "set NODE_ENV=production&&node release/server",
         "serve:prod": "http-server release/browser",
-        "build:ng-state": "npx ivy-ngcc && ng build ng-state && cpy logo.png LICENSE README.md release/ng-state",
+        "build:ng-state": "ng build ng-state && cpy logo.png LICENSE README.md release/ng-state",
+        "build:ng-state:ivy": "npx ivy-ngcc && npm run build:ng-state",
         "build:data-strategy": "ng build data-strategy && cpy logo.png release/data-strategy",
         "build:immer-data-strategy": "ng build immer-data-strategy && cpy logo.png release/immer-data-strategy",
         "build:immutablejs-data-strategy": "ng build immutablejs-data-strategy && cpy logo.png release/immutablejs-data-strategy",
@@ -24,10 +25,10 @@
         "@angular-devkit/build-angular": "^0.803.3",
         "@angular-devkit/build-ng-packagr": "^0.803.3",
         "@angular/animations": "^8.2.5",
+        "@angular/cli": "^8.2.5",
         "@angular/common": "^8.2.5",
         "@angular/compiler": "^8.2.5",
         "@angular/compiler-cli": "^8.2.5",
-        "@angular/cli": "^8.2.5",
         "@angular/core": "^8.2.5",
         "@angular/forms": "^8.2.5",
         "@angular/http": "^7.1.4",
@@ -60,6 +61,7 @@
         "immutable": "^3.8.1",
         "immutable-cursor": "^2.0.1",
         "jest": "^24.5.0",
+        "jest-preset-angular": "^8.0.0",
         "ng-packagr": "^4.7.1",
         "ngx-take-until-destroy": "^5.4.0",
         "rxjs": "6.5.3",
@@ -67,7 +69,7 @@
         "ts-node": "1.2.1",
         "tsickle": "^0.35.0",
         "tslib": "^1.9.0",
-        "tslint": "^5.7.0",
+        "tslint": "^5.20.0",
         "typescript": "3.5.3",
         "zone.js": "^0.9.1"
     },
@@ -96,15 +98,16 @@
             "json",
             "node"
         ],
-        "setupFiles": [
-            "./spec/localstorage.mock.ts"
-        ],
         "modulePathIgnorePatterns": [
             "<rootDir>/release/"
         ],
         "moduleNameMapper": {
             "^@ng-state/store$": "<rootDir>/release/ng-state",
             "^@ng-state/(.*)$": "<rootDir>/release/$1"
-        }
+        },
+        "preset": "jest-preset-angular",
+        "setupFilesAfterEnv": [
+            "<rootDir>/setupJest.ts"
+        ]
     }
 }

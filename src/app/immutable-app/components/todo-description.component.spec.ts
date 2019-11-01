@@ -8,33 +8,28 @@ import { ImmutableJsDataStrategy } from '@ng-state/immutablejs-data-strategy';
 describe('TodoDescription', () => {
 
     let component: TodoDescription;
+    let copyIntitialState: typeof initialState;
     const cd = { markForCheck: () => { } };
 
     beforeEach(() => {
         NgStateTestBed.setTestEnvironment(new ImmutableJsDataStrategy());
+        NgStateTestBed.strictActionsCheck = false;
+
+        copyIntitialState = JSON.parse(JSON.stringify(initialState));
+        copyIntitialState.todos.push(<TodoModel>{ description: 'test description' });
+        NgStateTestBed.createActions(TodoStateActions, copyIntitialState, ['todos', 1]) as TodoStateActions;
         component = new TodoDescription(cd as any);
+        component.ngOnInit();
     });
 
-    it('should get description', () => {
-        initialState.todos.push(<TodoModel>{description: 'test description'});
-
-        const actions = NgStateTestBed.createActions(TodoStateActions, initialState, ['todos', 1], ) as TodoStateActions;
-        expect(actions.todoDescription).toEqual('test description');
-    });
-
-    it('should get description from oveeriden constructor', () => {
-        const todo = new TodoModel();
-        todo.description = 'test description';
-        initialState.todos.push(todo);
-
-        const actions = NgStateTestBed.createActions(TodoStateActions, initialState, ['todos', 1]) as TodoStateActions;
-        expect(actions.todoDescription).toEqual('test description');
+    it('should get description t', () => {
+        expect(component.actions.todoDescription).toEqual('test description');
     });
 
     it ('should set actions to component - immutable', () => {
-        initialState.todos.push(<TodoModel>{description: 'test description'});
+        copyIntitialState.todos.push(<TodoModel>{ description: 'test description 2' });
 
-        const actions = NgStateTestBed.createActions(TodoStateActions, initialState, ['todos', 1]) as TodoStateActions;
+        const actions = NgStateTestBed.createActions(TodoStateActions, copyIntitialState, ['todos', 1]) as TodoStateActions;
         NgStateTestBed.setActionsToComponent(actions, component);
 
         expect(component.actions.todoDescription).toEqual('test description');

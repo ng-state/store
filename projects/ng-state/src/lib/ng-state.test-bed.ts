@@ -12,6 +12,21 @@ export class NgStateTestBed {
     private static dataStrategy: DataStrategy = null;
     private static dependencyInjection = <{ key: any, value: any }[]>[];
 
+    private static actions: TestComponentActions[] = [];
+
+    public static strictActionsCheck = true;
+
+    public static getActionsInstance(actionsType: any, strictActionsCheck: boolean = true) {
+        const componentActions = NgStateTestBed.actions.find(c => c.actionsType === actionsType);
+        if (componentActions) {
+            return componentActions.instance;
+        } else if (strictActionsCheck) {
+            throw new Error(`No actions were found for ${actionsType}`);
+        } else {
+            return null;
+        }
+    }
+
     public static setTestEnvironment(dataStrategy: DataStrategy) {
         this.dependencyInjection = [];
         this.dependencyInjection.push({ key: this.getMockName(IS_TEST), value: true });
@@ -83,6 +98,10 @@ export class NgStateTestBed {
         const actions = new (actionsType as any)();
         actions.createTestStore(NgStateTestBed.getPath(path));
 
+        if (!NgStateTestBed.getActionsInstance(actionsType, false)) {
+            NgStateTestBed.actions.push({ actionsType, instance: actions });
+        }
+
         return actions;
     }
 
@@ -98,4 +117,9 @@ export class NgStateTestBed {
         path = path.split('/');
         return path;
     }
+}
+
+export interface TestComponentActions {
+    actionsType: any;
+    instance: any;
 }

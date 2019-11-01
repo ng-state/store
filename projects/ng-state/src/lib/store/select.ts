@@ -26,5 +26,5 @@ export class Select {
 }
 
 export interface SelectSignature {
-  (path: any[]): Store<any>;
+  <T>(path: any[]): Store<T>;
 }
