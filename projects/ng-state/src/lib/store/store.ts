@@ -29,7 +29,7 @@ export class Store<T> extends Observable<T> implements Observer<any> {
         this.initializeOperators(this);
     }
 
-    select: SelectSignature = (statePath: string[]): Store<T> => {
+    select: SelectSignature = <T>(statePath: string[]): Store<T> => {
         let selectStore = Select.execute(this, statePath);
         selectStore.statePath = [...this.statePath, ...statePath];
         selectStore.rootPath = this.rootPath;

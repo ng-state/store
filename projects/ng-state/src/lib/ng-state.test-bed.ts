@@ -6,6 +6,7 @@ import { HistoryController } from './state/history-controller';
 import { DebugInfo } from './debug/debug-info';
 import { DataStrategy } from '@ng-state/data-strategy';
 import { IS_TEST, IS_PROD } from './inject-constants';
+import { Dispatcher } from './services/dispatcher';
 
 export class NgStateTestBed {
 
@@ -16,10 +17,10 @@ export class NgStateTestBed {
 
     public static strictActionsCheck = true;
 
-    public static getActionsInstance(actionsType: any, strictActionsCheck: boolean = true) {
+    public static getActions(actionsType: any, strictActionsCheck: boolean = true): TestComponentActions {
         const componentActions = NgStateTestBed.actions.find(c => c.actionsType === actionsType);
         if (componentActions) {
-            return componentActions.instance;
+            return componentActions;
         } else if (strictActionsCheck) {
             throw new Error(`No actions were found for ${actionsType}`);
         } else {
@@ -32,6 +33,8 @@ export class NgStateTestBed {
         this.dependencyInjection.push({ key: this.getMockName(IS_TEST), value: true });
         this.dependencyInjection.push({ key: this.getMockName(IS_PROD), value: false });
         this.dependencyInjection.push({ key: this.getMockName(DataStrategy), value: dataStrategy });
+        this.dependencyInjection.push({ key: this.getMockName(Dispatcher), value: new Dispatcher() });
+
         ServiceLocator.injector = {
             get: (key: any) => {
                 const name = this.getMockName(key);
@@ -98,8 +101,8 @@ export class NgStateTestBed {
         const actions = new (actionsType as any)();
         actions.createTestStore(NgStateTestBed.getPath(path));
 
-        if (!NgStateTestBed.getActionsInstance(actionsType, false)) {
-            NgStateTestBed.actions.push({ actionsType, instance: actions });
+        if (!NgStateTestBed.getActions(actionsType, false)) {
+            NgStateTestBed.actions.push({ actionsType, instance: actions, statePath: path});
         }
 
         return actions;
@@ -122,4 +125,5 @@ export class NgStateTestBed {
 export interface TestComponentActions {
     actionsType: any;
     instance: any;
+    statePath: string | any[];
 }

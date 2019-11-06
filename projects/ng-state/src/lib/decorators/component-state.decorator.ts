@@ -11,13 +11,13 @@ export function ComponentState(stateActions: any | ((T) => any), disableOnChange
         let origDestroy = target.prototype.ngOnDestroy || (() => { });
         let origOnChanges = target.prototype.ngOnChanges || (() => { });
 
-        const ensureMarkForCheck = function() {
+        const ensureMarkForCheck = function () {
             if (!this.cd) {
                 this.cd = ServiceLocator.injector.get(ChangeDetectorRef);
             }
         };
 
-        target.prototype.ngOnChanges = function (changes) {
+        target.prototype.ngOnChanges = function () {
             if (disableOnChangesBeforeActionsCreated && !this.actions) {
                 return;
             }
@@ -26,11 +26,17 @@ export function ComponentState(stateActions: any | ((T) => any), disableOnChange
         };
 
         target.prototype.ngOnInit = function () {
+            debugger;
+
             const isTest = ServiceLocator.injector.get(IS_TEST);
             if (isTest) {
-                this.actions = NgStateTestBed.getActionsInstance(stateActions, NgStateTestBed.strictActionsCheck);
-                origInit.apply(this, arguments);
-                return;
+                const actions = NgStateTestBed.getActions(stateActions, NgStateTestBed.strictActionsCheck);
+                if (actions) {
+                    this.actions = actions.instance;
+                    this.statePath = actions.statePath;
+                    origInit.apply(this, arguments);
+                    return;
+                }
             }
 
             if (!this.statePath) {
@@ -38,7 +44,10 @@ export function ComponentState(stateActions: any | ((T) => any), disableOnChange
             }
 
             if (stateActions) {
-                ensureMarkForCheck.apply(this);
+
+                if (!isTest) {
+                    ensureMarkForCheck.apply(this);
+                }
 
                 // DOC - CONVETION: only annonymous function allwed for choosing state; Actions can be only named functions;
                 const extractedStateAction = stateActions.name === ''
@@ -46,9 +55,10 @@ export function ComponentState(stateActions: any | ((T) => any), disableOnChange
                     : stateActions;
 
                 const actions = new extractedStateAction();
-                this.statePath = actions.createStore(this.statePath, this.stateIndex);
+                this.statePath =  actions.createStore(this.statePath, this.stateIndex);
 
-                this.stateChangeSubscription = ServiceLocator.injector.get(Dispatcher)
+                const dispatcher = ServiceLocator.injector.get(Dispatcher);
+                this.stateChangeSubscription = dispatcher
                     .subscribe(actions.aId, () => {
                         this.cd.markForCheck();
                     });
