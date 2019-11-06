@@ -48,7 +48,7 @@ describe('Forms manager - Immutable', () => {
 
     it('should reset form', () => {
         spyOn(form, 'patchValue');
-        const layoutStore = store.select(['layout']);
+        const layoutStore = store.select<Map<any, any>>(['layout']);
         layoutStore.update(state => state.set('test', 'test3'));
         expect(StateKeeper.CURRENT_STATE.getIn(['layout', 'test'])).toEqual('test3');
 

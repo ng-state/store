@@ -20,7 +20,7 @@ describe('Optimistic updates - Immutable', () => {
         store = NgStateTestBed.createStore(initialState);
         stateHistory = ServiceLocator.injector.get(StateHistory);
         stateHistory.history = [];
-        store.select(['layout']).update(state => state.set('test', 'test2'));
+        store.select<Map<any, any>>(['layout']).update(state => state.set('test', 'test2'));
     });
 
     afterEach(() => {
@@ -33,10 +33,10 @@ describe('Optimistic updates - Immutable', () => {
     });
 
     it('should revert to tag on root level', () => {
-        store.select(['layout']).update(state => state.set('test', 'test5'));
+        store.select<Map<any, any>>(['layout']).update(state => state.set('test', 'test5'));
         store.optimisticUpdates.tagCurrentState('testTag');
 
-        store.select(['layout']).update(state => state.set('test', 'test3'));
+        store.select<Map<any, any>>(['layout']).update(state => state.set('test', 'test3'));
         expect(stateHistory.currentState.getIn(['layout', 'test'])).toEqual('test3');
 
         store.optimisticUpdates.revertToTag('testTag');
@@ -64,9 +64,9 @@ describe('Optimistic updates - Immutable', () => {
 
     it('should revert to last tag', () => {
         store.optimisticUpdates.tagCurrentState('testTag');
-        store.select(['layout']).update(state => state.set('test', 'test3'));
+        store.select<Map<any, any>>(['layout']).update(state => state.set('test', 'test3'));
         store.optimisticUpdates.tagCurrentState('testTag2');
-        store.select(['layout']).update(state => state.set('test', 'test4'));
+        store.select<Map<any, any>>(['layout']).update(state => state.set('test', 'test4'));
 
         expect(stateHistory.currentState.getIn(['layout', 'test'])).toEqual('test4');
 
@@ -75,9 +75,9 @@ describe('Optimistic updates - Immutable', () => {
     });
 
     it('should revert last N actions', () => {
-        store.select(['layout']).update(state => state.set('test', 'test3'));
-        store.select(['layout']).update(state => state.set('test', 'test4'));
-        store.select(['layout']).update(state => state.set('test', 'test5'));
+        store.select<Map<any, any>>(['layout']).update(state => state.set('test', 'test3'));
+        store.select<Map<any, any>>(['layout']).update(state => state.set('test', 'test4'));
+        store.select<Map<any, any>>(['layout']).update(state => state.set('test', 'test5'));
 
         store.optimisticUpdates.revertLastChanges(2);
         expect(stateHistory.currentState.getIn(['layout', 'test'])).toEqual('test3');

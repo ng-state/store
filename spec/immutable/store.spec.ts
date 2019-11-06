@@ -39,7 +39,7 @@ describe('Store tests - Immutable', () => {
         });
 
         it('should update state', () => {
-            store.select(['layout']).update(state => state.set('loading', true));
+            store.select<Map<any, any>>(['layout']).update(state => state.set('loading', true));
 
             expect(StateKeeper.CURRENT_STATE.getIn(['layout', 'loading'])).toEqual(true);
         });
@@ -55,7 +55,7 @@ describe('Store tests - Immutable', () => {
 
         it('should reset root state', () => {
             store.initialize(['router'], { url: 'home' }, false);
-            store.select(['layout']).update(state => state.set('loading', true));
+            store.select<Map<any, any>>(['layout']).update(state => state.set('loading', true));
             expect(StateKeeper.CURRENT_STATE.getIn(['layout', 'loading'])).toEqual(true);
 
             store.reset();
@@ -66,7 +66,7 @@ describe('Store tests - Immutable', () => {
         });
 
         it('should reset nested state', () => {
-            store.select(['layout']).update(state => state.set('test', 'test2'));
+            store.select<Map<any, any>>(['layout']).update(state => state.set('test', 'test2'));
             expect(StateKeeper.CURRENT_STATE.getIn(['layout', 'test'])).toEqual('test2');
 
             store.select(['layout']).reset();
@@ -79,7 +79,7 @@ describe('Store tests - Immutable', () => {
 
         it('should reset state when store has initial state', () => {
             const intilizedStore = store.initialize(['actionStore'], { test: { url: 'home' } });
-            intilizedStore.select(['test']).update(state => state.set('url', 'home-updated'));
+            intilizedStore.select<Map<any, any>>(['test']).update(state => state.set('url', 'home-updated'));
             expect(StateKeeper.CURRENT_STATE.getIn(['actionStore', 'test', 'url'])).toEqual('home-updated');
 
             intilizedStore.select(['test']).reset();

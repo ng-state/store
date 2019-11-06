@@ -3,6 +3,7 @@
 - added Ivy support
 - added Angular TestBed support
 - added optional type(T) notation to `select` operator in order to remove explicite type setting in subscription: `...select<{somestate: string}>(...).subscribe(state => state.somestate...)`
+- added immer 5.0.0 as peer dependency
 
 ### 6.4.0
 - fixed `clear` operator
