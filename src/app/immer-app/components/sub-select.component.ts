@@ -1,7 +1,6 @@
 import { Store } from '@ng-state/store';
 import { ChangeDetectionStrategy, Component, ChangeDetectorRef } from '@angular/core';
 import { ComponentState, HasStateActions } from '@ng-state/store';
-import { Dispatcher } from '@ng-state/store';
 import { SubSelectTestStateActions } from '../actions/subselect-test.actions';
 
 @ComponentState(SubSelectTestStateActions)
@@ -16,7 +15,7 @@ import { SubSelectTestStateActions } from '../actions/subselect-test.actions';
 })
 export class SubSelectTestComponent extends HasStateActions<SubSelectTestStateActions> {
 
-    constructor(private dispatcher: Dispatcher, cd: ChangeDetectorRef, private store: Store<any>) {
+    constructor(cd: ChangeDetectorRef, private store: Store<any>) {
         super(cd);
     }
 

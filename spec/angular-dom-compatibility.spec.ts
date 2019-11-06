@@ -1,5 +1,5 @@
 
-import { ComponentState, InjectStore, HasStore } from '@ng-state/store';
+import { ComponentState, InjectStore, HasStore, HasStateActions } from '@ng-state/store';
 import { Component, ChangeDetectionStrategy, Input, ChangeDetectorRef } from '@angular/core';
 import { NgStateTestBed } from '@ng-state/store';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -36,13 +36,10 @@ export class TodosStateActions extends HasStore<TodoModel> {
         <div class="description">{{ actions.todoDescription }}</div>
         `
 })
-class TodoDescriptionComponent {
-    @Input() statePath: string[];
-    @Input() stateIndex: number | null;
-    actions: any;
-
-   /*  constructor(private cd: ChangeDetectorRef) {
-    } */
+class TodoDescriptionComponent extends HasStateActions<TodoDescriptionStateActions> {
+    constructor(cd: ChangeDetectorRef) {
+        super(cd);
+    }
 }
 
 @ComponentState(TodosStateActions)
@@ -56,18 +53,16 @@ class TodoDescriptionComponent {
         <button class="button" (click)="changeTodoDescription()"></button>
     </div>`
 })
-class TodosComponent {
-    @Input() statePath: string[];
-    @Input() stateIndex: number | null;
-    actions: TodosStateActions;
-/*
-    constructor(private cd: ChangeDetectorRef) {
-    } */
+class TodosComponent extends HasStateActions<TodosStateActions> {
+    constructor(cd: ChangeDetectorRef) {
+        super(cd);
+    }
 
     changeTodoDescription() {
         this.actions.changeTodoDescription();
     }
 }
+
 
 describe('Angular DOM compatibility test', () => {
     let component: TodosComponent;

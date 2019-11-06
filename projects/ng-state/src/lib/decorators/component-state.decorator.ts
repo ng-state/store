@@ -26,8 +26,6 @@ export function ComponentState(stateActions: any | ((T) => any), disableOnChange
         };
 
         target.prototype.ngOnInit = function () {
-            debugger;
-
             const isTest = ServiceLocator.injector.get(IS_TEST);
             if (isTest) {
                 const actions = NgStateTestBed.getActions(stateActions, NgStateTestBed.strictActionsCheck);
@@ -37,34 +35,29 @@ export function ComponentState(stateActions: any | ((T) => any), disableOnChange
                     origInit.apply(this, arguments);
                     return;
                 }
+            } else {
+                ensureMarkForCheck.apply(this);
             }
 
             if (!this.statePath) {
                 this.statePath = [];
             }
 
-            if (stateActions) {
+            // DOC - CONVETION: only annonymous function allwed for choosing state; Actions can be only named functions;
+            const extractedStateAction = stateActions.name === ''
+                ? stateActions(this)
+                : stateActions;
 
-                if (!isTest) {
-                    ensureMarkForCheck.apply(this);
-                }
+            const actions = new extractedStateAction();
+            this.statePath = actions.createStore(this.statePath, this.stateIndex);
 
-                // DOC - CONVETION: only annonymous function allwed for choosing state; Actions can be only named functions;
-                const extractedStateAction = stateActions.name === ''
-                    ? stateActions(this)
-                    : stateActions;
+            const dispatcher = ServiceLocator.injector.get(Dispatcher);
+            this.stateChangeSubscription = dispatcher
+                .subscribe(actions.aId, () => {
+                    this.cd.markForCheck();
+                });
 
-                const actions = new extractedStateAction();
-                this.statePath =  actions.createStore(this.statePath, this.stateIndex);
-
-                const dispatcher = ServiceLocator.injector.get(Dispatcher);
-                this.stateChangeSubscription = dispatcher
-                    .subscribe(actions.aId, () => {
-                        this.cd.markForCheck();
-                    });
-
-                this.actions = actions;
-            }
+            this.actions = actions;
 
             origInit.apply(this, arguments);
         };
