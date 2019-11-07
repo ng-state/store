@@ -27,7 +27,7 @@ describe('Storage - Immutable', () => {
     });
 
     it('should load state', () => {
-        const layoutStore = store.select<Map<any, any>>(['layout']);
+        const layoutStore = store.select(['layout']);
 
         layoutStore.storage.save();
         layoutStore.update(state => state.set('test', 'test-updated'));

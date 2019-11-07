@@ -29,6 +29,8 @@ export class NgStateTestBed {
     }
 
     public static setTestEnvironment(dataStrategy: DataStrategy) {
+        this.actions = [];
+
         this.dependencyInjection = [];
         this.dependencyInjection.push({ key: this.getMockName(IS_TEST), value: true });
         this.dependencyInjection.push({ key: this.getMockName(IS_PROD), value: false });
