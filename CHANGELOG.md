@@ -1,3 +1,6 @@
+### 6.6.0
+- added `listenTo` method to `Dispatcher`. It returns Observable and can be used with `takeUntil` and other RxJs functions
+
 ### 6.5.0
 - migrated to Angular 8
 - added Ivy support

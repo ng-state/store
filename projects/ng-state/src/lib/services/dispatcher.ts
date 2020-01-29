@@ -30,15 +30,25 @@ export class Dispatcher {
         this.subject.next(message);
     }
 
-    subscribe(message: Message, observerOrNext: (payload: any) => void, error?: (error: any) => void, complete?: () => void): Subscription;
+    subscribe(messageType: Message, observerOrNext: (payload: any) => void, error?: (error: any) => void, complete?: () => void): Subscription;
     subscribe(messageType: string, observerOrNext: (payload: any) => void, error?: (error: any) => void, complete?: () => void): Subscription;
     subscribe(messageType: string | Message, observerOrNext: (payload: any) => void, error?: (error: any) => void, complete?: () => void): Subscription {
+        return this.getFilteredObservable(messageType)
+            .subscribe(observerOrNext, error, complete);
+    }
+
+    listenTo<T>(messageType: Message): Observable<T | any>;
+    listenTo<T>(messageType: string): Observable<T | any>;
+    listenTo<T>(messageType: string | Message): Observable<T | any> {
+        return this.getFilteredObservable(messageType);
+    }
+
+    private getFilteredObservable(messageType: string | Message) {
         messageType = (<Function>messageType).prototype instanceof Message
             ? (new (<any>messageType)() as Message).type
             : messageType;
 
         return this.getMessagesOfType(messageType as string)
-            .pipe(map(msg =>  msg.payload))
-            .subscribe(observerOrNext, error, complete);
+            .pipe(map(msg => msg.payload));
     }
 }
