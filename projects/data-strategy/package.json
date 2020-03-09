@@ -1,6 +1,6 @@
 {
     "name": "@ng-state/data-strategy",
-    "version": "1.5.1",
+    "version": "1.6.0",
     "description": "Contract for different data stratgies",
     "homepage": "https://github.com/ng-state/store#readme",
     "keywords": [

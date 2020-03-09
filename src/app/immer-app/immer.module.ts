@@ -28,7 +28,7 @@ import { OptimisticUpdatesComponent } from './components/optimistic-updates.comp
             debugger: {
                 enableInitialDebugging: true,
                 options: {
-                    enableConsoleOutput: false
+                    enableConsoleOutput: true
                 }
             },
             history: {

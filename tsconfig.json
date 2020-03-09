@@ -1,4 +1,3 @@
-
 {
     "compilerOptions": {
         "baseUrl": "./",
@@ -9,6 +8,7 @@
         "module": "commonjs",
         "moduleResolution": "node",
         "noEmitOnError": false,
+        "esModuleInterop": true,
         "outDir": "./release",
         "rootDir": ".",
         "lib": [

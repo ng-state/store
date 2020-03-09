@@ -1,3 +1,6 @@
+### 6.7.0
+- fixed infinite loop with `emitEvent` when using form plugin. This loop was caused by updating forms state manually from code. Keep in mind that if you update state manually forms hooks `shouldUpdateState` and `onChange` will not be triggered.
+
 ### 6.6.0
 - added `listenTo` method to `Dispatcher`. It returns Observable and can be used with `takeUntil` and other RxJs functions
 

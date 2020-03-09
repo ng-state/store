@@ -1,6 +1,6 @@
 {
     "name": "@ng-state/immer-data-strategy",
-    "version": "1.5.1",
+    "version": "1.6.0",
     "description": "Immer data strategy for @ng-state/store",
     "homepage": "https://github.com/ng-state/store#readme",
     "keywords": [
@@ -28,5 +28,11 @@
     "peerDependencies": {
         "@ng-state/data-strategy": "^1.5.1",
         "immer": "^5.0.0"
+    },
+    "dependencies": {
+        "deep-equal": "^2.0.1"
+    },
+    "devDependencies": {
+        "@types/deep-equal": "^1.0.1"
     }
 }

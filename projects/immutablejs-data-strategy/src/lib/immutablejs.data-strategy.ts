@@ -84,8 +84,8 @@ export class ImmutableJsDataStrategy extends DataStrategy {
         }, { withMutations: true });
     }
 
-    equals(objOne: any, objTwo: any): boolean {
-        throw new Error('Method not implemented.');
+    equals(objOne: Map<any, any>, objTwo: Map<any, any>): boolean {
+        return objOne.equals(objTwo);
     }
 
     private isNotImmutableObject(obj: any) {

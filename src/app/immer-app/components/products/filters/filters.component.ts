@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Store } from '@ng-state/store';
-import { NgFormStateManager, ShoulUpdateStateParams } from '@ng-state/store';
+import { NgFormStateManager, ShouldUpdateStateParams } from '@ng-state/store';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -32,8 +32,8 @@ export class FiltersComponent implements OnInit {
         this.store.select(['form', 'location']).subscribe(state => this.location = state);
 
         this.ngFormStateManager = this.store.select(['form'])
-            .form.bind(this.filters)
-            .shouldUpdateState((params: ShoulUpdateStateParams) => true)
+            .form.bind(this.filters, { emitEvent: false })
+            .shouldUpdateState((params: ShouldUpdateStateParams) => true)
             .onChange(state => this.cd.markForCheck());
     }
 
@@ -43,6 +43,12 @@ export class FiltersComponent implements OnInit {
 
     resetRoot() {
         this.store.reset();
+    }
+
+    testLoop() {
+        this.store.select(['form']).update(state => {
+            state.cars.push('saab');
+        });
     }
 
     ngOnDestroy() {

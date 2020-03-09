@@ -1,5 +1,6 @@
 import { DataStrategy } from '@ng-state/data-strategy';
 import { produce, setAutoFreeze } from 'immer';
+import deepEqual from 'deep-equal';
 
 export class ImmerDataStrategy extends DataStrategy {
 
@@ -97,7 +98,7 @@ export class ImmerDataStrategy extends DataStrategy {
     }
 
     equals(objOne: any, objTwo: any): boolean {
-        throw new Error('Method not implemented.');
+        return deepEqual(objOne, objTwo);
     }
 
     private getCursor(state: any, propertyPath: string | any[]): any {
@@ -141,8 +142,8 @@ export class ImmerDataStrategy extends DataStrategy {
     private isConstructorArray(obj: any) {
         return obj.constructor === Array;
     }
-    
-    private isPropertyDefined(obj:any) {
+
+    private isPropertyDefined(obj: any) {
         return obj !== null && obj !== undefined;
     }
 

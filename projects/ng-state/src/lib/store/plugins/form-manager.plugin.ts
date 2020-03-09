@@ -1,4 +1,4 @@
-import { distinctUntilChanged, debounceTime, takeUntil, take } from 'rxjs/operators';
+import { distinctUntilChanged, debounceTime, takeUntil, take, filter } from 'rxjs/operators';
 import { Observable, Subject } from 'rxjs';
 import { Store } from '../store';
 import { DataStrategy } from '@ng-state/data-strategy';
@@ -13,7 +13,7 @@ export class NgFormStateManager {
     private dataStrategy: DataStrategy;
 
     private onChangeFn: (state: any) => void;
-    private shouldUpdateStateFn: (params: ShoulUpdateStateParams) => boolean;
+    private shouldUpdateStateFn: (params: ShouldUpdateStateParams) => boolean;
 
     constructor(store: Store<any>) {
         this.store = store;
@@ -48,7 +48,7 @@ export class NgFormStateManager {
         return this;
     }
 
-    shouldUpdateState(shouldUpdateStateFn: (params: ShoulUpdateStateParams) => boolean) {
+    shouldUpdateState(shouldUpdateStateFn: (params: ShouldUpdateStateParams) => boolean) {
         this.shouldUpdateStateFn = shouldUpdateStateFn;
         return this;
     }
@@ -70,6 +70,7 @@ export class NgFormStateManager {
             .pipe(
                 debounceTime(this.params.debounceTime),
                 distinctUntilChanged(),
+                this.distinctUntilNotEqual(),
                 takeUntil(this.unsubscribe)
             )
             .subscribe(value => {
@@ -83,6 +84,21 @@ export class NgFormStateManager {
                     this.onChangeCall();
                 }
             });
+    }
+
+    private distinctUntilNotEqual() {
+        return <T>(source: Observable<T>): Observable<T> => {
+            return source.pipe(filter(value => {
+                let isEqual = false;
+                this.store
+                    .pipe(take(1))
+                    .subscribe(state => {
+                        isEqual = this.dataStrategy.equals(this.dataStrategy.fromJS(value), state);
+                    });
+
+                return !isEqual;
+            }));
+        };
     }
 
     private executeUpdate(value: any, state: any): boolean {
@@ -128,7 +144,7 @@ export type NgFormStateManagerParams = {
     emitEvent?: boolean;
 };
 
-export interface ShoulUpdateStateParams {
+export interface ShouldUpdateStateParams {
     form: FormGroupLike;
     state: any;
     value: any;
