@@ -1,3 +1,9 @@
+### 6.8.1
+- Added window object initialization for platforms that does not have it (nativescript).
+
+### 6.8.0
+- Removed `@angular/platform-browser` dependency. No in order to load state from server you need to pass `TransferState` and `makeStateKey` to `restoreFromServerOptions`;
+
 ### 6.7.0
 - fixed infinite loop with `emitEvent` when using form plugin. This loop was caused by updating forms state manually from code. Keep in mind that if you update state manually forms hooks `shouldUpdateState` and `onChange` will not be triggered.
 

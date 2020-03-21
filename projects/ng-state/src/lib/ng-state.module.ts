@@ -1,5 +1,4 @@
-import { Inject, Injector, ModuleWithProviders, NgModule, InjectionToken, NgZone } from '@angular/core';
-import { makeStateKey, TransferState } from '@angular/platform-browser';
+import { Inject, Injector, ModuleWithProviders, NgModule, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Dispatcher } from './services/dispatcher';
 import { Router } from '@angular/router';
@@ -11,14 +10,20 @@ import { Store } from './store/store';
 import { HistoryController } from './state/history-controller';
 import { DebugInfo, DebugOptions } from './debug/debug-info';
 import { DataStrategy } from '@ng-state/data-strategy';
-import { TRANSFER_STATE_KEY, NG_STATE_OPTIONS, INITIAL_STATE, IS_PROD, IS_TEST, RESTORE_FROM_SERVER } from './inject-constants';
+import { TRANSFER_STATE_KEY, NG_STATE_OPTIONS, INITIAL_STATE, IS_PROD, IS_TEST, RESTORE_FROM_SERVER as RESTORE_FROM_SERVER_OPTIONS } from './inject-constants';
 
-export function stateFactory(initialState, dataStrategy: DataStrategy, transferState?: TransferState, restoreFromServer?: boolean) {
-    if (transferState && restoreFromServer) {
-        const stateKey = makeStateKey<any>(TRANSFER_STATE_KEY);
-        if (transferState.hasKey(stateKey)) {
-            initialState = transferState.get(stateKey, initialState);
-        }
+export function stateFactory(initialState, dataStrategy: DataStrategy, restoreFromServerOptions?: RestoreFromServerOptions) {
+    if (
+        !restoreFromServerOptions ||
+        !restoreFromServerOptions.restoreStateFromServer ||
+        !restoreFromServerOptions.transferState
+    ) {
+        return new State(initialState, dataStrategy);
+    }
+
+    const stateKey = restoreFromServerOptions.makeStateKey<any>(TRANSFER_STATE_KEY);
+    if (restoreFromServerOptions.transferState.hasKey(stateKey)) {
+        initialState = restoreFromServerOptions.transferState.get(stateKey, initialState);
     }
 
     return new State(initialState, dataStrategy);
@@ -45,7 +50,7 @@ export function debugInfoFactory(history: StateHistory, zone: NgZone, dataStrate
     imports: [CommonModule]
 })
 export class StoreModule {
-    static provideStore(initialState: any, isProd?: boolean, options: NgStateOptions = {}, restoreStateFromServer?: boolean): ModuleWithProviders {
+    static provideStore(initialState: any, isProd?: boolean, options: NgStateOptions = {}, restoreStateFromServer?: RestoreFromServerOptions): ModuleWithProviders {
         return {
             ngModule: StoreModule,
             providers: [
@@ -53,8 +58,8 @@ export class StoreModule {
                 { provide: INITIAL_STATE, useValue: initialState },
                 { provide: IS_PROD, useValue: isProd },
                 { provide: IS_TEST, useValue: false },
-                { provide: RESTORE_FROM_SERVER, useValue: restoreStateFromServer },
-                { provide: State, useFactory: stateFactory, deps: [INITIAL_STATE, DataStrategy, TransferState, RESTORE_FROM_SERVER] },
+                { provide: RESTORE_FROM_SERVER_OPTIONS, useValue: restoreStateFromServer },
+                { provide: State, useFactory: stateFactory, deps: [INITIAL_STATE, DataStrategy, RESTORE_FROM_SERVER_OPTIONS] },
                 { provide: Store, useFactory: storeFactory, deps: [State] },
                 { provide: StateHistory, useClass: StateHistory },
                 { provide: DebugInfo, useFactory: debugInfoFactory, deps: [StateHistory, NgZone, DataStrategy] },
@@ -85,6 +90,7 @@ export class StoreModule {
         routerState.init();
 
         if (!isProd) {
+            this.ensureWindowObject();
             (<any>window).state = {
                 history: StateKeeper,
                 debug: debugInfo.publicApi
@@ -92,6 +98,12 @@ export class StoreModule {
         }
 
         dataStrategy.init(store, isProd);
+    }
+
+    private ensureWindowObject() {
+        if (global['window'] === undefined) {
+            global['window'] = global;
+        }
     }
 
     private initStateHistory(initialState: any, ngStateOptions: NgStateOptions) {
@@ -125,4 +137,24 @@ export interface NgStateOptions {
         enableInitialDebugging?: boolean;
         options?: DebugOptions;
     };
+    restoreFromServerOptions?: RestoreFromServerOptions;
+}
+
+export interface RestoreFromServerOptions {
+    restoreStateFromServer: boolean;
+    transferState: TransferStateLike;
+    makeStateKey<T = void>(key: string): StateKeyLike<T>;
+}
+
+type StateKeyLike<T> = string & {
+    __not_a_string: never;
+};
+
+interface TransferStateLike {
+    get<T>(key: StateKeyLike<T>, defaultValue: T): T;
+    set<T>(key: StateKeyLike<T>, value: T): void;
+    remove<T>(key: StateKeyLike<T>): void;
+    hasKey<T>(key: StateKeyLike<T>): boolean;
+    onSerialize<T>(key: StateKeyLike<T>, callback: () => T): void;
+    toJson(): string;
 }
