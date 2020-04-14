@@ -37,9 +37,9 @@ export class Dispatcher {
             .subscribe(observerOrNext, error, complete);
     }
 
-    listenTo<T>(messageType: Message): Observable<T | any>;
-    listenTo<T>(messageType: string): Observable<T | any>;
-    listenTo<T>(messageType: string | Message): Observable<T | any> {
+    listenTo<T = any>(messageType: Message): Observable<T>;
+    listenTo<T = any>(messageType: string): Observable<T>;
+    listenTo<T = any>(messageType: string | Message): Observable<T> {
         return this.getFilteredObservable(messageType);
     }
 

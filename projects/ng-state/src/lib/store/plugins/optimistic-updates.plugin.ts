@@ -2,8 +2,9 @@ import { Store } from '../store';
 import { ServiceLocator } from '../../helpers/service-locator';
 import { DataStrategy } from '@ng-state/data-strategy';
 import { StateHistory, HistoryItem } from '../../state/history';
+import { helpers } from '../../helpers/helpers';
 
-export class OptimistaicUpdatesManager {
+export class OptimisticUpdatesManager {
 
     private _stateHistory: StateHistory;
     private _dataStrategy: DataStrategy;
@@ -38,17 +39,17 @@ export class OptimistaicUpdatesManager {
     revertToLastTag() {
         const targetState = this.stateHistory.history.filter(item => !!item.tag);
         if (targetState.length === 0) {
-            throw new Error(OptimistaicUpdatesManager.nonTagsMessage);
+            throw new Error(OptimisticUpdatesManager.nonTagsMessage);
         }
 
-        const tageRevertTo = targetState[targetState.length - 1];
-        this.restoreState(tageRevertTo);
+        const tagRevertTo = targetState[targetState.length - 1];
+        this.restoreState(tagRevertTo);
     }
 
     revertToTag(tag: string): void {
         const targetState = this.stateHistory.history.find(item => item.tag === tag);
         if (!targetState) {
-            throw new Error(OptimistaicUpdatesManager.nonExistingTagMessage(tag));
+            throw new Error(OptimisticUpdatesManager.nonExistingTagMessage(tag));
         }
         this.restoreState(targetState);
     }
@@ -56,15 +57,14 @@ export class OptimistaicUpdatesManager {
     revertLastChanges(count: number): void {
         const targetState = this.stateHistory.history[this.stateHistory.history.length - 1 - count];
         if (!targetState) {
-            throw new Error(OptimistaicUpdatesManager.nonExistingChangeMessage(count));
+            throw new Error(OptimisticUpdatesManager.nonExistingChangeMessage(count));
         }
         this.restoreState(targetState);
     }
 
     private restoreState(state: HistoryItem) {
-        let path = this.store.statePath.filter(item => !this.store.rootPath.includes(item));
-        const isRootPath = Array.isArray(path) && path.length === 0;
-        if (isRootPath) {
+        let path = helpers.getChildPath(this.store.statePath, this.store.rootPath);
+        if (helpers.isRootPath(this.store.rootPath)) {
             this.dataStrategy.resetRoot(state.state);
         } else {
             const previousState = this.dataStrategy.getIn(state.state, (path));

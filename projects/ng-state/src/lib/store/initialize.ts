@@ -21,16 +21,20 @@ export class Initialize {
                 }
 
                 dataStrategy.overrideContructor(initialState);
-                initialState.constructor = Object;
-                initialState = dataStrategy.fromJS(initialState);
-                initialState = dataStrategy.set(initialState, initialized, true);
+
+                if (initialState.constructor !== Object) {
+                    initialState.constructor = Object;
+                }
+
+                let initializedInitialState = dataStrategy.fromJS(initialState);
+                initializedInitialState = dataStrategy.set(initializedInitialState, initialized, true);
 
                 let newState: T;
 
                 try {
-                    newState = dataStrategy.setIn(state, statePath, initialState);
+                    newState = dataStrategy.setIn(state, statePath, initializedInitialState);
                     newStore = store.select(statePath);
-                    newStore.initialState = initialState;
+                    newStore.initialState = initializedInitialState;
                     newStore.rootPath = statePath;
                 } catch (exception) {
                     console.error(exception);

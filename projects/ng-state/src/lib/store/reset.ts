@@ -5,6 +5,7 @@ import { ServiceLocator } from '../helpers/service-locator';
 import { DataStrategy } from '@ng-state/data-strategy';
 import { DebugInfo } from '../debug/debug-info';
 import { RouterState } from '../state/router-state';
+import { helpers } from '../helpers/helpers';
 
 export class Reset {
     static execute<T>(store: Store<T>) {
@@ -13,9 +14,8 @@ export class Reset {
             const dataStrategy = ServiceLocator.injector.get(DataStrategy);
 
             const restoreState = () => {
-                let path = store.statePath.filter(item => !store.rootPath.includes(item));
-                const isRootPath = Array.isArray(path) && path.length === 0;
-                if (isRootPath) {
+                let path = helpers.getChildPath(store.statePath, store.rootPath);
+                if (helpers.isRootPath(store.rootPath)) {
                     dataStrategy.resetRoot(StateHistory.initialState, RouterState.startingRoute);
                 } else {
                     let initialState: any = !!store.initialState

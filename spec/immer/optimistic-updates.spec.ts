@@ -3,7 +3,7 @@ import { ImmerDataStrategy } from '../../projects/immer-data-strategy/src/lib/im
 import { NgStateTestBed } from '../../projects/ng-state/src/lib/ng-state.test-bed';
 import { StateHistory } from '../../projects/ng-state/src/lib/state/history';
 import { ServiceLocator } from '../../projects/ng-state/src/public-api';
-import { OptimistaicUpdatesManager } from '../../projects/ng-state/src/lib/store/plugins/optimistic-updates.plugin';
+import { OptimisticUpdatesManager } from '../../projects/ng-state/src/lib/store/plugins/optimistic-updates.plugin';
 
 describe('Optimistic updates - Immer', () => {
     let store: Store<any>;
@@ -58,7 +58,7 @@ describe('Optimistic updates - Immer', () => {
 
         store.select(['layout']).optimisticUpdates.revertToTag('testTag');
         expect(stateHistory.currentState['layout']['test']).toEqual('test2');
-        expect(stateHistory.currentState['counter']).toEqual(2);
+        expect(stateHistory.currentState['counter']).toEqual(1);
 
     });
 
@@ -87,18 +87,18 @@ describe('Optimistic updates - Immer', () => {
         it('on reverting to non existing index', () => {
             const stepsBack = 2;
             expect(() => store.optimisticUpdates.revertLastChanges(stepsBack))
-            .toThrowError(OptimistaicUpdatesManager.nonExistingChangeMessage(stepsBack));
+            .toThrowError(OptimisticUpdatesManager.nonExistingChangeMessage(stepsBack));
         });
 
         it('on reverting to non existing tag', () => {
             const tag = 'testTagNonExisting';
             expect(() => store.optimisticUpdates.revertToTag(tag))
-            .toThrowError(OptimistaicUpdatesManager.nonExistingTagMessage(tag));
+            .toThrowError(OptimisticUpdatesManager.nonExistingTagMessage(tag));
         });
 
         it('on reverting to non existing tag when there are no tags at all', () => {
             expect(() => store.optimisticUpdates.revertToLastTag())
-            .toThrowError(OptimistaicUpdatesManager.nonTagsMessage);
+            .toThrowError(OptimisticUpdatesManager.nonTagsMessage);
         });
     });
 });

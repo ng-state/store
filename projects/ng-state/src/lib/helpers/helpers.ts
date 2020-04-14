@@ -1,11 +1,24 @@
 export class Helpers {
-    static guid() {
-        const s4 = () => {
-          return Math.floor((1 + Math.random()) * 0x10000)
-            .toString(16)
-            .substring(1);
+    guid() {
+        const s4 = function () {
+            return Math.floor((1 + Math.random()) * 0x10000)
+                .toString(16)
+                .substring(1);
         };
 
         return s4() + s4() + s4() + s4() + s4() + s4() + s4() + s4();
-      }
+    }
+
+    getChildPath(statePath: string[], rootPath: string[]) {
+        return statePath.filter(function (item) {
+            return !rootPath.includes(item);
+        });
+    }
+
+    isRootPath(path: string[]) {
+        return path.length === 0;
+    }
 }
+
+const helpers = new Helpers();
+export { helpers };

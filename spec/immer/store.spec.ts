@@ -25,7 +25,7 @@ describe('Store tests - Immer', () => {
     describe('', () => {
         beforeEach(() => {
             NgStateTestBed.setTestEnvironment(dataStrategy);
-            const initialState = { layout: { test: 'test' } };
+            const initialState = { layout: { test: 'test' }, locallyInitialized: {} };
             store = NgStateTestBed.createStore(initialState);
         });
 
@@ -68,6 +68,27 @@ describe('Store tests - Immer', () => {
 
             store.select(['layout']).reset();
             expect(StateKeeper.CURRENT_STATE['layout']['test']).toEqual('test');
+        });
+
+        it('should reset locally initialized nested state', () => {
+            const initStore = store.initialize(['locallyInitialized'], { value: 'test value' }, false);
+            initStore.update(state => state['value'] = 'test value 2');
+            expect(StateKeeper.CURRENT_STATE['locallyInitialized']['value']).toEqual('test value 2');
+
+            initStore.reset();
+            expect(StateKeeper.CURRENT_STATE['locallyInitialized']['value']).toEqual('test value');
+        });
+
+        it('should reset locally initialized nested state child path', () => {
+            const initStore = store.initialize(['locallyInitialized'], { value: 'test value', nestedValue: { value: 'v1'} }, false);
+            initStore.update(state => state['value'] = 'test value 2');
+            initStore.select(['nestedValue']).update(state => state['value'] = 'v2');
+            expect(StateKeeper.CURRENT_STATE['locallyInitialized']['value']).toEqual('test value 2');
+            expect(StateKeeper.CURRENT_STATE['locallyInitialized']['nestedValue']['value']).toEqual('v2');
+
+            initStore.select(['nestedValue']).reset();
+            expect(StateKeeper.CURRENT_STATE['locallyInitialized']['value']).toEqual('test value 2');
+            expect(StateKeeper.CURRENT_STATE['locallyInitialized']['nestedValue']['value']).toEqual('v1');
         });
 
         it('should thorw exception on try to reset state when state path points to value but not an object', () => {

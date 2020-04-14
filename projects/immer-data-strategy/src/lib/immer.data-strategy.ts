@@ -3,10 +3,9 @@ import { produce, setAutoFreeze } from 'immer';
 import deepEqual from 'deep-equal';
 
 export class ImmerDataStrategy extends DataStrategy {
-
     init(store: any, isProd: boolean) {
         super.init(store, isProd);
-        setAutoFreeze(!isProd);
+        setAutoFreeze(false);
     }
 
     getIn(state: any, path: any[]): any {
@@ -22,8 +21,9 @@ export class ImmerDataStrategy extends DataStrategy {
     }
 
     set(state: any, property: string, data: any) {
-        state[property] = data;
-        return state;
+        return produce(state, (draftState: any) => {
+            draftState[property] = data;
+        });
     }
 
     setIn(state: any, path: any[], data: any, additionalData: any = {}) {
@@ -79,7 +79,7 @@ export class ImmerDataStrategy extends DataStrategy {
 
         const nextState = produce(initialState, (draftState: any) => {
             if (startingRoute !== null) {
-                this.set(draftState, 'router', router);
+                draftState['router'] = router;
                 this.setIn(draftState, ['router', 'url'], startingRoute, { fromUpdate: true });
             }
         });

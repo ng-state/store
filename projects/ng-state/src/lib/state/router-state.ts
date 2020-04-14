@@ -2,18 +2,14 @@ import { Router, NavigationCancel, NavigationEnd, RoutesRecognized } from '@angu
 import { Store } from '../store/store';
 import { DebugInfo } from '../debug/debug-info';
 import { filter, take } from 'rxjs/operators';
-import { ServiceLocator } from '../helpers/service-locator';
-import { DataStrategy } from '@ng-state/data-strategy';
 
 export class RouterState {
     static startingRoute = '';
-    private dataStrategy: DataStrategy;
 
     constructor(private store: Store<any>, private router: Router, private debugInfo: DebugInfo) {
     }
 
     init() {
-        this.dataStrategy = ServiceLocator.injector.get(DataStrategy);
         this.initRouter();
         this.bindRouter();
     }
@@ -42,9 +38,10 @@ export class RouterState {
                     cancelledId = (<NavigationCancel>event).id;
                 }
                 if (event instanceof NavigationEnd && (<NavigationEnd>event).id !== cancelledId) {
-                    (<Store<any>>this.store.select(['router'])).update(state => {
-                        this.dataStrategy.set(state, 'url', event.url);
-                    });
+                    (<Store<any>>this.store.select(['router']))
+                        .update(state => {
+                            state.url = event.url;
+                        });
                 }
             });
     }

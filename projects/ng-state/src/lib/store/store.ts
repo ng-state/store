@@ -6,7 +6,7 @@ import { MapSgnature, Map } from './map';
 import { ResetSignature, Reset } from './reset';
 import { NgFormStateManager } from './plugins/form-manager.plugin';
 import { PersistStateManager } from './plugins/persist-state.plugin';
-import { OptimistaicUpdatesManager } from './plugins/optimistic-updates.plugin';
+import { OptimisticUpdatesManager } from './plugins/optimistic-updates.plugin';
 
 export class Store<T> extends Observable<T> implements Observer<any> {
     statePath: any[] = [];
@@ -20,7 +20,7 @@ export class Store<T> extends Observable<T> implements Observer<any> {
 
     form: NgFormStateManager;
     storage: PersistStateManager;
-    optimisticUpdates: OptimistaicUpdatesManager;
+    optimisticUpdates: OptimisticUpdatesManager;
 
     constructor(state: Observable<any>) {
         super();
@@ -62,6 +62,6 @@ export class Store<T> extends Observable<T> implements Observer<any> {
         storeContext.map = Map.execute<T>(storeContext);
         storeContext.form = new NgFormStateManager(storeContext);
         storeContext.storage = new PersistStateManager(storeContext);
-        storeContext.optimisticUpdates = new OptimistaicUpdatesManager(storeContext);
+        storeContext.optimisticUpdates = new OptimisticUpdatesManager(storeContext);
     }
 }

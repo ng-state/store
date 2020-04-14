@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 import { ServiceLocator } from '../helpers/service-locator';
 import { Store } from '../store/store';
-import { Helpers } from '../helpers/helpers';
+import { helpers } from '../helpers/helpers';
 import { Dispatcher } from '../services/dispatcher';
 import { DataStrategy } from '@ng-state/data-strategy';
 import { IS_PROD, IS_TEST } from '../inject-constants';
@@ -91,7 +91,7 @@ export function InjectStore(newPath: string[] | string | ((currentPath, stateInd
     return (target: any) => {
 
         target.prototype.createStore = function (currentPath: any[], stateIndex: (string | number) | (string | number)[]) {
-            this.aId = Helpers.guid();
+            this.aId = helpers.guid();
 
             let extractedPath = typeof newPath === 'function' && (<any>newPath).name === ''
                 ? (<any>newPath)(currentPath, stateIndex)
