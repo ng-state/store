@@ -66,7 +66,7 @@ export class ImmerDataStrategy extends DataStrategy {
         this.rootStore.next(nextState);
     }
 
-    overrideContructor(obj: any) {
+    overrideConstructor(obj: any) {
     }
 
     isObject(obj: any) {

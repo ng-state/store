@@ -46,16 +46,16 @@ export class ImmutableJsDataStrategy extends DataStrategy {
         }
     }
 
-    overrideContructor(obj: any) {
+    overrideConstructor(obj: any) {
         if (this.isNotImmutableObject(obj)) { // from ImmutableJs 4 breaking change isIterable => isCollection
             if (obj.constructor === Array) {
                 for (let i = 0; i < obj.length; i++) {
-                    this.overrideContructor(obj[i]);
+                    this.overrideConstructor(obj[i]);
                 }
             } else {
                 obj.__proto__.constructor = Object;
                 for (let key in obj) {
-                    this.overrideContructor(obj[key]);
+                    this.overrideConstructor(obj[key]);
                 }
             }
         }

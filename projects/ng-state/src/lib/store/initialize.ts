@@ -10,7 +10,7 @@ export class Initialize {
     static execute<T>(store: Store<T>) {
         let newStore: Store<any>;
 
-        const intiailize = function (statePath: any[], initialState: any = null) {
+        const initialize = function (statePath: any[], initialState: any = null) {
             const initialized = '__initialized';
 
             let actionWrapper = (state: any) => {
@@ -20,7 +20,7 @@ export class Initialize {
                     return;
                 }
 
-                dataStrategy.overrideContructor(initialState);
+                dataStrategy.overrideConstructor(initialState);
 
                 if (initialState.constructor !== Object) {
                     initialState.constructor = Object;
@@ -54,7 +54,7 @@ export class Initialize {
             return newStore as any;
         };
 
-        return intiailize;
+        return initialize;
     }
 }
 

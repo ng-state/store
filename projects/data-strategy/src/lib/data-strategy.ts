@@ -13,7 +13,7 @@ export abstract class DataStrategy {
     abstract set(state: any, property: string, data: any): any;
     abstract setIn(state: any, path: any[], data: any, additionalData?: { fromUpdate: boolean }): any;
     abstract isObject(state: any): any;
-    abstract overrideContructor(obj: any): any;
+    abstract overrideConstructor(obj: any): any;
     abstract reset(path: any[], stateToMerge: any): void;
     abstract resetRoot(initialState: any, startingRoute?: string): void;
     abstract equals(objOne: any, objTwo: any): boolean;
