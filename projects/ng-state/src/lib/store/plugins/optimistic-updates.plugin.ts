@@ -2,7 +2,6 @@ import { Store } from '../store';
 import { ServiceLocator } from '../../helpers/service-locator';
 import { DataStrategy } from '@ng-state/data-strategy';
 import { StateHistory, HistoryItem } from '../../state/history';
-import { helpers } from '../../helpers/helpers';
 
 export class OptimisticUpdatesManager {
 
@@ -63,13 +62,8 @@ export class OptimisticUpdatesManager {
     }
 
     private restoreState(state: HistoryItem) {
-        let path = helpers.getChildPath(this.store.statePath, this.store.rootPath);
-        if (helpers.isRootPath(this.store.rootPath)) {
-            this.dataStrategy.resetRoot(state.state);
-        } else {
-            const previousState = this.dataStrategy.getIn(state.state, (path));
-            this.dataStrategy.reset(this.store.statePath, previousState);
-        }
+        const previousState = this.dataStrategy.getIn(state.state, this.store.statePath);
+        this.dataStrategy.reset(this.store.statePath, previousState);
 
         const revertedHistory = this.stateHistory.history.slice(0, this.stateHistory.history.indexOf(state) + 1);
         this.stateHistory.history = [...revertedHistory];

@@ -58,7 +58,7 @@ describe('Optimistic updates - Immutable', () => {
 
         store.select(['layout']).optimisticUpdates.revertToTag('testTag');
         expect(stateHistory.currentState.getIn(['layout', 'test'])).toEqual('test2');
-        expect(stateHistory.currentState.get('counter')).toEqual(1);
+        expect(stateHistory.currentState.get('counter')).toEqual(2);
 
     });
 
@@ -72,6 +72,31 @@ describe('Optimistic updates - Immutable', () => {
 
         store.optimisticUpdates.revertToLastTag();
         expect(stateHistory.currentState.getIn(['layout', 'test'])).toEqual('test3');
+    });
+
+    it('should reset locally initialized nested state', () => {
+        const initStore = store.initialize(['locallyInitialized'], { value: 'test value' }, false);
+        initStore.optimisticUpdates.tagCurrentState('testTag');
+
+        initStore.update((state: Map<any, any>) => state.set('value', 'test value 2'));
+        expect(stateHistory.currentState.getIn(['locallyInitialized', 'value'])).toEqual('test value 2');
+
+        initStore.optimisticUpdates.revertToTag('testTag');
+        expect(stateHistory.currentState.getIn(['locallyInitialized', 'value'])).toEqual('test value');
+    });
+
+    it('should reset locally initialized nested state child path', () => {
+        const initStore = store.initialize(['locallyInitialized'], { value: 'test value', nestedValue: { value: 'v1'} }, false);
+        initStore.optimisticUpdates.tagCurrentState('testTag');
+
+        initStore.update((state: Map<any, any>) => state.set('value', 'test value 2'));
+        initStore.select(['nestedValue']).update((state: Map<any, any>) => state.set('value', 'v2'));
+        expect(stateHistory.currentState.getIn(['locallyInitialized', 'value'])).toEqual('test value 2');
+        expect(stateHistory.currentState.getIn(['locallyInitialized', 'nestedValue', 'value'])).toEqual('v2');
+
+        initStore.select(['nestedValue']).optimisticUpdates.revertToTag('testTag');
+        expect(stateHistory.currentState.getIn(['locallyInitialized', 'value'])).toEqual('test value 2');
+        expect(stateHistory.currentState.getIn(['locallyInitialized', 'nestedValue', 'value'])).toEqual('v1');
     });
 
     it('should revert last N actions', () => {

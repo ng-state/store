@@ -15,8 +15,8 @@ export class Helpers {
         });
     }
 
-    isRootPath(path: string[]) {
-        return path.length === 0;
+    isRootPath(childPath: string[], path: string[]) {
+        return Array.isArray(childPath) && childPath.length === 0 && path.length === 0;
     }
 }
 

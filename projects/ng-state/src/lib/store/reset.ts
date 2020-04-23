@@ -15,7 +15,7 @@ export class Reset {
 
             const restoreState = () => {
                 let path = helpers.getChildPath(store.statePath, store.rootPath);
-                if (helpers.isRootPath(store.rootPath)) {
+                if (helpers.isRootPath(path, store.rootPath)) {
                     dataStrategy.resetRoot(StateHistory.initialState, RouterState.startingRoute);
                 } else {
                     let initialState: any = !!store.initialState

@@ -46,6 +46,31 @@ describe('Optimistic updates - Immer', () => {
         expect(stateHistory.history[1].state['layout']['test']).toEqual('test5');
     });
 
+    it('should reset locally initialized nested state', () => {
+        const initStore = store.initialize(['locallyInitialized'], { value: 'test value' }, false);
+        initStore.optimisticUpdates.tagCurrentState('testTag');
+
+        initStore.update(state => state['value'] = 'test value 2');
+        expect(stateHistory.currentState['locallyInitialized']['value']).toEqual('test value 2');
+
+        initStore.optimisticUpdates.revertToTag('testTag');
+        expect(stateHistory.currentState['locallyInitialized']['value']).toEqual('test value');
+    });
+
+    it('should reset locally initialized nested state child path', () => {
+        const initStore = store.initialize(['locallyInitialized'], { value: 'test value', nestedValue: { value: 'v1'} }, false);
+        initStore.optimisticUpdates.tagCurrentState('testTag');
+
+        initStore.update(state => state['value'] = 'test value 2');
+        initStore.select(['nestedValue']).update(state => state['value'] = 'v2');
+        expect(stateHistory.currentState['locallyInitialized']['value']).toEqual('test value 2');
+        expect(stateHistory.currentState['locallyInitialized']['nestedValue']['value']).toEqual('v2');
+
+        initStore.select(['nestedValue']).optimisticUpdates.revertToTag('testTag');
+        expect(stateHistory.currentState['locallyInitialized']['value']).toEqual('test value 2');
+        expect(stateHistory.currentState['locallyInitialized']['nestedValue']['value']).toEqual('v1');
+    });
+
     it('should revert to tag on nested level', () => {
         store.optimisticUpdates.tagCurrentState('testTag');
         store.update(state => {
@@ -58,7 +83,7 @@ describe('Optimistic updates - Immer', () => {
 
         store.select(['layout']).optimisticUpdates.revertToTag('testTag');
         expect(stateHistory.currentState['layout']['test']).toEqual('test2');
-        expect(stateHistory.currentState['counter']).toEqual(1);
+        expect(stateHistory.currentState['counter']).toEqual(2);
 
     });
 

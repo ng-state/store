@@ -1,3 +1,8 @@
+### 6.8.9
+- Fixed reset functionlaity
+- Fixed immutability issues with immer
+- Fixed in-InjectStore decorator initialization
+
 ### 6.8.1
 - Added window object initialization for platforms that does not have it (nativescript).
 

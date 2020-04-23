@@ -1,6 +1,6 @@
 {
     "name": "@ng-state/store",
-    "version": "6.8.9",
+    "version": "6.8.11",
     "description": "RxJS and ImmutableJs powered nested state management for Angular2 apps inspired by @ngrx.",
     "repository": {
         "type": "git",
@@ -33,7 +33,7 @@
     },
     "homepage": "https://github.com/ng-state/store#readme",
     "dependencies": {
-        "@ng-state/data-strategy": "^1.6.0"
+        "@ng-state/data-strategy": "^1.6.2"
     },
     "peerDependencies": {
         "@angular/common": "^8.2.0",

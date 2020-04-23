@@ -73,23 +73,23 @@ describe('Store tests - Immutable', () => {
             expect(StateKeeper.CURRENT_STATE.getIn(['layout', 'test'])).toEqual('test');
         });
 
-        it('should thorw exception on try to reset state when state path points to value but not an object', () => {
+        it('should throw exception on try to reset state when state path points to value but not an object', () => {
             expect(() => store.select(['layout', 'test']).reset()).toThrowError();
         });
 
         it('should reset state when store has initial state', () => {
-            const intilizedStore = store.initialize(['actionStore'], { test: { url: 'home' } });
-            intilizedStore.select<Map<any, any>>(['test']).update(state => state.set('url', 'home-updated'));
+            const initializedStore = store.initialize(['actionStore'], { test: { url: 'home' } });
+            initializedStore.select<Map<any, any>>(['test']).update(state => state.set('url', 'home-updated'));
             expect(StateKeeper.CURRENT_STATE.getIn(['actionStore', 'test', 'url'])).toEqual('home-updated');
 
-            intilizedStore.select(['test']).reset();
+            initializedStore.select(['test']).reset();
             expect(StateKeeper.CURRENT_STATE.getIn(['actionStore', 'test', 'url'])).toEqual('home');
         });
 
-        it('should rootPath and initialState vallues to store after initialization', () => {
-            const intilizedStore = store.initialize(['actionStore'], { test: { url: 'home' } });
-            expect(intilizedStore.rootPath).toContain('actionStore');
-            expect(dataStrategy.toJS(intilizedStore.initialState).test.url).toBe('home');
+        it('should rootPath and initialState values to store after initialization', () => {
+            const initializedStore = store.initialize(['actionStore'], { test: { url: 'home' } });
+            expect(initializedStore.rootPath).toContain('actionStore');
+            expect(dataStrategy.toJS(initializedStore.initialState).test.url).toBe('home');
         });
     });
 });
