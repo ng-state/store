@@ -19,7 +19,7 @@ class TestStateActions {
 }
 
 const store = {
-    initialize: (statePath, intialState) => { },
+    initialize: (statePath, intialState) => new Subject<any>(),
     select: (statePath: string[]) => new Subject()
 };
 
@@ -33,6 +33,7 @@ describe('InjectStore decorator', () => {
     });
 
     let setup = (newPath: string[] | string | ((currentPath, stateIndex) => string[] | string), intialState?: Object | any, debug: boolean = false) => {
+        jest.clearAllMocks();
         NgStateTestBed.registerDependency(Store, store);
         NgStateTestBed.registerDependency(Dispatcher, new Dispatcher());
         NgStateTestBed.registerDependency(StateHistory, new StateHistory());
@@ -40,8 +41,7 @@ describe('InjectStore decorator', () => {
         decorator(TestStateActions);
         target = new TestStateActions();
         StateKeeper.CURRENT_STATE = fromJS({});
-        spyOn(StateKeeper.CURRENT_STATE, 'getIn').and.returnValue(true);
-
+        jest.spyOn(StateKeeper.CURRENT_STATE, 'getIn').mockReturnValue(() => true);
     };
 
     it('should resolve state path from anonymous function', () => {
@@ -84,7 +84,7 @@ describe('InjectStore decorator', () => {
     it('should initialize store with initial values if provided', () => {
         setup(['test', '${stateIndex}', 'path'], { test: 'test' });
         target.store = store;
-        spyOn(store, 'initialize').and.returnValue(new Subject<any>());
+        jest.spyOn(store, 'initialize').mockReturnValueOnce(new Subject<any>());
 
         target.createStore(['parent'], 1);
 
@@ -100,14 +100,14 @@ describe('InjectStore decorator', () => {
 
     it('should check path', () => {
         NgStateTestBed.registerDependency(IS_TEST, false);
-        spyOn(console, 'error');
+        jest.spyOn(console, 'error');
         setup(['test']);
         target.createStore(['parent']);
         expect(console.error).toHaveBeenCalled();
     });
 
     it('should check path if debug is set', () => {
-        spyOn(console, 'error');
+        jest.spyOn(console, 'error');
         setup(['test'], null, true);
         target.createStore(['parent']);
         expect(console.error).toHaveBeenCalled();
@@ -115,7 +115,7 @@ describe('InjectStore decorator', () => {
 
     it('should not check path for prod', () => {
         NgStateTestBed.registerDependency(IS_PROD, true);
-        spyOn(console, 'error');
+        jest.spyOn(console, 'error');
         setup(['test'], null, true);
         target.createStore(['parent']);
         expect(console.error).not.toHaveBeenCalled();

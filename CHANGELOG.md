@@ -1,3 +1,7 @@
+### 6.8.12
+- Angular version bump
+- Added StoreModule as a generic parameter for Ivy compiler
+
 ### 6.8.9
 - Fixed reset functionlaity
 - Fixed immutability issues with immer

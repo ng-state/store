@@ -75,7 +75,7 @@ describe('Storage - Immer', () => {
                     done();
                 });
 
-            jest.runTimersToTime(delay);
+            jest.advanceTimersByTime(delay);
         });
 
         it('should notify observer after state is loaded', (done) => {
@@ -96,7 +96,7 @@ describe('Storage - Immer', () => {
                     done();
                 });
 
-            jest.runTimersToTime(delay);
+            jest.advanceTimersByTime(delay);
         });
 
         it('should notify observer after item is removed from storage', (done) => {
@@ -116,7 +116,7 @@ describe('Storage - Immer', () => {
                     done();
                 });
 
-            jest.runTimersToTime(delay);
+            jest.advanceTimersByTime(delay);
         });
 
         it('should notify observer after storage is cleared', (done) => {
@@ -138,7 +138,7 @@ describe('Storage - Immer', () => {
                     done();
                 });
 
-            jest.runTimersToTime(delay);
+            jest.advanceTimersByTime(delay);
         });
     });
 });

@@ -10,7 +10,7 @@ describe('Store tests - Immutable', () => {
     let store: Store<any>;
     const dataStrategy = new ImmutableJsDataStrategy();
 
-    describe('', () => {
+    describe('Initial setup', () => {
         it('should convert initial state classes ES6 to ES5 objects', () => {
             const state = stateFactory(new InitialState(), dataStrategy) as BehaviorSubject<InitialState>;
             state
@@ -24,7 +24,7 @@ describe('Store tests - Immutable', () => {
         });
     });
 
-    describe('', () => {
+    describe('Common cases', () => {
         beforeEach(() => {
             NgStateTestBed.setTestEnvironment(dataStrategy);
             const initialState = { layout: { test: 'test' } };
@@ -36,6 +36,37 @@ describe('Store tests - Immutable', () => {
 
             expect(StateKeeper.CURRENT_STATE.get('test')).toEqual('test');
             expect(StateKeeper.CURRENT_STATE.get('__initialized')).toEqual(true);
+        });
+
+        it('should return correct store no matter if initialization is made in initial state object or dynamically - immutable', (done) => {
+            let localStore = store.initialize(['localState'], { test: 'test2' });
+            expect(localStore.statePath[0]).toEqual('localState');
+            localStore.pipe(take(1))
+                .subscribe((state: any) => {
+                    expect(state.getIn(['test'])).toEqual('test2');
+                });
+
+            localStore = store.initialize(['layout']);
+            expect(localStore.statePath[0]).toEqual('layout');
+            localStore.pipe(take(1))
+                .subscribe((state: any) => {
+                    expect(state.getIn(['test'])).toEqual('test');
+                });
+
+            localStore = store.initialize(['locallyInitialized'], { value: 'one' });
+            expect(localStore.statePath[0]).toEqual('locallyInitialized');
+            localStore.pipe(take(1))
+                .subscribe((state: any) => {
+                    expect(state.getIn(['value'])).toEqual('one');
+                });
+
+            localStore = store.initialize(['localState'], { test: 'test2' });
+            expect(localStore.statePath[0]).toEqual('localState');
+            localStore.pipe(take(1))
+                .subscribe((state: any) => {
+                    expect(state.getIn(['test'])).toEqual('test2');
+                    done();
+                });
         });
 
         it('should update state', () => {

@@ -10,7 +10,7 @@ describe('Store tests - Immer', () => {
     let store: Store<any>;
     const dataStrategy = new ImmerDataStrategy();
 
-    describe('', () => {
+    describe('Initial setup', () => {
         it('should not convert initial state classes to immutable', () => {
             const state = stateFactory(new InitialState(), dataStrategy) as BehaviorSubject<InitialState>;
             state
@@ -22,7 +22,7 @@ describe('Store tests - Immer', () => {
         });
     });
 
-    describe('', () => {
+    describe('Common cases', () => {
         beforeEach(() => {
             NgStateTestBed.setTestEnvironment(dataStrategy);
             const initialState = { layout: { test: 'test' }, locallyInitialized: {} };
@@ -33,6 +33,37 @@ describe('Store tests - Immer', () => {
             store.initialize([], { test: 'test' });
             expect(StateKeeper.CURRENT_STATE['test']).toEqual('test');
             expect(StateKeeper.CURRENT_STATE['__initialized']).toEqual(true);
+        });
+
+        it('should return correct store no matter if initialization is made in initial state object or dynamically - immer', (done) => {
+            let localStore = store.initialize(['localState'], { test: 'test2' });
+            expect(localStore.statePath[0]).toEqual('localState');
+            localStore.pipe(take(1))
+                .subscribe((state: any) => {
+                    expect(state['test']).toEqual('test2');
+                });
+
+            localStore = store.initialize(['layout']);
+            expect(localStore.statePath[0]).toEqual('layout');
+            localStore.pipe(take(1))
+                .subscribe((state: any) => {
+                    expect(state['test']).toEqual('test');
+                });
+
+            localStore = store.initialize(['locallyInitialized'], { value: 'one' });
+            expect(localStore.statePath[0]).toEqual('locallyInitialized');
+            localStore.pipe(take(1))
+                .subscribe((state: any) => {
+                    expect(state['value']).toEqual('one');
+                });
+
+            localStore = store.initialize(['localState'], { test: 'test2' });
+            expect(localStore.statePath[0]).toEqual('localState');
+            localStore.pipe(take(1))
+                .subscribe((state: any) => {
+                    expect(state['test']).toEqual('test2');
+                    done();
+                });
         });
 
         it('should update state', () => {
@@ -80,7 +111,7 @@ describe('Store tests - Immer', () => {
         });
 
         it('should reset locally initialized nested state child path', () => {
-            const initStore = store.initialize(['locallyInitialized'], { value: 'test value', nestedValue: { value: 'v1'} }, false);
+            const initStore = store.initialize(['locallyInitialized'], { value: 'test value', nestedValue: { value: 'v1' } }, false);
             initStore.update(state => state['value'] = 'test value 2');
             initStore.select(['nestedValue']).update(state => state['value'] = 'v2');
             expect(StateKeeper.CURRENT_STATE['locallyInitialized']['value']).toEqual('test value 2');

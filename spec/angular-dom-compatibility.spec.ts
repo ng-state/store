@@ -1,12 +1,16 @@
 
-import { ComponentState, InjectStore, HasStore, HasStateActions } from '@ng-state/store';
-import { Component, ChangeDetectionStrategy, Input, ChangeDetectorRef } from '@angular/core';
-import { NgStateTestBed } from '@ng-state/store';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import 'zone.js/dist/zone-testing';
+import * as ngState from '@ng-state/store';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
+import { ComponentFixture, TestBed, } from '@angular/core/testing';
 import { ImmerDataStrategy } from '@ng-state/immer-data-strategy';
 import { initialState } from '../src/app/initial-state';
 import { TodoModel } from '../src/app/immutable-app/actions/todo.model';
 import { By } from '@angular/platform-browser';
+
+const { ComponentState, InjectStore, HasStateActions, NgStateTestBed } = ngState;
+const HasStore = ngState.HasStore;
 
 @InjectStore(['${stateIndex}'])
 export class TodoDescriptionStateActions extends HasStore<TodoModel> {
@@ -14,6 +18,7 @@ export class TodoDescriptionStateActions extends HasStore<TodoModel> {
         return this.state.description;
     }
 }
+
 
 @InjectStore('todos')
 export class TodosStateActions extends HasStore<TodoModel> {
@@ -37,7 +42,7 @@ export class TodosStateActions extends HasStore<TodoModel> {
         `
 })
 class TodoDescriptionComponent extends HasStateActions<TodoDescriptionStateActions> {
-    constructor(cd: ChangeDetectorRef) {
+    private constructor(cd: ChangeDetectorRef) {
         super(cd);
     }
 }
@@ -54,7 +59,7 @@ class TodoDescriptionComponent extends HasStateActions<TodoDescriptionStateActio
     </div>`
 })
 class TodosComponent extends HasStateActions<TodosStateActions> {
-    constructor(cd: ChangeDetectorRef) {
+    private constructor(cd: ChangeDetectorRef) {
         super(cd);
     }
 
@@ -69,6 +74,10 @@ describe('Angular DOM compatibility test', () => {
     let fixture: ComponentFixture<TodosComponent>;
     let copyIntitialState: typeof initialState;
 
+    beforeAll(() => {
+        TestBed.initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());
+    });
+
     beforeEach(() => {
         NgStateTestBed.setTestEnvironment(new ImmerDataStrategy());
         NgStateTestBed.strictActionsCheck = false;
@@ -77,10 +86,10 @@ describe('Angular DOM compatibility test', () => {
         NgStateTestBed.createActions(TodosStateActions, copyIntitialState, ['todos']) as TodosStateActions;
 
         TestBed.configureTestingModule({
-            declarations: [TodosComponent, TodoDescriptionComponent]
+            declarations: [TodosComponent, TodoDescriptionComponent],
         });
 
-        fixture = TestBed.createComponent(TodosComponent);
+        fixture = TestBed.createComponent(TodosComponent as any);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
@@ -108,3 +117,4 @@ describe('Angular DOM compatibility test', () => {
         expect(fixture.nativeElement.querySelector('div.description').textContent).toEqual('changed description');
     });
 });
+

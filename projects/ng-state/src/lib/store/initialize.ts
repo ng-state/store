@@ -7,16 +7,29 @@ import { DataStrategy } from '@ng-state/data-strategy';
 import { BehaviorSubject } from 'rxjs';
 
 export class Initialize {
+    static statePathsAreEqual(statePathOne: any[], statePathTwo: any[]){
+        return statePathOne.length === statePathTwo.length && statePathOne.every((value, index) => value === statePathTwo[index]);
+    }
+
     static execute<T>(store: Store<T>) {
         let newStore: Store<any>;
+
 
         const initialize = function (statePath: any[], initialState: any = null) {
             const initialized = '__initialized';
 
             let actionWrapper = (state: any) => {
+                if(!initialState) {
+                    newStore = store.select(statePath);
+                    return;
+                }
+
                 const dataStrategy = ServiceLocator.injector.get(DataStrategy);
 
                 if (dataStrategy.getIn(state, [...statePath, initialized])) {
+                    if(!Initialize.statePathsAreEqual(newStore.statePath, statePath)) {
+                        newStore = store.select(statePath);
+                    }
                     return;
                 }
 

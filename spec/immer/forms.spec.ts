@@ -31,7 +31,7 @@ describe('Forms manager - Immer', () => {
     });
 
     it('should apply state on form bind', () => {
-        spyOn(form, 'patchValue');
+        jest.spyOn(form, 'patchValue' as any);
         layoutForm = store.select(['layout']).form.bind(form);
 
         expect(form.patchValue).toHaveBeenCalledWith({ test: 'test' }, { 'emitEvent': false });
@@ -47,7 +47,7 @@ describe('Forms manager - Immer', () => {
     });
 
     it('should reset form', () => {
-        spyOn(form, 'patchValue');
+        jest.spyOn(form, 'patchValue' as any);
         const layoutStore = store.select(['layout']);
         layoutStore.update(state => state['test'] = 'test3');
         expect(StateKeeper.CURRENT_STATE['layout']['test']).toEqual('test3');

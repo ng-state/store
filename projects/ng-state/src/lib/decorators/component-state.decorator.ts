@@ -13,10 +13,10 @@ import { Dispatcher } from "../services/dispatcher";
 import { IS_TEST } from "../inject-constants";
 import { NgStateTestBed } from "../ng-state.test-bed";
 
-export function ComponentState(
+export const ComponentState = (
   stateActions: any | ((T) => any),
   disableOnChangesBeforeActionsCreated = true
-) {
+) => {
   return (target: any) => {
     let origInit = target.prototype.ngOnInit || (() => {});
     let origDestroy = target.prototype.ngOnDestroy || (() => {});

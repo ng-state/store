@@ -30,8 +30,9 @@ describe('Forms manager - Immutable', () => {
         layoutForm.destroy();
     });
 
+
     it('should apply state on form bind', () => {
-        spyOn(form, 'patchValue');
+        jest.spyOn(form, 'patchValue' as any);
         layoutForm = store.select(['layout']).form.bind(form);
 
         expect(form.patchValue).toHaveBeenCalledWith({ test: 'test' }, { 'emitEvent': false });
@@ -47,7 +48,7 @@ describe('Forms manager - Immutable', () => {
     });
 
     it('should reset form', () => {
-        spyOn(form, 'patchValue');
+        jest.spyOn(form, 'patchValue' as any);
         const layoutStore = store.select<Map<any, any>>(['layout']);
         layoutStore.update(state => state.set('test', 'test3'));
         expect(StateKeeper.CURRENT_STATE.getIn(['layout', 'test'])).toEqual('test3');

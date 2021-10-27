@@ -6,8 +6,9 @@ import { Dispatcher } from '../services/dispatcher';
 import { DataStrategy } from '@ng-state/data-strategy';
 import { IS_PROD, IS_TEST } from '../inject-constants';
 import { StateHistory } from '../state/history';
+import { Injectable } from '@angular/core';
 
-export function InjectStore(newPath: string[] | string | ((currentPath, stateIndex) => string[] | string), intialState: Object | any = null, debug: boolean = false) {
+export const InjectStore = (newPath: string[] | string | ((currentPath, stateIndex) => string[] | string), intialState: Object | any = null, debug: boolean = false) => {
     let getStatePath = (currentPath, stateIndex, extractedPath) => {
 
         let transformedPath = (<string[]>extractedPath).map(item => {
@@ -106,9 +107,7 @@ export function InjectStore(newPath: string[] | string | ((currentPath, stateInd
             const dataStrategy = ServiceLocator.injector.get(DataStrategy);
             const stateHistory = ServiceLocator.injector.get(StateHistory);
 
-            this.store = intialState
-                ? store.initialize(statePath, intialState)
-                : store.select(statePath);
+            this.store = store.initialize(statePath, intialState);
 
             if (checkPath() && !dataStrategy.getIn(stateHistory.currentState, statePath)) {
                 console.error(`No such state in path ${statePath}. Define initial state for this path in global initial state or comonent actions.`);
@@ -143,6 +142,7 @@ export function InjectStore(newPath: string[] | string | ((currentPath, stateInd
     };
 }
 
+@Injectable()
 export class HasStore<T> {
     store: Store<T> = null;
     state?: T = null;
