@@ -1,7 +1,7 @@
 
 import 'zone.js/dist/zone-testing';
-import * as ngState from '@ng-state/store';
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { ComponentState, InjectStore, HasStateActions, NgStateTestBed, HasStore } from '@ng-state/store';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
 import { ComponentFixture, TestBed, } from '@angular/core/testing';
 import { ImmerDataStrategy } from '@ng-state/immer-data-strategy';
@@ -9,16 +9,12 @@ import { initialState } from '../src/app/initial-state';
 import { TodoModel } from '../src/app/immutable-app/actions/todo.model';
 import { By } from '@angular/platform-browser';
 
-const { ComponentState, InjectStore, HasStateActions, NgStateTestBed } = ngState;
-const HasStore = ngState.HasStore;
-
 @InjectStore(['${stateIndex}'])
 export class TodoDescriptionStateActions extends HasStore<TodoModel> {
     get todoDescription() {
         return this.state.description;
     }
 }
-
 
 @InjectStore('todos')
 export class TodosStateActions extends HasStore<TodoModel> {
@@ -42,9 +38,6 @@ export class TodosStateActions extends HasStore<TodoModel> {
         `
 })
 class TodoDescriptionComponent extends HasStateActions<TodoDescriptionStateActions> {
-    private constructor(cd: ChangeDetectorRef) {
-        super(cd);
-    }
 }
 
 @ComponentState(TodosStateActions)
@@ -59,10 +52,6 @@ class TodoDescriptionComponent extends HasStateActions<TodoDescriptionStateActio
     </div>`
 })
 class TodosComponent extends HasStateActions<TodosStateActions> {
-    private constructor(cd: ChangeDetectorRef) {
-        super(cd);
-    }
-
     changeTodoDescription() {
         this.actions.changeTodoDescription();
     }

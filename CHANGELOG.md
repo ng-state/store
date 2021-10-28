@@ -1,3 +1,6 @@
+### 6.9.0
+- Fixed bug with dynamic state initialization when setting initial state via ```@InjectStore([], {prop: 'val'})```. Wrong store was returned on second initialization (when returning to component).
+
 ### 6.8.12
 - Angular version bump
 - Added StoreModule as a generic parameter for Ivy compiler

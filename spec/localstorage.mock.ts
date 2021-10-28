@@ -1,4 +1,4 @@
-class LocalStorageMock {
+export class LocalStorageMock {
     store = {} as any;
 
     clear() {

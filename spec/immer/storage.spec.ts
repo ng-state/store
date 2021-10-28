@@ -5,6 +5,7 @@ import { NgStateTestBed } from '../../projects/ng-state/src/lib/ng-state.test-be
 import { Store } from '../../projects/ng-state/src/lib/store/store';
 import { PersistStateManager, PersistStateStorage } from '../../projects/ng-state/src/lib/store/plugins/persist-state.plugin';
 import { StateKeeper } from '../../projects/ng-state/src/lib/state/history';
+import { LocalStorageMock } from '../localstorage.mock';
 
 jest.useFakeTimers();
 

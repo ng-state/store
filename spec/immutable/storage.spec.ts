@@ -5,6 +5,7 @@ import { Store } from '../../projects/ng-state/src/lib/store/store';
 import { PersistStateManager, PersistStateStorage } from '../../projects/ng-state/src/lib/store/plugins/persist-state.plugin';
 import { StateKeeper } from '../../projects/ng-state/src/lib/state/history';
 import { ImmutableJsDataStrategy } from '../../projects/immutablejs-data-strategy/src/lib/immutablejs.data-strategy';
+import { LocalStorageMock } from '../localstorage.mock';
 
 jest.useFakeTimers();
 

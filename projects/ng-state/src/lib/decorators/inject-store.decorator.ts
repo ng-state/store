@@ -142,7 +142,6 @@ export const InjectStore = (newPath: string[] | string | ((currentPath, stateInd
     };
 }
 
-@Injectable()
 export class HasStore<T> {
     store: Store<T> = null;
     state?: T = null;
