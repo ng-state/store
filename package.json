@@ -55,7 +55,7 @@
         "faker": "^4.1.0",
         "hammerjs": "^2.0.8",
         "http-server": "^0.11.2",
-        "immer": "^5.3.6",
+        "immer": "^9.0.6",
         "immutable": "^3.8.1",
         "immutable-cursor": "^2.0.1",
         "jest": "^27.3.1",
