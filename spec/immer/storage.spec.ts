@@ -1,5 +1,5 @@
-import { timer } from 'rxjs';
-import { tap, map } from 'rxjs/operators';
+import { Observable, throwError, timer } from 'rxjs';
+import { tap, map, take, catchError } from 'rxjs/operators';
 import { ImmerDataStrategy } from '../../projects/immer-data-strategy/src/lib/immer.data-strategy';
 import { NgStateTestBed } from '../../projects/ng-state/src/lib/ng-state.test-bed';
 import { Store } from '../../projects/ng-state/src/lib/store/store';
@@ -24,6 +24,8 @@ describe('Storage - Immer', () => {
 
     it('should save state', () => {
         store.select(['layout']).storage.save({ key: 'testKey' });
+        jest.runAllTimers();
+
         expect(<any>keyValueStorage.getItem('state::testKey')).toBe('{"test":"test"}');
     });
 
@@ -31,24 +33,53 @@ describe('Storage - Immer', () => {
         const layoutStore = store.select(['layout']);
 
         layoutStore.storage.save();
+        jest.runAllTimers();
+
         layoutStore.update(state => state['test'] = 'test-updated');
         expect(StateKeeper.CURRENT_STATE['layout']['test']).toEqual('test-updated');
 
         layoutStore.storage.load();
+        jest.runAllTimers();
+
         expect(StateKeeper.CURRENT_STATE['layout']['test']).toEqual('test');
+    });
+
+    it('should throw an error to observable but not console on state load which is not persisted in storage', (done) => {
+        const layoutStore = store.select(['test3']);
+
+        layoutStore.storage.load().pipe(
+            take(1),
+            catchError((err) => {
+                expect(true).toBe(true);
+                done();
+
+                return new Observable<never>();
+            })
+        ).subscribe(() => {
+            expect(false).toBe(true);
+            done();
+        });
+
+        jest.runAllTimers();
     });
 
     it('should clear state', () => {
         keyValueStorage.setItem('should-stay-item', 'a');
         store.select(['layout']).storage.save({ key: 'testKey' });
+        jest.runAllTimers();
+
         store.select(['layout']).storage.clear();
+        jest.runAllTimers();
 
         expect(<any>keyValueStorage.getItem('should-stay-item')).toEqual('a');
     });
 
     it('should remove item', () => {
         store.select(['layout']).storage.save({ key: 'remove-item' });
+        jest.runAllTimers();
+
         store.select(['layout']).storage.remove({ key: 'remove-item' });
+        jest.runAllTimers();
 
         expect(<any>keyValueStorage.getItem('remove-item')).toBeNull();
     });
@@ -76,6 +107,7 @@ describe('Storage - Immer', () => {
                     done();
                 });
 
+            jest.runAllTimers();
             jest.advanceTimersByTime(delay);
         });
 
@@ -83,6 +115,7 @@ describe('Storage - Immer', () => {
             const layoutStore = store.select(['layout']);
 
             layoutStore.storage.save({ key: 'testKey' });
+            jest.runAllTimers();
 
             layoutStore
                 .storage.load({
@@ -97,6 +130,7 @@ describe('Storage - Immer', () => {
                     done();
                 });
 
+            jest.runAllTimers();
             jest.advanceTimersByTime(delay);
         });
 
@@ -104,6 +138,7 @@ describe('Storage - Immer', () => {
             const layoutStore = store.select(['layout']);
 
             layoutStore.storage.save({ key: 'testKey' });
+            jest.runAllTimers();
 
             layoutStore
                 .storage.remove({
@@ -117,6 +152,7 @@ describe('Storage - Immer', () => {
                     done();
                 });
 
+            jest.runAllTimers();
             jest.advanceTimersByTime(delay);
         });
 
@@ -125,6 +161,7 @@ describe('Storage - Immer', () => {
 
             layoutStore.storage.save({ key: 'testKey' });
             layoutStore.storage.save({ key: 'testKey2' });
+            jest.runAllTimers();
 
             layoutStore
                 .storage.clear({
@@ -139,6 +176,7 @@ describe('Storage - Immer', () => {
                     done();
                 });
 
+            jest.runAllTimers();
             jest.advanceTimersByTime(delay);
         });
     });

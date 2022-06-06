@@ -6,3 +6,5 @@ release/src/
 release/bundles/
 tests-coverage/*
 release/
+.angular
+dist

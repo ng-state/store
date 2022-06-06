@@ -148,6 +148,10 @@ export class ImmerDataStrategy extends DataStrategy {
     }
 
     private extend(source: any, target: any, deep: boolean = true) {
+        if(!source) {
+            source = {};
+        }
+
         for (let prop in target) {
             if (target.hasOwnProperty(prop)) {
                 if (this.isPropertyDefined(target[prop]) && this.isConstructorArray(target[prop])) {

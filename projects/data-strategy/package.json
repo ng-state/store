@@ -1,6 +1,6 @@
 {
   "name": "@ng-state/data-strategy",
-  "version": "1.6.3",
+  "version": "1.7.0",
   "description": "Contract for different data strategies",
   "homepage": "https://github.com/ng-state/store#readme",
   "keywords": [
@@ -24,8 +24,5 @@
     "angular store"
   ],
   "author": "Vytautas Pranskunas <vytautas.pranskunas@gmail.com>",
-  "license": "MIT",
-  "peerDependencies": {
-    "rxjs": "^6.5.5"
-  }
+  "license": "MIT"
 }

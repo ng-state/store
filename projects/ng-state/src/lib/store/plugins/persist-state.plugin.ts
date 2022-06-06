@@ -1,4 +1,4 @@
-import { tap, take } from 'rxjs/operators';
+import { tap, take, filter, delay } from 'rxjs/operators';
 import { Store } from '../store';
 import { Observable, isObservable, from, of, ReplaySubject, forkJoin } from 'rxjs';
 import { ServiceLocator } from '../../helpers/service-locator';
@@ -37,7 +37,9 @@ export class PersistStateManager {
         this.store.pipe(
             tap((state: any) => {
                 this.resolve(params.storageConfig.storage.setItem(params.key, params.serialize(dataStrategy.toJS(state))))
-                    .pipe(take(1))
+                    .pipe(
+                        delay(0),
+                        take(1))
                     .subscribe(_ => {
                         onSaveComplete.next({
                             key: params.key,
@@ -59,8 +61,16 @@ export class PersistStateManager {
 
         params = this.getParams(params, this.store);
         this.resolve(params.storageConfig.storage.getItem(params.key))
-            .pipe(take(1))
+            .pipe(
+                delay(0),
+                take(1)
+            )
             .subscribe(loadedState => {
+                if(loadedState === null) {
+                    onLoadComplete.error(`No state found for key: ${params.key}`);
+                    return;
+                }
+
                 this.store.update((state: Map<any, any>) => {
                     dataStrategy.merge(state, dataStrategy.fromJS(params.deserialize(loadedState)));
                 });
@@ -92,7 +102,9 @@ export class PersistStateManager {
         params = this.getParams(params, this.store);
 
         this.resolve(params.storageConfig.getKeys())
-            .pipe(take(1))
+            .pipe(
+                delay(0),
+                take(1))
             .subscribe(keys => {
                 keys.filter((e: string) => e.startsWith(this.prefix))
                     .map((key: string) => {
@@ -118,7 +130,9 @@ export class PersistStateManager {
         const onRemoveComplete = new ReplaySubject<string>(1);
 
         this.resolve(params.storageConfig.storage.removeItem(params.key))
-            .pipe(take(1))
+            .pipe(
+                delay(0),
+                take(1))
             .subscribe(_ => {
                 onRemoveComplete.next(params.key);
             });

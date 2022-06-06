@@ -8,7 +8,6 @@
         "module": "esnext",
         "moduleResolution": "node",
         "noEmitOnError": false,
-        "esModuleInterop": true,
         "outDir": "./release",
         "rootDir": ".",
         "lib": [

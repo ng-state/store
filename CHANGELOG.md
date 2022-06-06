@@ -1,3 +1,14 @@
+###7.2.0
+- Updated SSR restore functionality
+- Improved merging for immer data strategy to create state object if not exists to prevent errors while merging
+
+### 7.0.0
+- Updated to Angular 13.3.10
+- Updated all libraries like rxjs, immer etc.
+### 6.9.3
+- Added small fix to not crash when trying to load state from storage which is not available
+- Fixed bug with observable notification timing when saving, loading, clearing persistent storage
+
 ### 6.9.0
 - Fixed bug with dynamic state initialization when setting initial state via ```@InjectStore([], {prop: 'val'})```. Wrong store was returned on second initialization (when returning to component).
 

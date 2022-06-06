@@ -1,34 +1,18 @@
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
-    "extends": "../tsconfig.json",
-    "compilerOptions": {
-        "outDir": "../out-tsc/app",
-        "baseUrl": "./",
-        "module": "commonjs",
-        "types": [
-            "node"
-        ],
-        "paths": {
-            "@ng-state/immer-data-strategy": [
-                "../direleasest/immer-data-strategy"
-            ],
-            "@ng-state/immutablejs-data-strategy": [
-                "../release/immutablejs-data-strategy"
-            ],
-            "@ng-state/data-strategy": [
-                "../release/data-strategy"
-            ],
-            "@ng-state/store": [
-                "../release/ng-state"
-            ],
-        }
-    },
-    "angularCompilerOptions": {
-        "entryModule": "./app/app.server.module#AppServerModule"
-    },
-    "files": [
-      "main.server.ts"
-    ],
-    "include": [
-      "src/**/*.d.ts"
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../out-tsc/server",
+    "target": "es2019",
+    "types": [
+      "node"
     ]
+  },
+  "files": [
+    "main.server.ts",
+    "server.ts"
+  ],
+  "angularCompilerOptions": {
+    "entryModule": "./app/app.server.module#AppServerModule"
+  }
 }

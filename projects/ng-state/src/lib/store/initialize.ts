@@ -27,7 +27,7 @@ export class Initialize {
                 const dataStrategy = ServiceLocator.injector.get(DataStrategy);
 
                 if (dataStrategy.getIn(state, [...statePath, initialized])) {
-                    if(!Initialize.statePathsAreEqual(newStore.statePath, statePath)) {
+                    if(!newStore || !Initialize.statePathsAreEqual(newStore.statePath, statePath)) {
                         newStore = store.select(statePath);
                     }
                     return;

@@ -1,6 +1,6 @@
 // This file includes polyfills needed by Angular and is loaded before
 // the app. You can add your own extra polyfills to this file.
-import 'core-js/es6/symbol';
+/* import 'core-js/es6/symbol';
 import 'core-js/es6/object';
 import 'core-js/es6/function';
 import 'core-js/es6/parse-int';
@@ -14,8 +14,14 @@ import 'core-js/es6/regexp';
 import 'core-js/es6/map';
 import 'core-js/es6/set';
 import 'core-js/es6/reflect';
+import 'zone.js/dist/zone'; */
 
-import 'core-js/es7/reflect';
-import 'zone.js/dist/zone';
+import 'zone.js';
+// import 'hammerjs';
 
-import 'hammerjs';
+/* (global as any).window = window;
+(global as any).document = window.document;
+(global as any).Event = window.Event;
+(global as any).KeyboardEvent = window.KeyboardEvent;
+(window as any)['global'] = window; */
+

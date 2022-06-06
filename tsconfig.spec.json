@@ -3,11 +3,11 @@
     "compilerOptions": {
         "outDir": "./out-tsc/spec",
         "allowJs": true,
+        "esModuleInterop": true,
         "types": [
             "jest",
             "node"
         ],
-        "esModuleInterop": true,
         "emitDecoratorMetadata": true
     },
     "include": [
