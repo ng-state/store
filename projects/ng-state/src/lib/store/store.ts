@@ -22,7 +22,7 @@ export class Store<T> extends Observable<T> implements Observer<any> {
     storage: PersistStateManager;
     optimisticUpdates: OptimisticUpdatesManager;
 
-    constructor(state: Observable<any>) {
+    constructor(state: Observable<any>, private isProd: any) {
         super();
 
         this.source = state;
@@ -39,7 +39,7 @@ export class Store<T> extends Observable<T> implements Observer<any> {
     }
 
     lift<R>(operator: Operator<T, R>): Store<R> {
-        const store = new Store<R>(this);
+        const store = new Store<R>(this, this.isProd);
         store.operator = operator;
         return store;
     }
@@ -61,7 +61,7 @@ export class Store<T> extends Observable<T> implements Observer<any> {
         storeContext.reset = Reset.execute(storeContext);
         storeContext.map = Map.execute<T>(storeContext);
         storeContext.form = new NgFormStateManager(storeContext);
-        storeContext.storage = new PersistStateManager(storeContext);
+        storeContext.storage = new PersistStateManager(storeContext, this.isProd);
         storeContext.optimisticUpdates = new OptimisticUpdatesManager(storeContext);
     }
 }

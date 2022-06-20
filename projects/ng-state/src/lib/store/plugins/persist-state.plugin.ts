@@ -1,4 +1,4 @@
-import { tap, take, filter, delay } from 'rxjs/operators';
+import { tap, take, delay } from 'rxjs/operators';
 import { Store } from '../store';
 import { Observable, isObservable, from, of, ReplaySubject, forkJoin } from 'rxjs';
 import { ServiceLocator } from '../../helpers/service-locator';
@@ -16,7 +16,7 @@ export class PersistStateManager {
         serialize: JSON.stringify
     };
 
-    constructor(private store: Store<any>) {
+    constructor(private store: Store<any>, private isProd: boolean) {
     }
 
     static configureStorage(storage: PersistStateStorage, getKeys: () => Promise<string[]> | Observable<string[]> | string[]) {
@@ -66,8 +66,15 @@ export class PersistStateManager {
                 take(1)
             )
             .subscribe(loadedState => {
-                if(loadedState === null) {
-                    onLoadComplete.error(`No state found for key: ${params.key}`);
+                if (loadedState === null) {
+                    if (!this.isProd) {
+                        console.log(`State with key '${params.key}' not found in storage`);
+                    }
+
+                    onLoadComplete.next({
+                        key: params.key,
+                        data: null,
+                    });
                     return;
                 }
 
