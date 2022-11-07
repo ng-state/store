@@ -6,7 +6,6 @@ import {
   OnChanges,
   OnInit,
   SimpleChanges,
-  ɵɵngDeclareDirective,
   Directive,
 } from "@angular/core";
 import { Dispatcher } from "../services/dispatcher";

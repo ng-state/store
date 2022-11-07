@@ -85,7 +85,7 @@ export class ImmutableJsDataStrategy extends DataStrategy {
     }
 
     equals(objOne: Map<any, any>, objTwo: Map<any, any>): boolean {
-        return objOne.equals(objTwo);
+        return !objOne || !objTwo ? false : objOne.equals(objTwo);
     }
 
     private isNotImmutableObject(obj: any) {

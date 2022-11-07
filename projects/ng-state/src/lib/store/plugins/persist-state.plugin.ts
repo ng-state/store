@@ -67,7 +67,7 @@ export class PersistStateManager {
             )
             .subscribe(loadedState => {
                 if (loadedState === null) {
-                    if (!this.isProd) {
+                    if (!this.isProd ) {
                         console.log(`State with key '${params.key}' not found in storage`);
                     }
 

@@ -8,7 +8,7 @@
             "jest",
             "node"
         ],
-        "emitDecoratorMetadata": true
+        "emitDecoratorMetadata": true,
     },
     "include": [
         "src/**/*.spec.ts",

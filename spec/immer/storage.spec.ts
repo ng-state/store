@@ -44,19 +44,11 @@ describe('Storage - Immer', () => {
         expect(StateKeeper.CURRENT_STATE['layout']['test']).toEqual('test');
     });
 
-    it('should throw an error to observable but not console on state load which is not persisted in storage', (done) => {
+    it('should return null on state load which is not persisted in storage', (done) => {
         const layoutStore = store.select(['test3']);
 
-        layoutStore.storage.load().pipe(
-            take(1),
-            catchError((err) => {
-                expect(true).toBe(true);
-                done();
-
-                return new Observable<never>();
-            })
-        ).subscribe(() => {
-            expect(false).toBe(true);
+        layoutStore.storage.load().pipe(take(1)).subscribe((data) => {
+            expect(data.data).toBeNull();
             done();
         });
 

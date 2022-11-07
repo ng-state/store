@@ -1,3 +1,5 @@
+### 7.3.0
+ - Fixed infinite loop which was caused by setting initial value to form after bind with ```emitEvent: true```
 ### 7.2.0
 - Updated SSR restore functionality
 - Improved merging for immer data strategy to create state object if not exists to prevent errors while merging

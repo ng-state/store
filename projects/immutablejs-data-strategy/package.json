@@ -1,6 +1,6 @@
 {
   "name": "@ng-state/immutablejs-data-strategy",
-  "version": "1.7.2",
+  "version": "1.8.0",
   "description": "ImmutableJs data strategy for @ng-state/store",
   "homepage": "https://github.com/ng-state/store#readme",
   "keywords": [
@@ -26,7 +26,7 @@
   "author": "Vytautas Pranskunas",
   "license": "ISC",
   "peerDependencies": {
-    "@ng-state/data-strategy": "^1.7.0",
+    "@ng-state/data-strategy": "^1.8.0",
     "immutable": "^3.8.1",
     "immutable-cursor": "^2.0.0"
   }

@@ -1,11 +1,12 @@
 module.exports = {
   globals: {
     "ts-jest": {
-      tsconfig: "tsconfig.spec.json",
+        useESM: true,
+        tsconfig: "tsconfig.spec.json",
     },
   },
   transform: {
-    "^.+\\.ts?$": "ts-jest",
+    '^.+\\.(ts|js|html)$': 'jest-preset-angular'
   },
   testRegex: "(spec/__tests__/.*|(\\.|/)(test|spec))\\.(ts?)$",
   testPathIgnorePatterns: ["/node_modules/"],
@@ -13,11 +14,11 @@ module.exports = {
   coverageReporters: ["lcov", "text"],
   coverageDirectory: "tests-coverage",
   collectCoverageFrom: ["src/**/*.ts"],
-  moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
+  moduleFileExtensions: ['ts', 'js', 'html', 'svg', 'json', 'mjs', 'node'],
   modulePathIgnorePatterns: ["<rootDir>/release/"],
   moduleNameMapper: {
-    "^@ng-state/store$": "<rootDir>/release/ng-state",
-    "^@ng-state/(.*)$": "<rootDir>/release/$1",
+    "^@ng-state/store$": "<rootDir>/release/ng-state/fesm2015/ng-state-store",
+    "^@ng-state/(.*)$": "<rootDir>/release/$1/fesm2015/ng-state-$1",
   },
   snapshotSerializers: [
     "<rootDir>/node_modules/pretty-format/build/plugins/ConvertAnsi.js",

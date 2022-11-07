@@ -5,7 +5,7 @@
 This is immer data adapter for ng-state/store
 
 ## Have'nt you hear about ng-state?
-@ng-state/store is RxJS and ImmutableJs powered nested state management for Angular 2 applications inspired by [@ngrx/store](https://github.com/ngrx/store). It is simple, fast, reliable with no boilerplate.
+@ng-state/store is RxJS and Immer (or ImmutableJs) powered nested state management for Angular 2 applications inspired by [@ngrx/store](https://github.com/ngrx/store). It is simple, fast, reliable with no boilerplate.
 
 [![npm version](https://badge.fury.io/js/ng-state.svg)](https://badge.fury.io/js/ng-state)
 

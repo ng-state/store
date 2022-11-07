@@ -1,7 +1,7 @@
 {
   "name": "@ng-state/store",
-  "version": "7.2.3",
-  "description": "RxJS and ImmutableJs powered nested state management for Angular2 apps inspired by @ngrx.",
+  "version": "7.3.0",
+  "description": "RxJS and Immer (or ImmutableJs) powered nested state management for Angular2 apps inspired by @ngrx.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ng-state/store.git"
@@ -33,6 +33,6 @@
   },
   "homepage": "https://github.com/ng-state/store#readme",
   "dependencies": {
-    "@ng-state/data-strategy": "^1.7.0"
+    "@ng-state/data-strategy": "^1.8.0"
   }
 }

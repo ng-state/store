@@ -6,9 +6,12 @@ import { Dispatcher } from '../services/dispatcher';
 import { DataStrategy } from '@ng-state/data-strategy';
 import { IS_PROD, IS_TEST } from '../inject-constants';
 import { StateHistory } from '../state/history';
-import { Injectable } from '@angular/core';
 
-export const InjectStore = (newPath: string[] | string | ((currentPath, stateIndex) => string[] | string), intialState: Object | any = null, debug: boolean = false) => {
+export const InjectStore = (
+    newPath: string[] | string | ((currentPath, stateIndex) => string[] | string),
+    intialState: Object | any = null,
+    debug: boolean = false,
+) => {
     let getStatePath = (currentPath, stateIndex, extractedPath) => {
 
         let transformedPath = (<string[]>extractedPath).map(item => {

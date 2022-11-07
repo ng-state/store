@@ -1,5 +1,5 @@
-import { distinctUntilChanged, debounceTime, takeUntil, take, filter } from 'rxjs/operators';
-import { Observable, Subject } from 'rxjs';
+import { distinctUntilChanged, debounceTime, takeUntil, take, filter, startWith, pairwise } from 'rxjs/operators';
+import { Observable, of, Subject } from 'rxjs';
 import { Store } from '../store';
 import { DataStrategy } from '@ng-state/data-strategy';
 import { ServiceLocator } from '../../helpers/service-locator';
@@ -56,11 +56,16 @@ export class NgFormStateManager {
     private setInitialValue() {
         this.store
             .pipe(
+                startWith(undefined),
+                pairwise(),
                 distinctUntilChanged(),
                 takeUntil(this.unsubscribe)
             )
-            .subscribe((state: any) => {
-                this.form.patchValue(this.dataStrategy.toJS(state), { emitEvent: this.params.emitEvent });
+            .subscribe(([previousValue, currentValue]) => {
+                const equals = this.dataStrategy.equals(previousValue, currentValue);
+                if (!equals) {
+                    this.form.patchValue(this.dataStrategy.toJS(currentValue), { emitEvent: this.params.emitEvent });
+                }
             });
     }
 

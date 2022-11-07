@@ -1,7 +1,4 @@
-import { ComponentState } from '@ng-state/store';
-import { ServiceLocator } from '@ng-state/store';
-import { IS_PROD } from '@ng-state/store';
-import { Message, Dispatcher } from '@ng-state/store';
+import { ComponentState, ServiceLocator, IS_PROD, Message, Dispatcher } from '@ng-state/store';
 
 const actionId = 'actionId';
 class TestStateActions {

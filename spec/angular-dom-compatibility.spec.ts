@@ -57,7 +57,6 @@ class TodosComponent extends HasStateActions<TodosStateActions> {
     }
 }
 
-
 describe('Angular DOM compatibility test', () => {
     let component: TodosComponent;
     let fixture: ComponentFixture<TodosComponent>;
