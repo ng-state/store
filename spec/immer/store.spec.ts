@@ -135,10 +135,15 @@ describe('Store tests - Immer', () => {
             expect(StateKeeper.CURRENT_STATE['actionStore']['test']['url']).toEqual('home');
         });
 
-        it('should rootPath and initialState vallues to store after initialization', () => {
+        it('should rootPath and initialState values to store after initialization', () => {
             const initializedStore = store.initialize(['actionStore'], { test: { url: 'home' } });
             expect(initializedStore.rootPath).toContain('actionStore');
             expect(initializedStore.initialState.test.url).toBe('home');
+        });
+
+        it('should return snapshot', () => {
+            const value = store.select(['layout', 'test']).snapshot();
+            expect(value).toBe('test');
         });
     });
 });

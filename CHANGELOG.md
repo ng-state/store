@@ -1,3 +1,9 @@
+### 7.5.0
+- Added ```onChangePairwise``` to form bind options to be able to get state pairwise (old one and current one).
+
+### 7.4.0
+- Added ```snapshot``` function to store. Now you can do ```const value = store.select(['layout', 'test']).snapshot();``` which will return state value.
+
 ### 7.3.0
  - Fixed infinite loop which was caused by setting initial value to form after bind with ```emitEvent: true```
 ### 7.2.0

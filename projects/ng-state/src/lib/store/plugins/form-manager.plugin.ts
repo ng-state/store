@@ -12,7 +12,7 @@ export class NgFormStateManager {
     private store: Store<any>;
     private dataStrategy: DataStrategy;
 
-    private onChangeFn: (state: any) => void;
+    private onChangeFn: (state: any | any[]) => void;
     private shouldUpdateStateFn: (params: ShouldUpdateStateParams) => boolean;
 
     constructor(store: Store<any>) {
@@ -38,12 +38,11 @@ export class NgFormStateManager {
         this.unsubscribe.complete();
 
         this.form = null;
-        this.store = null;
         this.onChangeFn = null;
         this.shouldUpdateStateFn = null;
     }
 
-    onChange(onChangeFn: (state: any) => void) {
+    onChange(onChangeFn: (state: any | any[]) => void) {
         this.onChangeFn = onChangeFn;
         return this;
     }
@@ -70,6 +69,7 @@ export class NgFormStateManager {
     }
 
     private subscribeToFormChange() {
+        let lastState: any;
 
         this.form.valueChanges
             .pipe(
@@ -81,12 +81,16 @@ export class NgFormStateManager {
             .subscribe(value => {
                 let stateUpdated = false;
 
+                if (this.params.onChangePairwise) {
+                    lastState = this.store.snapshot();
+                }
+
                 this.store.update((state: any) => {
                     stateUpdated = this.executeUpdate(value, state);
                 });
 
                 if (stateUpdated) {
-                    this.onChangeCall();
+                    this.onChangeCall(lastState);
                 }
             });
     }
@@ -124,14 +128,19 @@ export class NgFormStateManager {
         return false;
     }
 
-    private onChangeCall() {
-        if (this.onChangeFn) {
-            this.store
-                .pipe(take(1))
-                .subscribe(state => {
-                    this.onChangeFn(this.dataStrategy.toJS(state));
-                });
+    private onChangeCall(oldState: any) {
+        if (!this.onChangeFn) {
+            return;
         }
+
+        const snapshot = this.dataStrategy.toJS(this.store.snapshot());
+
+        if (this.params.onChangePairwise) {
+            this.onChangeFn([this.dataStrategy.toJS(oldState), snapshot]);
+            return;
+        }
+
+        this.onChangeFn(snapshot);
     }
 }
 
@@ -147,6 +156,7 @@ export type FormGroupLike = {
 export type NgFormStateManagerParams = {
     debounceTime?: number;
     emitEvent?: boolean;
+    onChangePairwise?: boolean;
 };
 
 export interface ShouldUpdateStateParams {

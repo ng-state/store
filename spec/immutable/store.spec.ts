@@ -122,6 +122,11 @@ describe('Store tests - Immutable', () => {
             expect(initializedStore.rootPath).toContain('actionStore');
             expect(dataStrategy.toJS(initializedStore.initialState).test.url).toBe('home');
         });
+
+        it('should return snapshot', () => {
+            const value = store.select(['layout', 'test']).snapshot();
+            expect(value).toBe('test');
+        });
     });
 });
 

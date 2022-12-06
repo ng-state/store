@@ -4,6 +4,7 @@ import { Initialize, InitializeSignature } from './initialize';
 import { Operator, Observable, Observer } from 'rxjs';
 import { MapSgnature, Map } from './map';
 import { ResetSignature, Reset } from './reset';
+import { Snapshot } from './snapshot';
 import { NgFormStateManager } from './plugins/form-manager.plugin';
 import { PersistStateManager } from './plugins/persist-state.plugin';
 import { OptimisticUpdatesManager } from './plugins/optimistic-updates.plugin';
@@ -17,6 +18,7 @@ export class Store<T> extends Observable<T> implements Observer<any> {
     initialize: InitializeSignature<T>;
     map: MapSgnature<T>;
     reset: ResetSignature;
+    snapshot: any;
 
     form: NgFormStateManager;
     storage: PersistStateManager;
@@ -60,6 +62,7 @@ export class Store<T> extends Observable<T> implements Observer<any> {
         storeContext.initialize = Initialize.execute<T>(storeContext);
         storeContext.reset = Reset.execute(storeContext);
         storeContext.map = Map.execute<T>(storeContext);
+        storeContext.snapshot = (): T => Snapshot.execute<T>(storeContext);
         storeContext.form = new NgFormStateManager(storeContext);
         storeContext.storage = new PersistStateManager(storeContext, this.isProd);
         storeContext.optimisticUpdates = new OptimisticUpdatesManager(storeContext);

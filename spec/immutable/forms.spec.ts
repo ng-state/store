@@ -109,6 +109,27 @@ describe('Forms manager - Immutable', () => {
             done();
         });
     });
+
+    it('should call onChange hook after state change pairwise', (done) => {
+        const onChange = jest.fn();
+
+        layoutForm = store.select(['layout']).form
+            .bind(form, { debounceTime: 0, onChangePairwise: true })
+            .onChange(onChange);
+
+        (<Subject<any>>form.valueChanges).next({ test: 'test2' });
+
+        setTimeout(() => {
+            (<Subject<any>>form.valueChanges).next({ test: 'test3' });
+
+            setTimeout(() => {
+                expect(onChange.mock.calls.length).toBe(2);
+                expect(onChange.mock.calls[0][0]).toMatchObject([{ test: 'test' }, { test: 'test2' }]);
+                expect(onChange.mock.calls[1][0]).toMatchObject([{ test: 'test2' }, { test: 'test3' }]);
+                done();
+            });
+        });
+    });
 });
 
 class InitialState {
