@@ -1,45 +1,46 @@
 {
     "compilerOptions": {
-        "baseUrl": "./",
-        "declaration": true,
-        "stripInternal": true,
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
-        "module": "esnext",
-        "moduleResolution": "node",
-        "noEmitOnError": false,
-        "outDir": "./release",
-        "rootDir": ".",
-        "lib": [
-            "es2017",
-            "dom"
+      "baseUrl": "./",
+      "declaration": true,
+      "stripInternal": true,
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "module": "esnext",
+      "moduleResolution": "node",
+      "noEmitOnError": false,
+      "outDir": "./release",
+      "rootDir": ".",
+      "lib": [
+        "es2017",
+        "dom"
+      ],
+      "target": "ES2022",
+      "skipLibCheck": true,
+      "types": [
+        "node",
+        "jest"
+      ],
+      "paths": {
+        "@ng-state/immer-data-strategy": [
+          "release/immer-data-strategy"
         ],
-        "target": "es2020",
-        "skipLibCheck": true,
-        "types": [
-            "node",
-            "jest"
+        "@ng-state/immutablejs-data-strategy": [
+          "release/immutablejs-data-strategy"
         ],
-        "paths": {
-            "@ng-state/immer-data-strategy": [
-                "release/immer-data-strategy"
-            ],
-            "@ng-state/immutablejs-data-strategy": [
-                "release/immutablejs-data-strategy"
-            ],
-            "@ng-state/data-strategy": [
-                "release/data-strategy"
-            ],
-            "@ng-state/store": [
-                "release/ng-state"
-            ],
-            "@angular/*": [
-                "./node_modules/@angular/*"
-            ],
-            "immer/*": [
-                "./node_modules/immer/*"
-            ]
-        }
+        "@ng-state/data-strategy": [
+          "release/data-strategy"
+        ],
+        "@ng-state/store": [
+          "release/ng-state"
+        ],
+        "@angular/*": [
+          "./node_modules/@angular/*"
+        ],
+        "immer/*": [
+          "./node_modules/immer/*"
+        ]
+      },
+      "useDefineForClassFields": false
     },
     "exclude": [
         "node_modules"
