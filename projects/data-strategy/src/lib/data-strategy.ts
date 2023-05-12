@@ -9,7 +9,7 @@ export abstract class DataStrategy {
     abstract merge(state: any, newState: any, path?: any[], isRootPath?: boolean): any;
     abstract update(path: any[], action: (state: any) => void, additionalSettings: UpdateActionAdditionalSettings): void;
     abstract fromJS(data: any): any;
-    abstract toJS(data: any): any;
+    abstract toJS<T = any>(data: any): T;
     abstract set(state: any, property: string, data: any): any;
     abstract setIn(state: any, path: any[], data: any, additionalData?: { fromUpdate: boolean }): any;
     abstract isObject(state: any): any;
@@ -18,7 +18,7 @@ export abstract class DataStrategy {
     abstract resetRoot(initialState: any, startingRoute?: string): void;
     abstract equals(objOne: any, objTwo: any): boolean;
 
-    protected get currentState() {
+    get currentState() {
         let currentState: any;
 
         this.rootStore.pipe(take(1))

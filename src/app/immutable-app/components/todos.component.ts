@@ -1,11 +1,10 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, ChangeDetectorRef, Signal, OnInit } from '@angular/core';
 import { ClearTodoMessage, TodoModel } from './../actions/todo.model';
 
 import { ComponentState, HasStateActions } from '@ng-state/store';
 import { Dispatcher, Message } from '@ng-state/store';
 import { Subscription } from 'rxjs';
 import { TodosStateActions } from './../actions/todos.actions';
-import { Store } from '@ng-state/store';
 
 @ComponentState(TodosStateActions)
 @Component({
@@ -13,7 +12,7 @@ import { Store } from '@ng-state/store';
     templateUrl: './todos.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TodosComponent extends HasStateActions<TodosStateActions> implements OnDestroy {
+export class TodosComponent extends HasStateActions<TodosStateActions> implements OnDestroy, OnInit {
 
     actions: TodosStateActions;
     model = {
@@ -22,6 +21,9 @@ export class TodosComponent extends HasStateActions<TodosStateActions> implement
     };
 
     subscription: Subscription;
+
+    descriptionSignal: Signal<string>;
+    firstItemSignal: Signal<string>;
 
     constructor(dispatcher: Dispatcher, cd: ChangeDetectorRef) {
         super(cd);
@@ -35,6 +37,11 @@ export class TodosComponent extends HasStateActions<TodosStateActions> implement
             .subscribe('update', (payload: any) => {
                 this.actions.updateFirstItem();
             });
+    }
+
+    ngOnInit(): void {
+        this.descriptionSignal = this.actions.store.select([0, 'description']).toSignal();
+        this.firstItemSignal = this.actions.store.select([0]).toSignal();
     }
 
     ngOnDestroy() {

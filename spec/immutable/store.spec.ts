@@ -5,6 +5,7 @@ import { Store } from '../../projects/ng-state/src/lib/store/store';
 import { stateFactory } from '../../projects/ng-state/src/lib/ng-state.module';
 import { NgStateTestBed } from '../../projects/ng-state/src/lib/ng-state.test-bed';
 import { StateKeeper } from '../../projects/ng-state/src/lib/state/history';
+import { Map } from 'immutable';
 
 describe('Store tests - Immutable', () => {
     let store: Store<any>;
@@ -120,7 +121,8 @@ describe('Store tests - Immutable', () => {
         it('should rootPath and initialState values to store after initialization', () => {
             const initializedStore = store.initialize(['actionStore'], { test: { url: 'home' } });
             expect(initializedStore.rootPath).toContain('actionStore');
-            expect(dataStrategy.toJS(initializedStore.initialState).test.url).toBe('home');
+            const initialState = dataStrategy.toJS(initializedStore.initialState);
+            expect(initialState.test.url).toBe('home');
         });
 
         it('should return snapshot', () => {

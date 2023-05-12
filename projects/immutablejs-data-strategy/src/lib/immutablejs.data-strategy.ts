@@ -1,19 +1,19 @@
 import { DataStrategy, UpdateActionAdditionalSettings } from '@ng-state/data-strategy';
-import { Map, fromJS, Collection, Iterable } from 'immutable';
-import * as _Cursor from 'immutable/contrib/cursor';
+import { Map, fromJS, Collection, isMap, isCollection } from 'immutable';
+import * as Cursor from 'immutable-cursor';
 
 export class ImmutableJsDataStrategy extends DataStrategy {
 
     getIn(state: Map<any, any>, path: any[]): Collection<any, any> {
-        return state.getIn(path);
+        return state.getIn(path) as Collection<any, any> ;
     }
 
     fromJS(data: any): Collection<any, any> {
         return fromJS(data);
     }
 
-    toJS(data: Collection<any, any>) {
-        return data.toJS();
+    toJS<T = any>(data: Collection<any, any>) : T {
+        return data.toJS() as T;
     }
 
     set(state: Map<any, any>, property: string, data: any) {
@@ -25,15 +25,15 @@ export class ImmutableJsDataStrategy extends DataStrategy {
     }
 
     isObject(state: any) {
-        return Map.isMap(state) || Iterable.isIterable(state);
+        return isMap(state) || isCollection(state);
     }
 
     merge(state: any, newState: any) {
-        return state.merge(newState);
+        return state.merge(fromJS(newState));
     }
 
     update(path: any[], action: (state: any) => void, additionalSettings: ImmutableUpdateActionAdditionalSettings = { withMutations: false }) {
-        const cursor = _Cursor.from(this.currentState, path, (newData) => {
+        const cursor = Cursor.from(this.currentState, path, (newData) => {
             this.rootStore.next(newData);
         });
 
@@ -68,7 +68,7 @@ export class ImmutableJsDataStrategy extends DataStrategy {
 
         this.update([], (state: any) => {
             state.clear();
-            state.merge(initialState);
+            state.merge(fromJS(initialState));
 
             if (startingRoute !== null) {
                 state.set('router', router);
@@ -80,19 +80,27 @@ export class ImmutableJsDataStrategy extends DataStrategy {
     reset(path: any[], stateToMerge: any): void {
         this.update(path, (state: any) => {
             state.clear();
-            state.merge(stateToMerge);
+            state.merge(fromJS(stateToMerge));
         }, { withMutations: true });
     }
 
     equals(objOne: Map<any, any>, objTwo: Map<any, any>): boolean {
-        return !objOne || !objTwo ? false : objOne.equals(objTwo);
+        if(!objOne || !objTwo) {
+            return false;
+        }
+
+        if(this.isObject(objOne) && this.isObject(objTwo)) {
+            return objOne.equals(objTwo);
+        }
+
+        return objOne === objTwo;
     }
 
     private isNotImmutableObject(obj: any) {
         return obj !== null
             && typeof (obj) === 'object'
-            && !Map.isMap(obj)
-            && !Iterable.isIterable(obj);
+            && !isMap(obj)
+            && !isCollection(obj);
     }
 }
 

@@ -112,7 +112,7 @@ export class PersistStateManager {
             .pipe(
                 delay(0),
                 take(1))
-            .subscribe(keys => {
+            .subscribe((keys: string[]) => {
                 keys.filter((e: string) => e.startsWith(this.prefix))
                     .map((key: string) => {
                         const localParams = { ...params };

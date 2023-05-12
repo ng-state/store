@@ -10,7 +10,7 @@ const globals = {
     'rxjs/Observable': 'Rx',
     'rxjs/BehaviorSubject': 'Rx',
     'rxjs/Subscriber': 'Rx',
-    'immutable/contrib/cursor': '_Cursor',
+    'immutable-cursor': 'Cursor',
     'rxjs/operator/distinctUntilChanged': 'Rx.Observable.prototype',
     'rxjs/operator/map': 'Rx.Observable',
     'rxjs/operator/do': 'Rx.Observable.prototype'

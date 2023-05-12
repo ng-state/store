@@ -7,7 +7,6 @@ import { ImmerDataStrategy } from '@ng-state/immer-data-strategy';
 import { initialState } from '../src/app/initial-state';
 import { TodoModel } from '../src/app/immutable-app/actions/todo.model';
 import { By } from '@angular/platform-browser';
-import { toObservable } from '@angular/core/rxjs-interop';
 
 @InjectStore(['${stateIndex}'])
 export class TodoDescriptionStateActions extends HasStore<TodoModel> {

@@ -1,3 +1,8 @@
+### 8.0.0
+- Updated to Angular 16+
+- Added Signals support
+- Migrated to latest (4.3.0) ImmutableJs
+
 ### 7.5.0
 - Added ```onChangePairwise``` to form bind options to be able to get state pairwise (old one and current one).
 
