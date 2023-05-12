@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl } from '@angular/forms';
 import { Store } from '@ng-state/store';
 import { NgFormStateManager, ShouldUpdateStateParams } from '@ng-state/store';
 import { Observable } from 'rxjs';
@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FiltersComponent implements OnInit {
-    filters: FormGroup;
+    filters: UntypedFormGroup;
     ngFormStateManager: NgFormStateManager;
 
     location: any;
@@ -19,14 +19,14 @@ export class FiltersComponent implements OnInit {
     constructor(private store: Store<any>, private cd: ChangeDetectorRef) { }
 
     ngOnInit() {
-        this.filters = new FormGroup({
-            condition: new FormGroup({
-                new: new FormControl(false),
-                used: new FormControl(false),
-                notSpecified: new FormControl(false)
+        this.filters = new UntypedFormGroup({
+            condition: new UntypedFormGroup({
+                new: new UntypedFormControl(false),
+                used: new UntypedFormControl(false),
+                notSpecified: new UntypedFormControl(false)
             }),
-            location: new FormControl(),
-            cars: new FormControl()
+            location: new UntypedFormControl(),
+            cars: new UntypedFormControl()
         });
 
         this.store.select(['form', 'location']).subscribe(state => this.location = state);
