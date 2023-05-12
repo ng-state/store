@@ -1,5 +1,5 @@
 import { distinctUntilChanged, debounceTime, takeUntil, take, filter, startWith, pairwise } from 'rxjs/operators';
-import { Observable, of, Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Store } from '../store';
 import { DataStrategy } from '@ng-state/data-strategy';
 import { ServiceLocator } from '../../helpers/service-locator';

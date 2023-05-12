@@ -29,11 +29,11 @@ ServiceLocator.injector = <any>{
             return false;
         }
 
-        if (key.name === 'Dispatcher') {
+        if (key.name === '_Dispatcher') {
             return dispatcher;
         }
 
-        if (key.name === 'ChangeDetectorRef') {
+        if (key.name === '_ChangeDetectorRef') {
             return {
                 markForCheck: () => { }
             };

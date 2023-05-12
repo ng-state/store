@@ -127,6 +127,12 @@ describe('Store tests - Immutable', () => {
             const value = store.select(['layout', 'test']).snapshot();
             expect(value).toBe('test');
         });
+
+        it('should correctly convert to Signal', () => {
+            const signal = store.select(['layout']).toSignal();
+            const value = signal();
+            expect(dataStrategy.toJS(value)).toEqual({ test: 'test' });
+        });
     });
 });
 

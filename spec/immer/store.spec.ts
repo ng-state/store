@@ -5,6 +5,9 @@ import { ImmerDataStrategy } from '../../projects/immer-data-strategy/src/lib/im
 import { stateFactory } from '../../projects/ng-state/src/lib/ng-state.module';
 import { NgStateTestBed } from '../../projects/ng-state/src/lib/ng-state.test-bed';
 import { StateKeeper } from '../../projects/ng-state/src/lib/state/history';
+import { computed, effect, signal } from '@angular/core';
+import { TestBed, fakeAsync, flush, tick } from '@angular/core/testing';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 describe('Store tests - Immer', () => {
     let store: Store<any>;
@@ -144,6 +147,12 @@ describe('Store tests - Immer', () => {
         it('should return snapshot', () => {
             const value = store.select(['layout', 'test']).snapshot();
             expect(value).toBe('test');
+        });
+
+        it('should correctly convert to Signal', () => {
+            const signal = store.select(['layout']).toSignal();
+            const value = signal();
+            expect(value).toEqual({ test: 'test' });
         });
     });
 });

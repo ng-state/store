@@ -1,13 +1,13 @@
 
-import 'zone.js/dist/zone-testing';
+// import 'zone.js/dist/zone-testing';
 import { ComponentState, InjectStore, HasStateActions, NgStateTestBed, HasStore } from '@ng-state/store';
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
+import { Component, ChangeDetectionStrategy, OnInit, Signal, effect, ChangeDetectorRef, Injector, signal } from '@angular/core';
 import { ComponentFixture, TestBed, } from '@angular/core/testing';
 import { ImmerDataStrategy } from '@ng-state/immer-data-strategy';
 import { initialState } from '../src/app/initial-state';
 import { TodoModel } from '../src/app/immutable-app/actions/todo.model';
 import { By } from '@angular/platform-browser';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 @InjectStore(['${stateIndex}'])
 export class TodoDescriptionStateActions extends HasStore<TodoModel> {
@@ -17,14 +17,14 @@ export class TodoDescriptionStateActions extends HasStore<TodoModel> {
 }
 
 @InjectStore('todos')
-export class TodosStateActions extends HasStore<TodoModel> {
+export class TodosStateActions extends HasStore<TodoModel[]> {
     get todoDescription() {
         return this.state[0].description;
     }
 
-    changeTodoDescription() {
+    changeTodoDescription(value: string) {
         this.store.update(state => {
-            state[1].description = 'changed description';
+            state[1].description = value;
         });
     }
 }
@@ -48,12 +48,29 @@ class TodoDescriptionComponent extends HasStateActions<TodoDescriptionStateActio
     <div class="todos">
         <div class="parent-description">{{actions.todoDescription}}</div>
         <todo-description [statePath]="statePath" [stateIndex]="1"></todo-description>
+        <div class="parent-description-signal">{{descriptionSignal()}}</div>
         <button class="button" (click)="changeTodoDescription()"></button>
     </div>`
 })
-class TodosComponent extends HasStateActions<TodosStateActions> {
-    changeTodoDescription() {
-        this.actions.changeTodoDescription();
+class TodosComponent extends HasStateActions<TodosStateActions> implements OnInit {
+    descriptionSignal: Signal<string>;
+    changedTimes = -1;
+
+    constructor(cd: ChangeDetectorRef, private injector: Injector) {
+        super(cd);
+    }
+
+    ngOnInit() {
+        this.descriptionSignal = this.actions.store.select([1, 'description']).toSignal();
+
+        effect(() => {
+            this.changedTimes++;
+            this.descriptionSignal();
+        }, { injector: this.injector });
+    }
+
+    changeTodoDescription(value: string = 'changed description') {
+        this.actions.changeTodoDescription(value);
     }
 }
 
@@ -62,9 +79,9 @@ describe('Angular DOM compatibility test', () => {
     let fixture: ComponentFixture<TodosComponent>;
     let copyIntitialState: typeof initialState;
 
-    beforeAll(() => {
+    /* beforeAll(() => {
         TestBed.initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());
-    });
+    }); */
 
     beforeEach(() => {
         NgStateTestBed.setTestEnvironment(new ImmerDataStrategy());
@@ -103,6 +120,41 @@ describe('Angular DOM compatibility test', () => {
         fixture.detectChanges();
 
         expect(fixture.nativeElement.querySelector('div.description').textContent).toEqual('changed description');
+    });
+
+    it('should read description from signal', () => {
+        expect(fixture.nativeElement.querySelector('div.parent-description-signal').innerHTML).toEqual('test description');
+    });
+
+    it('should not hit signal recalculation when value is same', () => {
+        component.changeTodoDescription();
+        fixture.detectChanges();
+
+        component.changeTodoDescription();
+        fixture.detectChanges();
+
+        expect(component.changedTimes).toEqual(1);
+    });
+
+    it('should hit signal recalculation when value is NOT same', () => {
+        component.changeTodoDescription();
+        fixture.detectChanges();
+
+        component.changeTodoDescription('changed description 2');
+        fixture.detectChanges();
+
+        expect(component.changedTimes).toEqual(2);
+    });
+
+    it('should reflect value of changed signal', () => {
+        expect(fixture.nativeElement.querySelector('div.parent-description-signal').textContent).toEqual('test description');
+
+        const button = fixture.debugElement.query(By.css('.button'));
+        button.triggerEventHandler('click', null);
+
+        fixture.detectChanges();
+
+        expect(fixture.nativeElement.querySelector('div.parent-description-signal').textContent).toEqual('changed description');
     });
 });
 

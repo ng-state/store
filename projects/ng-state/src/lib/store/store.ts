@@ -8,6 +8,8 @@ import { Snapshot } from './snapshot';
 import { NgFormStateManager } from './plugins/form-manager.plugin';
 import { PersistStateManager } from './plugins/persist-state.plugin';
 import { OptimisticUpdatesManager } from './plugins/optimistic-updates.plugin';
+import { Signal } from '@angular/core';
+import { ToSignal } from './to-signal';
 
 export class Store<T> extends Observable<T> implements Observer<any> {
     statePath: any[] = [];
@@ -18,7 +20,8 @@ export class Store<T> extends Observable<T> implements Observer<any> {
     initialize: InitializeSignature<T>;
     map: MapSgnature<T>;
     reset: ResetSignature;
-    snapshot: any;
+    snapshot: () => T;
+    toSignal: () => Signal<T>;
 
     form: NgFormStateManager;
     storage: PersistStateManager;
@@ -63,6 +66,7 @@ export class Store<T> extends Observable<T> implements Observer<any> {
         storeContext.reset = Reset.execute(storeContext);
         storeContext.map = Map.execute<T>(storeContext);
         storeContext.snapshot = (): T => Snapshot.execute<T>(storeContext);
+        storeContext.toSignal = (): Signal<T> => ToSignal.execute<T>(storeContext);
         storeContext.form = new NgFormStateManager(storeContext);
         storeContext.storage = new PersistStateManager(storeContext, this.isProd);
         storeContext.optimisticUpdates = new OptimisticUpdatesManager(storeContext);
