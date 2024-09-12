@@ -36,7 +36,7 @@ export const InjectStore = (
                     throw new Error(`State path ${newPath} has not enough stateIndexes set. Please provide stateIndexes as array in the same order as set in statePath.`);
                 }
 
-                transformedPath[index] = stateIndex[nthStatePathIndex];
+                transformedPath[index.toString()] = stateIndex[nthStatePathIndex];
                 nthStatePathIndex++;
             }
         });
