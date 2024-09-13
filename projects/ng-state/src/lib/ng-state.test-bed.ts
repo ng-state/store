@@ -99,17 +99,24 @@ export class NgStateTestBed {
         return obj.prototype.constructor.name;
     }
 
-    public static createSignalActions<T>(actionsType: any, initialState: any = {}, path: string | any[] = []): T {
-        return this.createActions(actionsType, initialState, path, { isSignalStore: true });
+    public static createSignalActions<T>(actionsType: any, initialState: any = {}, path: string | any[] = [], options?: { replaceAction?: boolean }): T {
+        return this.createActions(actionsType, initialState, path, { isSignalStore: true, ...options });
     }
 
-    public static createActions<T>(actionsType: any, initialState: any = {}, path: string | any[] = [], options?: { isSignalStore: boolean }): T {
+    public static createActions<T>(actionsType: any, initialState: any = {}, path: string | any[] = [], options?: { isSignalStore: boolean, replaceAction?: boolean }): T {
         this.createStore(initialState);
         const actions = new (actionsType as any)();
         actions.createTestStore(NgStateTestBed.getPath(path), options);
 
+        if (options && options.replaceAction) {
+            const index = NgStateTestBed.actions.findIndex(a => a.actionsType === actionsType);
+            if (index !== -1) {
+                NgStateTestBed.actions.splice(index, 1);
+            }
+        }
+
         if (!NgStateTestBed.getActions(actionsType, false)) {
-            NgStateTestBed.actions.push({ actionsType, instance: actions, statePath: path});
+            NgStateTestBed.actions.push({ actionsType, instance: actions, statePath: path });
         }
 
         return actions;

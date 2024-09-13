@@ -9,7 +9,7 @@ export function signalActions<T>(stateActions: new () => T | ((type: T) => any))
             return NgStateTestBed.getActions(
                 stateActions,
                 NgStateTestBed.strictActionsCheck
-            ) as T;
+            ).instance as T;
         }
 
         const extractedStateAction = stateActions.name === '' ? (stateActions as Function)(this) : stateActions;

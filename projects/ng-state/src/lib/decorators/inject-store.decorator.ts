@@ -95,7 +95,7 @@ export const InjectStore = (
 
     return (target: any) => {
 
-        target.prototype.createStore = function (currentPath: any[], stateIndex: (string | number) | (string | number)[], options: { isSignalStore: boolean }) {
+        target.prototype.createStore = function (currentPath: any[], stateIndex: (string | number) | (string | number)[], options?: { isSignalStore: boolean }) {
             this.aId = helpers.guid();
 
             let extractedPath = typeof newPath === 'function' && (<any>newPath).name === ''
@@ -117,7 +117,7 @@ export const InjectStore = (
                 console.error(`No such state in path ${statePath}. Define initial state for this path in global initial state or component actions.`);
             }
 
-            if (options.isSignalStore) {
+            if (options?.isSignalStore) {
                 this.state = this.store.toSignal();
             } else {
                 this.stateChangeSubscription = this.store.subscribe((state: any) => {
@@ -138,10 +138,10 @@ export const InjectStore = (
 
         target.prototype.createTestStore = function (statePath: any[], options?: { isSignalStore: boolean }) {
             let store = ServiceLocator.injector.get(Store);
-            this.store = store.initialize(statePath, initialState);
             this.store = store.select(statePath);
             const that = this;
             if (options?.isSignalStore) {
+                var t = this.store.toSignal();
                 this.state = this.store.toSignal();
             } else {
                 this.stateChangeSubscription = this.store.subscribe((state: any) => {

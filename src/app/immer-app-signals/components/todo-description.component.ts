@@ -14,7 +14,7 @@ export class TodoDescription implements OnChanges, OnInit {
     @Input() statePath;
     @Input() stateIndex;
 
-    actions:TodoStateActions;
+    actions: TodoStateActions;
 
     ngOnInit(): void {
         this.actions = signalActions(TodoStateActions)({statePath: this.statePath, stateIndex: this.stateIndex});

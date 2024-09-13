@@ -1,4 +1,4 @@
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { fromJS } from 'immutable';
 import { NgStateTestBed } from '../projects/ng-state/src/lib/ng-state.test-bed';
 import { Store } from '../projects/ng-state/src/lib/store/store';
@@ -7,6 +7,8 @@ import { IS_TEST, IS_PROD } from '../projects/ng-state/src/lib/inject-constants'
 import { InjectStore } from '../projects/ng-state/src/lib/decorators/inject-store.decorator';
 import { StateKeeper, StateHistory } from '../projects/ng-state/src/lib/state/history';
 import { Dispatcher } from '../projects/ng-state/src/lib/services/dispatcher';
+import { Signal } from '@angular/core';
+import { toSignal as toSignalRxJs } from '@angular/core/rxjs-interop';
 
 class TestStateActions {
     store: any;
@@ -18,11 +20,7 @@ class TestStateActions {
     }
 }
 
-const store = {
-    initialize: (statePath, intialState) => new Subject<any>(),
-    select: (statePath: string[]) => new Subject()
-};
-
+const store = new Store<any>(new BehaviorSubject({}), false);
 
 describe('InjectStore decorator', () => {
     let target;
@@ -34,6 +32,7 @@ describe('InjectStore decorator', () => {
 
     let setup = (newPath: string[] | string | ((currentPath, stateIndex) => string[] | string), intialState?: Object | any, debug: boolean = false) => {
         jest.clearAllMocks();
+        jest.spyOn(store, 'initialize').mockReturnValueOnce(store);
         NgStateTestBed.registerDependency(Store, store);
         NgStateTestBed.registerDependency(Dispatcher, new Dispatcher());
         NgStateTestBed.registerDependency(StateHistory, new StateHistory());
@@ -84,7 +83,7 @@ describe('InjectStore decorator', () => {
     it('should initialize store with initial values if provided', () => {
         setup(['test', '${stateIndex}', 'path'], { test: 'test' });
         target.store = store;
-        jest.spyOn(store, 'initialize').mockReturnValueOnce(new Subject<any>());
+        jest.spyOn(store, 'initialize').mockReturnValueOnce(new Subject<any>() as any);
 
         target.createStore(['parent'], 1);
 
@@ -119,5 +118,16 @@ describe('InjectStore decorator', () => {
         setup(['test'], null, true);
         target.createStore(['parent']);
         expect(console.error).not.toHaveBeenCalled();
+    });
+
+    it('should create signal actions', () => {
+        setup(['test', '${stateIndex}', 'path']);
+        target.createStore(['parent'], 1, { isSignalStore: true });
+
+        expect(target.store).toBeDefined();
+        expect(target.state()).toBeDefined();
+
+        const signalState: Signal<any> = target.state as Signal<any>;
+        expect(signalState).toBeTruthy();
     });
 });

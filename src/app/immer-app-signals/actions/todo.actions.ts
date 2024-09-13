@@ -1,4 +1,4 @@
-import { HasSignalStore, HasStore, InjectStore } from '@ng-state/store';
+import { HasSignalStore, InjectStore } from '@ng-state/store';
 import { TodoModel } from './todo.model';
 
 @InjectStore(['${stateIndex}'])
