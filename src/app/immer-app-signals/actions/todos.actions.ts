@@ -1,9 +1,8 @@
-import { HasStore, InjectStore } from '@ng-state/store';
+import { HasSignalStore, InjectStore } from '@ng-state/store';
 import { TodoModel } from './todo.model';
-import { Observable } from 'rxjs';
 
 @InjectStore('todos')
-export class TodosStateActions extends HasStore<TodoModel[]> {
+export class TodosStateActions extends HasSignalStore<TodoModel[]> {
 
     addTodo(item: TodoModel) {
         this.store.update(state => {
@@ -30,19 +29,5 @@ export class TodosStateActions extends HasStore<TodoModel[]> {
             state[0].description = 'updated';
             state[0].nested.value = 'updated nested value';
         });
-    }
-
-    get todos(): Observable<any> {
-        return this.store.map(state => {
-            return state.map(item => {
-                return {
-                    name: item.name
-                };
-            });
-        });
-    }
-
-    get todosSync() {
-        return this.state;
     }
 }

@@ -7,6 +7,7 @@ import { DebugInfo } from './debug/debug-info';
 import { DataStrategy } from '@ng-state/data-strategy';
 import { IS_TEST, IS_PROD } from './inject-constants';
 import { Dispatcher } from './services/dispatcher';
+import { BehaviorSubject } from 'rxjs';
 
 export class NgStateTestBed {
 
@@ -98,10 +99,14 @@ export class NgStateTestBed {
         return obj.prototype.constructor.name;
     }
 
-    public static createActions<T>(actionsType: any, initialState: any = {}, path: string | any[] = []): T {
+    public static createSignalActions<T>(actionsType: any, initialState: any = {}, path: string | any[] = []): T {
+        return this.createActions(actionsType, initialState, path, { isSignalStore: true });
+    }
+
+    public static createActions<T>(actionsType: any, initialState: any = {}, path: string | any[] = [], options?: { isSignalStore: boolean }): T {
         this.createStore(initialState);
         const actions = new (actionsType as any)();
-        actions.createTestStore(NgStateTestBed.getPath(path));
+        actions.createTestStore(NgStateTestBed.getPath(path), options);
 
         if (!NgStateTestBed.getActions(actionsType, false)) {
             NgStateTestBed.actions.push({ actionsType, instance: actions, statePath: path});

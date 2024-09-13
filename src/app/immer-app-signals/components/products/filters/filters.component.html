@@ -1,0 +1,60 @@
+<div style="width: 400px">
+    <form [formGroup]="filters">
+        <hr />
+        <button style="margin-bottom: 15px;" class="btn btn-danger" (click)="testLoop()">Test Loop</button>
+        <button style="margin-bottom: 15px;" class="btn btn-danger" (click)="reset()">Reset</button>
+        <button style="margin-bottom: 15px; margin-left: 15px;" class="btn btn-primary" (click)="resetRoot()">Reset
+            Root</button>
+        <hr />
+        Selected location: {{ location }}
+        <hr />
+        <section formGroupName="condition">
+            <h6>Condition:</h6>
+            <div class="form-check">
+                <input class="form-check-input" id="new" type="checkbox" formControlName="new" />
+                <label class="form-check-label" for="new">New</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" id="used" type="checkbox" formControlName="used" />
+                <label class="form-check-label" for="used">Used</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" id="notspecified" type="checkbox" formControlName="notSpecified" />
+                <label class="form-check-label" for="notspecified">Not specified</label>
+            </div>
+        </section>
+
+        <hr>
+        <section>
+            <h6>Item location:</h6>
+            <div class="form-check">
+                <input class="form-check-input" id="usa" type="radio" formControlName="location" name="location"
+                    value="usa" />
+                <label class="form-check-label" for="usa">USA</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" id="europe" type="radio" formControlName="location" name="location"
+                    value="europe" />
+                <label class="form-check-label" for="europe">Europe</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" id="asia" type="radio" formControlName="location" name="location"
+                    value="asia" />
+                <label class="form-check-label" for="asia">Asia</label>
+            </div>
+        </section>
+
+        <hr />
+        <section>
+            <div class="form-group">
+                <h6>Car model</h6>
+                <select class="form-control" formControlName="cars" multiple name="cars">
+                    <option value="volvo">Volvo</option>
+                    <option value="saab">Saab</option>
+                    <option value="opel">Opel</option>
+                    <option value="audi">Audi</option>
+                </select>
+            </div>
+        </section>
+    </form>
+</div>

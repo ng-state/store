@@ -4,6 +4,9 @@ export class TodoModel {
     id: any;
     name: string;
     description: string;
+    nested: {
+        value: string;
+    }
 
     constructor() {
         this.id = generateUUID();

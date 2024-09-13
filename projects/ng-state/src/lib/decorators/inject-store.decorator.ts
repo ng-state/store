@@ -6,10 +6,11 @@ import { Dispatcher } from '../services/dispatcher';
 import { DataStrategy } from '@ng-state/data-strategy';
 import { IS_PROD, IS_TEST } from '../inject-constants';
 import { StateHistory } from '../state/history';
+import { Signal } from '@angular/core';
 
 export const InjectStore = (
     newPath: string[] | string | ((currentPath, stateIndex) => string[] | string),
-    intialState: Object | any = null,
+    initialState: Object | any = null,
     debug: boolean = false,
 ) => {
     let getStatePath = (currentPath, stateIndex, extractedPath) => {
@@ -94,7 +95,7 @@ export const InjectStore = (
 
     return (target: any) => {
 
-        target.prototype.createStore = function (currentPath: any[], stateIndex: (string | number) | (string | number)[]) {
+        target.prototype.createStore = function (currentPath: any[], stateIndex: (string | number) | (string | number)[], options: { isSignalStore: boolean }) {
             this.aId = helpers.guid();
 
             let extractedPath = typeof newPath === 'function' && (<any>newPath).name === ''
@@ -110,33 +111,43 @@ export const InjectStore = (
             const dataStrategy = ServiceLocator.injector.get(DataStrategy);
             const stateHistory = ServiceLocator.injector.get(StateHistory);
 
-            this.store = store.initialize(statePath, intialState);
+            this.store = store.initialize(statePath, initialState);
 
             if (checkPath() && !dataStrategy.getIn(stateHistory.currentState, statePath)) {
-                console.error(`No such state in path ${statePath}. Define initial state for this path in global initial state or comonent actions.`);
+                console.error(`No such state in path ${statePath}. Define initial state for this path in global initial state or component actions.`);
             }
 
-            this.stateChangeSubscription = this.store.subscribe((state: any) => {
-                this.state = state;
-                dispatcher.publish(this.aId);
+            if (options.isSignalStore) {
+                this.state = this.store.toSignal();
+            } else {
+                this.stateChangeSubscription = this.store.subscribe((state: any) => {
+                    this.state = state;
+                    dispatcher.publish(this.aId);
 
-                if (debug) {
-                    console.info(dataStrategy.toJS(state));
-                }
-            });
+
+                    if (debug) {
+                        console.info(dataStrategy.toJS(state));
+                    }
+                });
+            }
 
             convertGettersToProperties(this);
 
             return statePath;
         };
 
-        target.prototype.createTestStore = function (statePath: any[]) {
+        target.prototype.createTestStore = function (statePath: any[], options?: { isSignalStore: boolean }) {
             let store = ServiceLocator.injector.get(Store);
+            this.store = store.initialize(statePath, initialState);
             this.store = store.select(statePath);
             const that = this;
-            this.stateChangeSubscription = this.store.subscribe((state: any) => {
-                that.state = state;
-            });
+            if (options?.isSignalStore) {
+                this.state = this.store.toSignal();
+            } else {
+                this.stateChangeSubscription = this.store.subscribe((state: any) => {
+                    that.state = state;
+                });
+            }
         };
 
         target.prototype.onDestroy = function () {
@@ -148,4 +159,10 @@ export const InjectStore = (
 export class HasStore<T> {
     store: Store<T> = null;
     state?: T = null;
+}
+
+export class HasSignalStore<T> {
+    store: Store<T> = null;
+    state: Signal<T> = null;
+    statePath: string | string[] = null;
 }

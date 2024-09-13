@@ -4,7 +4,10 @@ let initialState = <InitialState>{
     todos: <TodoModel[]>[{
         id: 1,
         name: 'test',
-        description: 'test'
+        description: 'test',
+        nested: {
+            value: 'nested test'
+        }
     }],
     form: {
         condition: {

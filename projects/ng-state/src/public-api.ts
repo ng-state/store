@@ -20,3 +20,4 @@ export * from './lib/state/router-state';
 export * from './lib/debug/debug-info-data';
 export * from './lib/debug/debug-info';
 export * from './lib/inject-constants';
+export * from './lib/signal-actions';
