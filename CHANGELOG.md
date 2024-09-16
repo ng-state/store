@@ -1,4 +1,9 @@
 ### 8.0.0
+- Updated to Angular 18+
+- Added signal action ```actions = signalActions(TodoActions);```
+- Reduced boilerplate when working with signal actions
+
+### 8.0.0
 - Updated to Angular 16+
 - Added Signals support
 - Migrated to latest (4.3.0) ImmutableJs

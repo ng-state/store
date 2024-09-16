@@ -1,6 +1,6 @@
 {
   "name": "@ng-state/immer-data-strategy",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Immer data strategy for @ng-state/store",
   "homepage": "https://github.com/ng-state/store#readme",
   "keywords": [
@@ -26,7 +26,7 @@
   "author": "Vytautas Pranskunas",
   "license": "ISC",
   "peerDependencies": {
-    "@ng-state/data-strategy": "^2.0.0",
+    "@ng-state/data-strategy": "^3.0.0",
     "immer": "^9.0.0"
   },
   "dependencies": {

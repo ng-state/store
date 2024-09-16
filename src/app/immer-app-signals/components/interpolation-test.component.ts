@@ -26,7 +26,7 @@ import { InterpolationTestStateActions } from '../actions/interpolation-test.act
   `
 })
 export class InterpolationTestComponent {
-    actions = signalActions(InterpolationTestStateActions)();
+    actions = signalActions(InterpolationTestStateActions);
 
     constructor(private dispatcher: Dispatcher, private store: Store<any>) {
     }

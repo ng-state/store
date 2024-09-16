@@ -95,7 +95,7 @@ export const InjectStore = (
 
     return (target: any) => {
 
-        target.prototype.createStore = function (currentPath: any[], stateIndex: (string | number) | (string | number)[], options?: { isSignalStore: boolean }) {
+        target.prototype.createStore = function (currentPath: any[], stateIndex: (string | number) | (string | number)[], options?: { isSignalStore: boolean }): any[] {
             this.aId = helpers.guid();
 
             let extractedPath = typeof newPath === 'function' && (<any>newPath).name === ''

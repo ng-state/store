@@ -12,7 +12,7 @@ import { SubSelectTestStateActions } from '../actions/subselect-test.actions';
   `
 })
 export class SubSelectTestComponent {
-    actions = signalActions(SubSelectTestStateActions)();
+    actions = signalActions(SubSelectTestStateActions);
 
     constructor(private store: Store<any>) {
     }

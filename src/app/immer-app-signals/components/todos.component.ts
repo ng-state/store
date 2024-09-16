@@ -14,7 +14,8 @@ import produce from 'immer';
 })
 export class TodosComponent implements OnDestroy {
 
-    actions = signalActions(TodosStateActions)();
+    actions = signalActions(TodosStateActions);
+
     model = {
         name: '',
         description: ''
