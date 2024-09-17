@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, ChangeDetectorRef, Signal, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
 import { ClearTodoMessage, TodoModel } from '../actions/todo.model';
 
 import { signalActions } from '@ng-state/store';
