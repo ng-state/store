@@ -1,37 +1,41 @@
 import { TodoDescription } from './todo-description.component';
 import { NgStateTestBed } from '@ng-state/store';
 import { initialState } from '../../initial-state';
-import { TodoStateActions } from '../actions/todo.actions';
 import { TodoModel } from '../actions/todo.model';
 import { ImmutableJsDataStrategy } from '@ng-state/immutablejs-data-strategy';
 
 describe('TodoDescription', () => {
 
     let component: TodoDescription;
-    let copyIntitialState: typeof initialState;
+    let copyInitialState: typeof initialState;
     const cd = { markForCheck: () => { } };
 
     beforeEach(() => {
         NgStateTestBed.setTestEnvironment(new ImmutableJsDataStrategy());
         NgStateTestBed.strictActionsCheck = false;
 
-        copyIntitialState = JSON.parse(JSON.stringify(initialState));
-        copyIntitialState.todos.push(<TodoModel>{ description: 'test description' });
-        NgStateTestBed.createActions(TodoStateActions, copyIntitialState, ['todos', 1]) as TodoStateActions;
+        copyInitialState = JSON.parse(JSON.stringify(initialState));
+        copyInitialState.todos.push(<TodoModel>{ description: 'test description' });
+        NgStateTestBed.createStore(copyInitialState);
         component = new TodoDescription(cd as any);
-        component.ngOnInit();
     });
 
     it('should get description t', () => {
+        component.stateIndex = 1;
+        component.statePath = ['todos'];
+        component.ngOnInit();
+
         expect(component.actions.todoDescription).toEqual('test description');
     });
 
     it ('should set actions to component - immutable', () => {
-        copyIntitialState.todos.push(<TodoModel>{ description: 'test description 2' });
+        copyInitialState.todos.push(<TodoModel>{ description: 'test description 2' });
 
-        const actions = NgStateTestBed.createActions(TodoStateActions, copyIntitialState, ['todos', 1]) as TodoStateActions;
-        NgStateTestBed.setActionsToComponent(actions, component);
+        component.stateIndex = 2;
+        component.statePath = ['todos'];
+        NgStateTestBed.createStore(copyInitialState);
+        component.ngOnInit();
 
-        expect(component.actions.todoDescription).toEqual('test description');
+        expect(component.actions.todoDescription).toEqual('test description 2');
     });
 });

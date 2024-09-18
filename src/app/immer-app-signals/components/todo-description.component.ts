@@ -14,11 +14,10 @@ export class TodoDescription implements OnChanges, OnInit, OnChanges {
     @Input() statePath;
     @Input() stateIndex;
 
-    actionsFactory = signalActions(TodoStateActions, { late: true });
-    actions: TodoStateActions;
+    actions = signalActions(TodoStateActions, { late: true });
 
     ngOnInit(): void {
-        this.actions = this.actionsFactory({ statePath: this.statePath, stateIndex: this.stateIndex });
+        this.actions.init({ statePath: this.statePath, stateIndex: this.stateIndex });
 
         console.log('on init');
     }

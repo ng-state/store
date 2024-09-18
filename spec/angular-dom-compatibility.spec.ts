@@ -76,7 +76,7 @@ class TodosComponent extends HasStateActions<TodosStateActions> implements OnIni
 describe('Angular DOM compatibility test', () => {
     let component: TodosComponent;
     let fixture: ComponentFixture<TodosComponent>;
-    let copyIntitialState: typeof initialState;
+    let copyInitialState: typeof initialState;
 
     /* beforeAll(() => {
         TestBed.initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());
@@ -85,9 +85,9 @@ describe('Angular DOM compatibility test', () => {
     beforeEach(() => {
         NgStateTestBed.setTestEnvironment(new ImmerDataStrategy());
         NgStateTestBed.strictActionsCheck = false;
-        copyIntitialState = JSON.parse(JSON.stringify(initialState));
-        copyIntitialState.todos.push(<TodoModel>{ description: 'test description' });
-        NgStateTestBed.createActions(TodosStateActions, copyIntitialState, ['todos']) as TodosStateActions;
+        copyInitialState = JSON.parse(JSON.stringify(initialState));
+        copyInitialState.todos.push(<TodoModel>{ description: 'test description' });
+        NgStateTestBed.createStore(copyInitialState);
 
         TestBed.configureTestingModule({
             declarations: [TodosComponent, TodoDescriptionComponent],

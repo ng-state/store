@@ -1,42 +1,28 @@
 import { inject } from '@angular/core';
 import { ServiceLocator } from './helpers/service-locator';
 import { IS_TEST } from './inject-constants';
-import { NgStateTestBed } from './ng-state.test-bed';
+import { TestBed } from '@angular/core/testing';
 
 export function signalActions<T>(stateActions: Provider<T>): T;
-export function signalActions<T>(stateActions: Provider<T>, args: { late: true }): ((lateArgs: { statePath?: string | string[], stateIndex?: (string | number) | (string | number)[] }) => T);
-export function signalActions<T>(stateActions: Provider<T>, args?: { late?: boolean }): T | ((lateArgs: { statePath?: string | string[], stateIndex?: (string | number) | (string | number)[] }) => T) {
-    if (!args?.late) {
-        const isTest = ServiceLocator.injector.get(IS_TEST);
-        if (isTest) {
-            const actions = NgStateTestBed.getActions(
-                stateActions,
-                NgStateTestBed.strictActionsCheck
-            );
+export function signalActions<T>(stateActions: Provider<T>, args: { late: true }): T & { init: (args: { statePath?: string | string[], stateIndex?: (string | number) | (string | number)[] }) => void };
+export function signalActions<T>(stateActions: Provider<T>, args?: { late?: boolean }): T | T & { init: (args: { statePath?: string | string[], stateIndex?: (string | number) | (string | number)[] }) => void } {
+    let actions = ServiceLocator.injector.get(IS_TEST)
+        ? TestBed.inject(stateActions, null, { optional: true })
+        : inject(stateActions, { optional: true });
 
-            return actions.instance;
-        }
-
-        let actions = inject(stateActions, { optional: true });
-        return actionsFactory(actions, stateActions, [], null);
-    }
-
-    let actions = inject(stateActions, { optional: true });
-    return (lateArgs: { statePath?: string | string[], stateIndex?: (string | number) | (string | number)[] }): T => {
-        return actionsFactory(actions, stateActions, lateArgs.statePath || [], lateArgs.stateIndex);
-    };
-}
-
-function actionsFactory<T>(actions: any, stateActions: Provider<T>, statePath: string | string[], stateIndex: (string | number) | (string | number)[]): T {
     if (!actions) {
         actions = new (stateActions as any)();
     }
 
-    actions.statePath = actions.createStore(
-        statePath,
-        stateIndex,
-        { isSignalStore: true }
-    ) as any[];
+    if (!args?.late) {
+        actions.statePath = actions.createStore([], null, { isSignalStore: true }) as any[];
+        return actions;
+    }
+
+    actions.init = ({ statePath, stateIndex }: { statePath: string | string[], stateIndex: (string | number) | (string | number)[] }) => {
+        actions.statePath = actions.createStore(statePath, stateIndex, { isSignalStore: true }) as any[];
+    }
+
 
     return actions;
 }

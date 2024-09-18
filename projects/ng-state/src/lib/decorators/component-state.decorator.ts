@@ -36,21 +36,7 @@ export const ComponentState = (
         };
 
         target.prototype.ngOnInit = function () {
-            const isTest = ServiceLocator.injector.get(IS_TEST);
-            if (isTest) {
-                const actions = NgStateTestBed.getActions(
-                    stateActions,
-                    NgStateTestBed.strictActionsCheck
-                );
-                if (actions) {
-                    this.actions = actions.instance;
-                    this.statePath = actions.statePath;
-                    origInit.apply(this, arguments);
-                    return;
-                }
-            } else {
-                ensureMarkForCheck.apply(this);
-            }
+            ensureMarkForCheck.apply(this);
 
             if (!this.statePath) {
                 this.statePath = [];

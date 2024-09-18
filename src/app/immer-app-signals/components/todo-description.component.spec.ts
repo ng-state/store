@@ -4,8 +4,6 @@ import { initialState } from '../../initial-state';
 import { TodoModel } from '../actions/todo.model';
 import { ImmerDataStrategy } from '@ng-state/immer-data-strategy';
 
-import { TodoStateActions } from '../actions/todo.actions';
-
 describe('TodoDescription', () => {
 
     let component: TodoDescription;
@@ -17,19 +15,24 @@ describe('TodoDescription', () => {
 
         copyInitialState = JSON.parse(JSON.stringify(initialState));
         copyInitialState.todos.push(<TodoModel>{ description: 'test description' });
-        NgStateTestBed.createSignalActions(TodoStateActions, copyInitialState, ['todos', 1]);
+        NgStateTestBed.createStore(copyInitialState);
         component = new TodoDescription();
-        component.ngOnInit();
     });
 
     it('should get description - immer signals', () => {
+        component.stateIndex = 1;
+        component.statePath = ['todos'];
+
+        component.ngOnInit();
         expect(component.actions.todoDescription).toEqual('test description');
     });
 
     it('should set actions to component - immer signals', () => {
         copyInitialState.todos.push(<TodoModel>{ description: 'test description 2' });
 
-        NgStateTestBed.createSignalActions(TodoStateActions, copyInitialState, ['todos', 2], { replaceAction: true });
+        component.stateIndex = 2;
+        component.statePath = ['todos'];
+
         component.ngOnInit();
 
         expect(component.actions.todoDescription).toEqual('test description 2');

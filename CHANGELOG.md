@@ -1,4 +1,8 @@
-### 8.0.0
+### 9.1.0
+- Added injectable actions. You can now use any Angular Injectable services in actions 🔥
+- Simplified testing
+
+### 9.0.0
 - Updated to Angular 18+
 - Added signal action ```actions = signalActions(TodoActions);```
 - Reduced boilerplate when working with signal actions

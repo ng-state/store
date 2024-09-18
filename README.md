@@ -2,7 +2,7 @@
 
 ![ng-state](/logo.png)
 
-RxJS and Immer (or ImmutableJs) powered nested state management for Angular 2 applications inspired by [@ngrx/store](https://github.com/ngrx/store). It is simple, fast, reliable with no boilerplate.
+RxJS and Immer (or ImmutableJs) powered nested state management for Angular applications inspired by [@ngrx/store](https://github.com/ngrx/store). It is simple, fast, reliable with no boilerplate. Supports signals and injectable actions.
 
 [![npm version](https://badge.fury.io/js/@ng-state%2Fstore.svg)](https://badge.fury.io/js/@ng-state%2Fstore)
 

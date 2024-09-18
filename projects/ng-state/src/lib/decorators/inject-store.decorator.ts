@@ -95,7 +95,7 @@ export const InjectStore = (
 
     return (target: any) => {
 
-        target.prototype.createStore = function (currentPath: any[], stateIndex: (string | number) | (string | number)[], options?: { isSignalStore: boolean }): any[] {
+        target.prototype.createStore = function (currentPath: any[] = [], stateIndex: (string | number) | (string | number)[], options?: { isSignalStore: boolean }): any[] {
             this.aId = helpers.guid();
 
             let extractedPath = typeof newPath === 'function' && (<any>newPath).name === ''
@@ -141,7 +141,6 @@ export const InjectStore = (
             this.store = store.select(statePath);
             const that = this;
             if (options?.isSignalStore) {
-                var t = this.store.toSignal();
                 this.state = this.store.toSignal();
             } else {
                 this.stateChangeSubscription = this.store.subscribe((state: any) => {

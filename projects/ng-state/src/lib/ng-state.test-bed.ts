@@ -7,31 +7,15 @@ import { DebugInfo } from './debug/debug-info';
 import { DataStrategy } from '@ng-state/data-strategy';
 import { IS_TEST, IS_PROD } from './inject-constants';
 import { Dispatcher } from './services/dispatcher';
-import { BehaviorSubject } from 'rxjs';
 
 export class NgStateTestBed {
 
     private static dataStrategy: DataStrategy = null;
     private static dependencyInjection = <{ key: any, value: any }[]>[];
 
-    private static actions: TestComponentActions[] = [];
-
     public static strictActionsCheck = true;
 
-    public static getActions(actionsType: any, strictActionsCheck: boolean = true): TestComponentActions {
-        const componentActions = NgStateTestBed.actions.find(c => c.actionsType === actionsType);
-        if (componentActions) {
-            return componentActions;
-        } else if (strictActionsCheck) {
-            throw new Error(`No actions were found for ${actionsType}`);
-        } else {
-            return null;
-        }
-    }
-
     public static setTestEnvironment(dataStrategy: DataStrategy) {
-        this.actions = [];
-
         this.dependencyInjection = [];
         this.dependencyInjection.push({ key: this.getMockName(IS_TEST), value: true });
         this.dependencyInjection.push({ key: this.getMockName(IS_PROD), value: false });
@@ -63,9 +47,14 @@ export class NgStateTestBed {
         this.dependencyInjection.push({ key: mockName, value: value });
     }
 
-    public static createStore(initialState: any): Store<any> {
+    public static createStore(initialState: any, path?: any[] | string): Store<any> {
         const state = stateFactory(initialState, this.dataStrategy);
-        const store = storeFactory(state, false);
+        let store = storeFactory(state, false);
+
+        if(path) {
+            store = store.select(NgStateTestBed.getPath(path));
+        }
+
         this.dataStrategy.init(store, false);
 
         const stateHistory = new StateHistory();
@@ -80,9 +69,9 @@ export class NgStateTestBed {
             this.dataStrategy);
         historyController.init();
 
-        this.dependencyInjection.push({ key: this.getMockName(Store), value: store });
-        this.dependencyInjection.push({ key: this.getMockName(StateHistory), value: stateHistory });
-        this.dependencyInjection.push({ key: this.getMockName(HistoryController), value: historyController });
+        this.registerDependency(Store, store);
+        this.registerDependency(StateHistory, stateHistory);
+        this.registerDependency(HistoryController, historyController);
 
         return store;
     }
@@ -97,33 +86,6 @@ export class NgStateTestBed {
         }
 
         return obj.prototype.constructor.name;
-    }
-
-    public static createSignalActions<T>(actionsType: any, initialState: any = {}, path: string | any[] = [], options?: { replaceAction?: boolean }): T {
-        return this.createActions(actionsType, initialState, path, { isSignalStore: true, ...options });
-    }
-
-    public static createActions<T>(actionsType: any, initialState: any = {}, path: string | any[] = [], options?: { isSignalStore: boolean, replaceAction?: boolean }): T {
-        this.createStore(initialState);
-        const actions = new (actionsType as any)();
-        actions.createTestStore(NgStateTestBed.getPath(path), options);
-
-        if (options && options.replaceAction) {
-            const index = NgStateTestBed.actions.findIndex(a => a.actionsType === actionsType);
-            if (index !== -1) {
-                NgStateTestBed.actions.splice(index, 1);
-            }
-        }
-
-        if (!NgStateTestBed.getActions(actionsType, false)) {
-            NgStateTestBed.actions.push({ actionsType, instance: actions, statePath: path });
-        }
-
-        return actions;
-    }
-
-    public static setActionsToComponent(actions: any, component: any) {
-        (<any>component).actions = actions;
     }
 
     private static getPath(path: string | string[]) {
