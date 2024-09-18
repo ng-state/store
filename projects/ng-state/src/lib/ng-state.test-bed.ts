@@ -7,6 +7,7 @@ import { DebugInfo } from './debug/debug-info';
 import { DataStrategy } from '@ng-state/data-strategy';
 import { IS_TEST, IS_PROD } from './inject-constants';
 import { Dispatcher } from './services/dispatcher';
+import { TestBed } from '@angular/core/testing';
 
 export class NgStateTestBed {
 
@@ -51,7 +52,7 @@ export class NgStateTestBed {
         const state = stateFactory(initialState, this.dataStrategy);
         let store = storeFactory(state, false);
 
-        if(path) {
+        if (path) {
             store = store.select(NgStateTestBed.getPath(path));
         }
 
@@ -74,6 +75,18 @@ export class NgStateTestBed {
         this.registerDependency(HistoryController, historyController);
 
         return store;
+    }
+
+    public static createSignalActions<T>(actionsType: any, initialState: any = {}, path: string | any[] = []): T {
+        return this.createActions(actionsType, initialState, path, { isSignalStore: true });
+    }
+
+    public static createActions<T>(actionsType: any, initialState: any = {}, path: string | any[] = [], options?: { isSignalStore: boolean }): T {
+        this.createStore(initialState);
+        const actions = TestBed.inject(actionsType, new (actionsType as any)(), { optional: true }) as any;
+        actions.createTestStore(NgStateTestBed.getPath(path), options);
+
+        return actions as T;
     }
 
     private static getMockName(obj: any) {

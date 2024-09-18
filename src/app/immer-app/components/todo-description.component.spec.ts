@@ -1,7 +1,6 @@
 import { TodoDescription } from './todo-description.component';
 import { NgStateTestBed } from '@ng-state/store';
 import { initialState } from '../../initial-state';
-import { TodoStateActions } from '../actions/todo.actions';
 import { TodoModel } from '../actions/todo.model';
 import { ImmerDataStrategy } from '@ng-state/immer-data-strategy';
 

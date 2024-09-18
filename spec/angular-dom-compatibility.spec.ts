@@ -1,7 +1,7 @@
 
 // import 'zone.js/dist/zone-testing';
 import { ComponentState, InjectStore, HasStateActions, NgStateTestBed, HasStore } from '@ng-state/store';
-import { Component, ChangeDetectionStrategy, OnInit, Signal, effect, ChangeDetectorRef, Injector, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, Signal, effect, ChangeDetectorRef, Injector } from '@angular/core';
 import { ComponentFixture, TestBed, } from '@angular/core/testing';
 import { ImmerDataStrategy } from '@ng-state/immer-data-strategy';
 import { initialState } from '../src/app/initial-state';
@@ -77,10 +77,6 @@ describe('Angular DOM compatibility test', () => {
     let component: TodosComponent;
     let fixture: ComponentFixture<TodosComponent>;
     let copyInitialState: typeof initialState;
-
-    /* beforeAll(() => {
-        TestBed.initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());
-    }); */
 
     beforeEach(() => {
         NgStateTestBed.setTestEnvironment(new ImmerDataStrategy());
