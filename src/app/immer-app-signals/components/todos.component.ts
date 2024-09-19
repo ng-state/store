@@ -5,7 +5,7 @@ import { signalActions } from '@ng-state/store';
 import { Dispatcher, Message } from '@ng-state/store';
 import { Subscription } from 'rxjs';
 import { TodosStateActions } from '../actions/todos.actions';
-import produce from 'immer';
+import { produce } from "immer"
 
 @Component({
     selector: 'todos',
