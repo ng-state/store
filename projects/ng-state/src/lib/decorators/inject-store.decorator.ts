@@ -150,7 +150,10 @@ export const InjectStore = (
         };
 
         target.prototype.onDestroy = function () {
-            this.stateChangeSubscription.unsubscribe();
+            if (this.stateChangeSubscription) {
+                this.stateChangeSubscription.unsubscribe();
+            }
+            this.store.complete();
         };
     };
 }

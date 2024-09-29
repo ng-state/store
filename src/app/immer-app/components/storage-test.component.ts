@@ -15,6 +15,10 @@ import { tap, map } from 'rxjs/operators';
     <button class="btn btn-primary" style="margin-left: 5px;" (click)="clear()">clear</button>
     <button class="btn btn-primary" style="margin-left: 5px;" (click)="load()">load</button>
     <button class="btn btn-primary" style="margin-left: 5px;" (click)="change()">change</button>
+    <br />
+    <br />
+    <br />
+    <button (click)="updateFirstToDoItem()">memory leak test</button>
   </div>
   `
 })
@@ -52,6 +56,13 @@ export class StorageTestComponent {
     change() {
         this.store.select(['shareTest']).update(state => {
             state['testValue'] = 'aaaaaa';
+        });
+    }
+
+    updateFirstToDoItem() {
+        this.store.select(['todos']).update(state => {
+            state[0].description = 'updated memory leak test';
+            state[0].nested.value = 'updated nested value memory leak test';
         });
     }
 }

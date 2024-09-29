@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component, ChangeDetectorRef, OnChanges, SimpleChanges, OnInit, Input } from '@angular/core';
-import { ComponentState, HasStateActions } from '@ng-state/store';
+import { ChangeDetectionStrategy, Component, ChangeDetectorRef, OnChanges, SimpleChanges, OnInit, Input, OnDestroy } from '@angular/core';
+import { ComponentState, HasStateActions, Store } from '@ng-state/store';
 
 import { TodoStateActions } from './../actions/todo.actions';
+import { Subscription } from 'rxjs';
 
 @ComponentState(TodoStateActions)
 @Component({
@@ -9,9 +10,10 @@ import { TodoStateActions } from './../actions/todo.actions';
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `<div>{{ actions.todoDescription }} {{ interpolationTest() }} {{testImmerMutation?.aa?.kk}}</div>`
 })
-export class TodoDescription extends HasStateActions<TodoStateActions> implements OnChanges, OnInit {
+export class TodoDescription extends HasStateActions<TodoStateActions> implements OnChanges, OnInit, OnDestroy {
 
     @Input() testImmerMutation: any = {aa: { kk: 'bu' }};
+    subscription: Subscription;
 
     constructor(cd: ChangeDetectorRef) {
         super(cd);
@@ -23,6 +25,10 @@ export class TodoDescription extends HasStateActions<TodoStateActions> implement
 
     ngOnChanges(changes: SimpleChanges): void {
         console.log('on changes', this.actions);
+    }
+
+    ngOnDestroy(): void {
+        this.subscription.unsubscribe();
     }
 
     interpolationTest() {

@@ -1,3 +1,6 @@
+### 9.1.2
+- Fixed memory leak
+
 ### 9.1.0
 - Added injectable actions. You can now use any Angular Injectable services in actions 🔥
 - Simplified testing
