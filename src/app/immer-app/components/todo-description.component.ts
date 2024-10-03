@@ -13,7 +13,6 @@ import { Subscription } from 'rxjs';
 export class TodoDescription extends HasStateActions<TodoStateActions> implements OnChanges, OnInit, OnDestroy {
 
     @Input() testImmerMutation: any = {aa: { kk: 'bu' }};
-    subscription: Subscription;
 
     constructor(cd: ChangeDetectorRef) {
         super(cd);
@@ -25,10 +24,6 @@ export class TodoDescription extends HasStateActions<TodoStateActions> implement
 
     ngOnChanges(changes: SimpleChanges): void {
         console.log('on changes', this.actions);
-    }
-
-    ngOnDestroy(): void {
-        this.subscription.unsubscribe();
     }
 
     interpolationTest() {
