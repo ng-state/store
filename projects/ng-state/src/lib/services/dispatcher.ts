@@ -1,4 +1,4 @@
-import {Observable, Subject, Subscription} from 'rxjs';
+import { Observable, ReplaySubject, Subject, Subscription } from 'rxjs';
 import { filter, share, map } from 'rxjs/operators';
 
 import { Injectable } from '@angular/core';
@@ -11,13 +11,16 @@ export class Message {
 @Injectable()
 export class Dispatcher {
     private subject = new Subject<any>();
+    private memorized = new ReplaySubject<any>(1);
 
     get observable(): Observable<Message> {
         return this.subject.asObservable();
     }
 
-    getMessagesOfType(messageType: string): Observable<Message> {
-        return this.subject.pipe(filter(msg => msg.type === messageType), share());
+    getMessagesOfType(messageType: string, isMemorized: boolean): Observable<Message> {
+        return isMemorized
+            ? this.memorized.pipe(filter(msg => msg.type === messageType), share())
+            : this.subject.pipe(filter(msg => msg.type === messageType), share());
     }
 
     publish(message: Message): void;
@@ -28,6 +31,16 @@ export class Dispatcher {
             : new Message(message as string, payload);
 
         this.subject.next(message);
+    }
+
+    publishMemorized(message: Message): void;
+    publishMemorized(messageType: string, payload?: any): void;
+    publishMemorized(message: string | Message, payload?: any): void {
+        message = (<Message>message).type !== undefined
+            ? message
+            : new Message(message as string, payload);
+
+        this.memorized.next(message);
     }
 
     subscribe(messageType: Message, observerOrNext: (payload: any) => void, error?: (error: any) => void, complete?: () => void): Subscription;
@@ -43,12 +56,18 @@ export class Dispatcher {
         return this.getFilteredObservable(messageType);
     }
 
-    private getFilteredObservable(messageType: string | Message) {
+    listenToMemorized<T = any>(messageType: Message): Observable<T>;
+    listenToMemorized<T = any>(messageType: string): Observable<T>;
+    listenToMemorized<T = any>(messageType: string | Message): Observable<T> {
+        return this.getFilteredObservable(messageType, true);
+    }
+
+    private getFilteredObservable(messageType: string | Message, isMemorized: boolean = false) {
         messageType = (<Function>messageType).prototype instanceof Message
             ? (new (<any>messageType)() as Message).type
             : messageType;
 
-        return this.getMessagesOfType(messageType as string)
+        return this.getMessagesOfType(messageType as string, isMemorized)
             .pipe(map(msg => msg.payload));
     }
 }

@@ -2,13 +2,14 @@ import { DestroyRef, inject } from '@angular/core';
 import { ServiceLocator } from './helpers/service-locator';
 import { IS_TEST } from './inject-constants';
 import { TestBed } from '@angular/core/testing';
+import { CreateStoreOptions } from './decorators/inject-store.model';
 
 export function signalActions<T>(stateActions: Provider<T>): T;
-export function signalActions<T>(stateActions: Provider<T>, args: { late: true }): T & { init: (args: { statePath?: string | string[], stateIndex?: (string | number) | (string | number)[] }) => void };
-export function signalActions<T>(stateActions: Provider<T>, args?: { late?: boolean }): T | T & { init: (args: { statePath?: string | string[], stateIndex?: (string | number) | (string | number)[] }) => void } {
+export function signalActions<T>(stateActions: Provider<T>, args: { late: true }): T & { init: (args: CreateStoreOptions) => void };
+export function signalActions<T>(stateActions: Provider<T>, args?: { late?: boolean }): T | T & { init: (args: CreateStoreOptions) => void } {
 
     let actions;
-    if(ServiceLocator.injector.get(IS_TEST)) {
+    if (ServiceLocator.injector.get(IS_TEST)) {
         actions = TestBed.inject(stateActions, null, { optional: true });
         TestBed.inject(DestroyRef).onDestroy(() => {
             actions.onDestroy();
@@ -29,8 +30,16 @@ export function signalActions<T>(stateActions: Provider<T>, args?: { late?: bool
         return actions;
     }
 
-    actions.init = ({ statePath, stateIndex }: { statePath: string | string[], stateIndex: (string | number) | (string | number)[] }) => {
-        actions.statePath = actions.createStore(statePath, stateIndex, { isSignalStore: true }) as any[];
+    actions.init = (args: CreateStoreOptions) => {
+        if (!args.options) {
+            args.options = { debug: false };
+        }
+
+        args.options.isSignalStore = true;
+
+        actions.statePath = args.newPath
+            ? actions.createStore(args)
+            : actions.createStore(args.statePath, args.stateIndex, args.options) as any[];
     }
 
     return actions;

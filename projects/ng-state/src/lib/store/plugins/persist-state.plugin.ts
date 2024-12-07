@@ -55,7 +55,7 @@ export class PersistStateManager {
             .pipe(take(1));
     }
 
-    load(params?: PersistStateParams, keepEntry = false): Observable<PersistStateItem> {
+    load(params?: PersistStateParams, keepEntry = false, autoMerge = true): Observable<PersistStateItem> {
         const dataStrategy = ServiceLocator.injector.get(DataStrategy) as DataStrategy;
         const onLoadComplete = new ReplaySubject<PersistStateItem>(1);
 
@@ -67,7 +67,7 @@ export class PersistStateManager {
             )
             .subscribe(loadedState => {
                 if (loadedState === null) {
-                    if (!this.isProd ) {
+                    if (!this.isProd) {
                         console.log(`State with key '${params.key}' not found in storage`);
                     }
 
@@ -78,9 +78,11 @@ export class PersistStateManager {
                     return;
                 }
 
-                this.store.update((state: Map<any, any>) => {
-                    dataStrategy.merge(state, dataStrategy.fromJS(params.deserialize(loadedState)));
-                });
+                if (autoMerge) {
+                    this.store.update((state: Map<any, any>) => {
+                        dataStrategy.merge(state, dataStrategy.fromJS(params.deserialize(loadedState)));
+                    });
+                }
 
                 if (!keepEntry) {
                     this.removeAction(params);

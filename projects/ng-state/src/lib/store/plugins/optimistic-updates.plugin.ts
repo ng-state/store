@@ -61,6 +61,15 @@ export class OptimisticUpdatesManager {
         this.restoreState(targetState);
     }
 
+    getStateByTag(tag: string): any {
+        const targetState = this.stateHistory.history.find(item => item.tag === tag);
+        if (!targetState) {
+            throw new Error(OptimisticUpdatesManager.nonExistingTagMessage(tag));
+        }
+
+        return this.dataStrategy.getIn(targetState.state, this.store.statePath);
+    }
+
     private restoreState(state: HistoryItem) {
         const previousState = this.dataStrategy.getIn(state.state, this.store.statePath);
         this.dataStrategy.reset(this.store.statePath, previousState);

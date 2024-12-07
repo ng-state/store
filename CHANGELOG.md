@@ -1,3 +1,15 @@
+### 9.5.0
+- Introduced new actions decorator ```WithStore``` in order to follow separation of concerns and to have more cleaner approach
+
+### 9.4.0
+- ```createStoreFull``` was introduced. All params are optional meaning that you can still define them in ```InjectStore``` decorator.
+
+### 9.3.1
+- bug fix with .restore()
+
+### 9.2.0
+- Introduced ```publishMemorized``` and ```listenToMemorized``` in Dispatcher.
+
 ### 9.1.2
 - Fixed memory leak
 

@@ -29,6 +29,11 @@ export class Initialize {
                 if (dataStrategy.getIn(state, [...statePath, initialized])) {
                     if(!newStore || !Initialize.statePathsAreEqual(newStore.statePath, statePath)) {
                         newStore = store.select(statePath);
+
+                        let initializedInitialState = dataStrategy.fromJS(initialState);
+                        initializedInitialState = dataStrategy.set(initializedInitialState, initialized, true);
+                        newStore.initialState = initializedInitialState;
+                        newStore.rootPath = statePath;
                     }
                     return;
                 }
