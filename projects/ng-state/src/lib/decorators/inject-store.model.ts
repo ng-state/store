@@ -14,7 +14,7 @@ export class HasSignalStore<T> {
 
 export interface CreateStoreOptions {
     statePath?: StatePath,
-    newPath: string[] | string | ((currentPath: StatePath, stateIndex: StateIndex) => string[] | string),
+    newPath?: string[] | string | ((currentPath: StatePath, stateIndex: StateIndex) => string[] | string),
     initialState?: Object | any,
     stateIndex?: StateIndex,
     options?: { isSignalStore?: boolean, debug?: boolean },

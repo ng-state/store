@@ -21,3 +21,5 @@ export * from './lib/debug/debug-info-data';
 export * from './lib/debug/debug-info';
 export * from './lib/inject-constants';
 export * from './lib/signal-actions';
+export * from './lib/decorators/inject-store.model';
+export * from './lib/decorators/with-store.decorator';
