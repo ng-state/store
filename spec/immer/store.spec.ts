@@ -5,9 +5,6 @@ import { ImmerDataStrategy } from '../../projects/immer-data-strategy/src/lib/im
 import { stateFactory } from '../../projects/ng-state/src/lib/ng-state.module';
 import { NgStateTestBed } from '../../projects/ng-state/src/lib/ng-state.test-bed';
 import { StateKeeper } from '../../projects/ng-state/src/lib/state/history';
-import { computed, effect, signal } from '@angular/core';
-import { TestBed, fakeAsync, flush, tick } from '@angular/core/testing';
-import { toObservable } from '@angular/core/rxjs-interop';
 
 describe('Store tests - Immer', () => {
     let store: Store<any>;
@@ -36,6 +33,12 @@ describe('Store tests - Immer', () => {
             store.initialize([], { test: 'test' });
             expect(StateKeeper.CURRENT_STATE['test']).toEqual('test');
             expect(StateKeeper.CURRENT_STATE['__initialized']).toEqual(true);
+        });
+
+        it('should initialize state deep with initial value even when state does not exists - immer', () => {
+            store.initialize(['dynamic', 'deeper', 'deep'], { test: 'test3' });
+            expect(StateKeeper.CURRENT_STATE['dynamic']['deeper']['deep']['test']).toEqual('test3');
+            expect(StateKeeper.CURRENT_STATE['dynamic']['deeper']['deep']['__initialized']).toEqual(true);
         });
 
         it('should return correct store no matter if initialization is made in initial state object or dynamically - immer', (done) => {

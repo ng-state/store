@@ -39,6 +39,12 @@ describe('Store tests - Immutable', () => {
             expect(StateKeeper.CURRENT_STATE.get('__initialized')).toEqual(true);
         });
 
+        it('should initialize state deep with initial value even when state does not exists', () => {
+            store.initialize(['dynamic', 'deeper', 'deep'], { test: 'test3' });
+            expect(StateKeeper.CURRENT_STATE.getIn(['dynamic', 'deeper', 'deep', 'test'])).toEqual('test3');
+            expect(StateKeeper.CURRENT_STATE.getIn(['dynamic', 'deeper', 'deep', '__initialized'])).toEqual(true);
+        });
+
         it('should return correct store no matter if initialization is made in initial state object or dynamically - immutable', (done) => {
             let localStore = store.initialize(['localState'], { test: 'test2' });
             expect(localStore.statePath[0]).toEqual('localState');

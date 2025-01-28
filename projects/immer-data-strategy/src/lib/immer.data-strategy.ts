@@ -125,11 +125,12 @@ export class ImmerDataStrategy extends DataStrategy {
         let properties = Array.isArray(propertyPath) ? propertyPath : propertyPath.split('.');
 
         if (properties.length > 1) {
-            if (!state.hasOwnProperty(properties[0]) || typeof state[properties[0]] !== 'object') {
-                return null;
+            const currentKey = properties[0];
+            if (!state.hasOwnProperty(currentKey) || typeof state[currentKey] !== 'object') {
+                state[currentKey] = {};
             }
 
-            return this.cursorBase(state[properties[0]], properties.slice(1), action);
+            return this.cursorBase(state[currentKey], properties.slice(1), action);
         } else {
             return action(state, properties);
         }
