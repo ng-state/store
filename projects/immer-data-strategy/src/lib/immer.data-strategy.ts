@@ -1,4 +1,4 @@
-import { DataStrategy } from '@ng-state/data-strategy';
+import { DataStrategy, AdditionalData } from '@ng-state/data-strategy';
 import { produce, setAutoFreeze } from 'immer';
 import deepEqual from 'deep-equal';
 
@@ -26,18 +26,18 @@ export class ImmerDataStrategy extends DataStrategy {
         });
     }
 
-    setIn(state: any, path: any[], data: any, additionalData: any = {}) {
-        const action = (s: any, p: any, d: any) => {
-            if (!this.setValue(s, p, d)) {
+    setIn(state: any, path: any[], data: any, additionalData: AdditionalData = {}) {
+        const action = (s: any, p: any, d: any, k: any) => {
+            if (!this.setValue(s, p, d, k)) {
                 throw new Error(`State was not set in ${path}`);
             }
         };
 
         if (additionalData.fromUpdate) {
-            action(state, path, data);
+            action(state, path, data, additionalData);
         } else {
             return produce(state, (draftState: any) => {
-                action(draftState, path, data);
+                action(draftState, path, data, additionalData);
             });
         }
     }
@@ -80,7 +80,7 @@ export class ImmerDataStrategy extends DataStrategy {
         const nextState = produce(initialState, (draftState: any) => {
             if (startingRoute !== null) {
                 draftState['router'] = router;
-                this.setIn(draftState, ['router', 'url'], startingRoute, { fromUpdate: true });
+                this.setIn(draftState, ['router', 'url'], startingRoute, { fromUpdate: true, fromReset: true });
             }
         });
 
@@ -91,7 +91,7 @@ export class ImmerDataStrategy extends DataStrategy {
         const state = this.currentState;
 
         const nextState = produce(state, (draftState: any) => {
-            this.setIn(draftState, path, stateToMerge, { fromUpdate: true });
+            this.setIn(draftState, path, stateToMerge, { fromUpdate: true, fromReset: true });
         });
 
         this.rootStore.next(nextState);
@@ -109,14 +109,18 @@ export class ImmerDataStrategy extends DataStrategy {
         });
     }
 
-    private setValue(state: any, propertyPath: string | any[], value: any): boolean {
+    private setValue(state: any, propertyPath: string | any[], value: any, additionalData: AdditionalData = {}): boolean {
         if (propertyPath.length === 0) {
             this.merge(state, value);
             return true;
         }
 
         return this.cursorBase(state, propertyPath, (state: any, properties: any) => {
-            state[properties[0]] = value;
+            if (!additionalData.fromReset && state[properties[0]] && this.isConstructorObject(state[properties[0]])) {
+                this.merge(state[properties[0]], value);
+            } else {
+                state[properties[0]] = value;
+            }
             return true;
         });
     }
@@ -149,7 +153,7 @@ export class ImmerDataStrategy extends DataStrategy {
     }
 
     private extend(source: any, target: any, deep: boolean = true) {
-        if(!source) {
+        if (!source) {
             source = {};
         }
 

@@ -1,3 +1,9 @@
+### immer data strategy 3.3.0
+- fixed a bug with .rest() introduced in #3.2.0
+
+### immer data strategy 3.2.0
+- is improved allowing to extend parent state with child object. Previously in, in this case, all parent object properties would be lost leaving only child object
+
 ### 9.5.0
 - Introduced new actions decorator ```WithStore``` in order to follow separation of concerns and to have more cleaner approach
 

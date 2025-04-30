@@ -25,7 +25,10 @@ describe('Store tests - Immer', () => {
     describe('Common cases', () => {
         beforeEach(() => {
             NgStateTestBed.setTestEnvironment(dataStrategy);
-            const initialState = { layout: { test: 'test' }, locallyInitialized: {} };
+            const initialState = {
+                layout: { test: 'test' },
+                locallyInitialized: {},
+            };
             store = NgStateTestBed.createStore(initialState);
         });
 
@@ -90,6 +93,7 @@ describe('Store tests - Immer', () => {
         it('should reset root state', () => {
             store.initialize(['router'], { url: 'home' }, false);
             store.select(['layout']).update(state => state['loading'] = true);
+            store.select(['layout']).update(state => state['test'] = 'newTest');
             expect(StateKeeper.CURRENT_STATE['layout']['loading']).toEqual(true);
 
             store.reset();
@@ -114,6 +118,17 @@ describe('Store tests - Immer', () => {
 
             initStore.reset();
             expect(StateKeeper.CURRENT_STATE['locallyInitialized']['value']).toEqual('test value');
+        });
+
+        it('should reset nested state with dynamically added objects', () => {
+            const initStore = store.initialize(['locallyInitialized'], { value: 'test value' }, false);
+            initStore.update(state => {
+                state['nested'] = { val: 'test value 3' };
+            });
+            expect(StateKeeper.CURRENT_STATE['locallyInitialized']['nested']['val']).toEqual('test value 3');
+
+            initStore.reset();
+            expect(StateKeeper.CURRENT_STATE['locallyInitialized']['nested']).toBeUndefined();
         });
 
         it('should reset locally initialized nested state child path', () => {
@@ -157,6 +172,12 @@ describe('Store tests - Immer', () => {
             const value = signal();
             expect(value).toEqual({ test: 'test' });
         });
+
+        it('should extend existing state with new object', () => {
+            store.initialize(['layout'], { innerObject: { value: 'val1' } }, false);
+            expect(StateKeeper.CURRENT_STATE['layout']['test']).toEqual('test');
+            expect(StateKeeper.CURRENT_STATE['layout']['innerObject']['value']).toEqual('val1');
+        })
     });
 });
 

@@ -11,7 +11,7 @@ export abstract class DataStrategy {
     abstract fromJS(data: any): any;
     abstract toJS<T = any>(data: any): T;
     abstract set(state: any, property: string, data: any): any;
-    abstract setIn(state: any, path: any[], data: any, additionalData?: { fromUpdate: boolean }): any;
+    abstract setIn(state: any, path: any[], data: any, additionalData?: AdditionalData): any;
     abstract isObject(state: any): any;
     abstract overrideConstructor(obj: any): any;
     abstract reset(path: any[], stateToMerge: any): void;
@@ -34,4 +34,5 @@ export abstract class DataStrategy {
     }
 }
 
-export interface UpdateActionAdditionalSettings {}
+export interface UpdateActionAdditionalSettings { }
+export interface AdditionalData { fromUpdate?: boolean, fromReset?: boolean }
