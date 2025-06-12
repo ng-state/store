@@ -6,7 +6,7 @@ import { ServiceLocator } from '../../helpers/service-locator';
 
 export class NgFormStateManager {
 
-    private unsubscribe = new Subject();
+    private unsubscribe: Subject<boolean> | null;
     private form: FormGroupLike;
     private params: NgFormStateManagerParams;
     private store: Store<any>;
@@ -15,11 +15,14 @@ export class NgFormStateManager {
     private onChangeFn: (state: any | any[]) => void;
     private shouldUpdateStateFn: (params: ShouldUpdateStateParams) => boolean;
 
+    private propertyChanges: { [key: string]: (currentVal: any, prevVal: any) => void } = {};
+
     constructor(store: Store<any>) {
         this.store = store;
     }
 
     bind(form: FormGroupLike, params: NgFormStateManagerParams = {}): NgFormStateManager {
+        this.unsubscribe = new Subject<boolean>();
         this.dataStrategy = ServiceLocator.injector.get(DataStrategy);
         this.form = form;
         this.params = { ... { debounceTime: 100, emitEvent: false }, ...params };
@@ -40,10 +43,22 @@ export class NgFormStateManager {
         this.form = null;
         this.onChangeFn = null;
         this.shouldUpdateStateFn = null;
+        this.propertyChanges = {};
     }
 
     onChange(onChangeFn: (state: any | any[]) => void) {
         this.onChangeFn = onChangeFn;
+        return this;
+    }
+
+    onPropertyChange<
+        TState = any,
+        K extends Extract<keyof TState, string> = Extract<keyof TState, string>
+    >(
+        property: K,
+        callback: (currentVal: TState extends any ? any : TState[K], prevVal: TState extends any ? any : TState[K]) => void
+    ) {
+        this.propertyChanges[property] = callback;
         return this;
     }
 
@@ -58,7 +73,7 @@ export class NgFormStateManager {
                 startWith(undefined),
                 pairwise(),
                 distinctUntilChanged(),
-                takeUntil(this.unsubscribe)
+                takeUntil(this.unsubscribe),
             )
             .subscribe(([previousValue, currentValue]) => {
                 const equals = this.dataStrategy.equals(previousValue, currentValue);
@@ -81,7 +96,7 @@ export class NgFormStateManager {
             .subscribe(value => {
                 let stateUpdated = false;
 
-                if (this.params.onChangePairwise) {
+                if (this.params.onChangePairwise || Object.keys(this.propertyChanges).length > 0) {
                     lastState = this.store.snapshot();
                 }
 
@@ -91,6 +106,7 @@ export class NgFormStateManager {
 
                 if (stateUpdated) {
                     this.onChangeCall(lastState);
+                    this.notifyPropertyChanges(lastState);
                 }
             });
     }
@@ -141,6 +157,25 @@ export class NgFormStateManager {
         }
 
         this.onChangeFn(snapshot);
+    }
+
+    private notifyPropertyChanges(oldState: any) {
+        if (Object.keys(this.propertyChanges).length === 0) {
+            return;
+        }
+
+        const currentState = this.store.snapshot();
+
+        for (const property in this.propertyChanges) {
+            if (this.propertyChanges.hasOwnProperty(property)) {
+                const currentVal = currentState?.[property];
+                const prevVal = oldState?.[property];
+
+                if (!this.dataStrategy.equals(currentVal, prevVal)) {
+                    this.propertyChanges[property](currentVal, prevVal);
+                }
+            }
+        }
     }
 }
 

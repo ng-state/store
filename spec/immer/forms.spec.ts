@@ -27,7 +27,9 @@ describe('Forms manager - Immer', () => {
 
     afterEach(() => {
         jest.resetAllMocks();
-        layoutForm.destroy();
+        if (layoutForm) {
+            layoutForm.destroy();
+        }
     });
 
     it('should apply state on form bind', () => {
@@ -74,7 +76,6 @@ describe('Forms manager - Immer', () => {
             expect(StateKeeper.CURRENT_STATE['layout']['test']).toEqual('test2');
             done();
         });
-
     });
 
     it('should not update state if shouldUpdateState returns false', (done) => {
@@ -127,6 +128,51 @@ describe('Forms manager - Immer', () => {
                 expect(onChange.mock.calls[1][0]).toMatchObject([{ test: 'test2' }, { test: 'test3' }]);
                 done();
             });
+        });
+    });
+
+    it('should notify property changes - immer', (done) => {
+        const onPropertyChange = jest.fn();
+
+        layoutForm = store.select(['layout']).form
+            .bind(form, { debounceTime: 0 })
+            .onPropertyChange('test', onPropertyChange);
+
+        (<Subject<any>>form.valueChanges).next({ test: 'test2' });
+        setTimeout(() => {
+            (<Subject<any>>form.valueChanges).next({ test: 'test3' });
+
+            setTimeout(() => {
+                expect(onPropertyChange.mock.calls.length).toBe(2);
+                expect(onPropertyChange.mock.calls[0]).toEqual(['test2', 'test']);
+                expect(onPropertyChange.mock.calls[1]).toEqual(['test3', 'test2']);
+                done();
+            });
+        });
+    });
+
+    it('should unsubscribe properly and not leak after rebinding', (done) => {
+        const equalsSpy = jest.fn().mockReturnValue(false);
+        dataStrategy.equals = equalsSpy;
+
+        let formManager = store.select(['layout']).form;
+        let layoutForm = formManager.bind(form, { debounceTime: 0 });
+
+        store.update(state => state['layout']['test'] = 'first');
+        layoutForm.destroy();
+
+        equalsSpy.mockClear();
+
+        layoutForm = formManager.bind(form, { debounceTime: 0 });
+
+        store.update(state => state['layout']['test'] = 'second');
+        layoutForm.destroy();
+
+        store.update(state => state['layout']['test'] = 'third');
+
+        setTimeout(() => {
+            expect(equalsSpy).toHaveBeenCalledTimes(2);
+            done();
         });
     });
 });

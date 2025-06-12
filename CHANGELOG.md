@@ -1,5 +1,11 @@
+### 9.7.1
+- fixes memory leak when binding form manager multiple times
+
+### 9.7.0
+- added possibility to track separate property changes to form manager ```this.actions.store.form.bind(this.form, {emitEvent: true}).onPropertyChange('prop', (currentValue, prevValue) => void)```. This is done to avoid using ```.onChange``` and keep property comparison inside
+
 ### immer data strategy 3.3.0
-- fixed a bug with .rest() introduced in #3.2.0
+- fixed a bug with .reset() introduced in #3.2.0
 
 ### immer data strategy 3.2.0
 - is improved allowing to extend parent state with child object. Previously in, in this case, all parent object properties would be lost leaving only child object
