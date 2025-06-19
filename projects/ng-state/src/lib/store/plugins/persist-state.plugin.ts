@@ -28,7 +28,9 @@ export class PersistStateManager {
         PersistStateManager.customStorageConfig.deserialize = deserialize;
     }
 
-    save(params?: PersistStateParams): Observable<PersistStateItem> {
+    save(params?: PersistStateParams): Observable<PersistStateItem>;
+    save(params?: string): Observable<PersistStateItem>;
+    save(params?: string | PersistStateParams): Observable<PersistStateItem> {
         const dataStrategy = ServiceLocator.injector.get(DataStrategy) as DataStrategy;
         const onSaveComplete = new ReplaySubject<PersistStateItem>(1);
 
@@ -55,7 +57,9 @@ export class PersistStateManager {
             .pipe(take(1));
     }
 
-    load(params?: PersistStateParams, keepEntry = false, autoMerge = true): Observable<PersistStateItem> {
+    load(params?: PersistStateParams, keepEntry?: boolean, autoMerge?: boolean): Observable<PersistStateItem>;
+    load(params?: string, keepEntry?: boolean, autoMerge?: boolean): Observable<PersistStateItem>;
+    load(params?: string | PersistStateParams, keepEntry = false, autoMerge = true): Observable<PersistStateItem> {
         const dataStrategy = ServiceLocator.injector.get(DataStrategy) as DataStrategy;
         const onLoadComplete = new ReplaySubject<PersistStateItem>(1);
 
@@ -99,7 +103,21 @@ export class PersistStateManager {
             .pipe(take(1));
     }
 
-    remove(params?: PersistStateParams): Observable<string> {
+    remove(params?: PersistStateParams | PersistStateParams[]): Observable<string | string[]>;
+    remove(params?: string | string[]): Observable<string | string[]>;
+    remove(params?: string | string[] | PersistStateParams | PersistStateParams[]): Observable<string | string[]> {
+        if (Array.isArray(params)) {
+            const removeKeys: Observable<string>[] = [];
+            params.forEach((p: string | PersistStateParams) => {
+                const params = this.getParams(p, this.store);
+                removeKeys.push(this.removeAction(params));
+            });
+
+            return forkJoin(removeKeys)
+                .pipe(take(1))
+                .pipe(tap(keys => keys));
+        }
+
         params = this.getParams(params, this.store);
         return this.removeAction(params);
     }
@@ -151,10 +169,15 @@ export class PersistStateManager {
             .pipe(take(1));
     }
 
-    private getParams(params: PersistStateParams, store: Store<any>) {
+    private getParams(params: string | PersistStateParams, store: Store<any>) {
         this.setDefaultStorage();
 
-        params = { ...this.defaults, ...PersistStateManager.customStorageConfig, ...params };
+        const key = !params ? { key: undefined } :
+            typeof params === 'string'
+                ? { key: params }
+                : { key: (params as PersistStateParams).key };
+
+        params = { ...this.defaults, ...PersistStateManager.customStorageConfig, ...key };
 
         if (!params.key) {
             params.key = store.statePath.join('.');
@@ -196,12 +219,12 @@ export interface PersistStateStorage {
 
 export interface PersistStateParams {
     key?: string;
-    storageConfig?: StorageConfiguartion;
+    storageConfig?: StorageConfiguration;
     deserialize?: Function;
     serialize?: Function;
 }
 
-export interface StorageConfiguartion {
+export interface StorageConfiguration {
     storage: PersistStateStorage;
     getKeys: () => Promise<string[]> | Observable<string[]> | string[];
 }

@@ -71,9 +71,9 @@ export class NgFormStateManager {
         this.store
             .pipe(
                 startWith(undefined),
+                takeUntil(this.unsubscribe),
                 pairwise(),
                 distinctUntilChanged(),
-                takeUntil(this.unsubscribe),
             )
             .subscribe(([previousValue, currentValue]) => {
                 const equals = this.dataStrategy.equals(previousValue, currentValue);
@@ -88,10 +88,10 @@ export class NgFormStateManager {
 
         this.form.valueChanges
             .pipe(
+                takeUntil(this.unsubscribe),
                 debounceTime(this.params.debounceTime),
                 distinctUntilChanged(),
                 this.distinctUntilNotEqual(),
-                takeUntil(this.unsubscribe)
             )
             .subscribe(value => {
                 let stateUpdated = false;
