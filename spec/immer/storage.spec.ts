@@ -91,6 +91,23 @@ describe('Storage - Immer', () => {
         expect(<any>keyValueStorage.getItem('state::remove-item-3')).toBe('{"test":"test"}');
     });
 
+    it('should correctly extend parameters', (done) => {
+        store.storage
+            .save({
+                key: 'testKey',
+                serialize: () => JSON.stringify({ selectedTabIndex: 1 }),
+            })
+            .pipe(take(1))
+            .subscribe((data) => {
+                expect(data.key).toEqual('state::testKey');
+                expect(<any>keyValueStorage.getItem('state::testKey')).toBe('{"selectedTabIndex":1}');
+                expect(data.data).toBe('{"selectedTabIndex":1}');
+                done();
+            });
+
+        jest.runAllTimers();
+    });
+
     describe('when delayed', () => {
         const delay = 2000;
         let storage = {

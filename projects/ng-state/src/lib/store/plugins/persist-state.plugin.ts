@@ -38,14 +38,15 @@ export class PersistStateManager {
 
         this.store.pipe(
             tap((state: any) => {
-                this.resolve(params.storageConfig.storage.setItem(params.key, params.serialize(dataStrategy.toJS(state))))
+                const data = params.serialize(dataStrategy.toJS(state));
+                this.resolve(params.storageConfig.storage.setItem(params.key, data))
                     .pipe(
                         delay(0),
                         take(1))
                     .subscribe(_ => {
                         onSaveComplete.next({
                             key: params.key,
-                            data: dataStrategy.toJS(state)
+                            data,
                         });
                     });
             }),
@@ -175,7 +176,7 @@ export class PersistStateManager {
         const key = !params ? { key: undefined } :
             typeof params === 'string'
                 ? { key: params }
-                : { key: (params as PersistStateParams).key };
+                : params;
 
         params = { ...this.defaults, ...PersistStateManager.customStorageConfig, ...key };
 
