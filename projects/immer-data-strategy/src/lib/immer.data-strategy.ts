@@ -114,7 +114,7 @@ export class ImmerDataStrategy extends DataStrategy {
             return false;
         }
 
-        return Object.values(x).some(this.hasMapOrSet);
+        return Object.values(x).some(v => this.hasMapOrSet(v));
     }
 
     private getCursor(state: any, propertyPath: string | any[]): any {
