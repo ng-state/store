@@ -47,6 +47,7 @@
     ],
     "angularCompilerOptions": {
         "preserveWhitespaces": false,
+        "allowSyntheticDefaultImports": true,
         //"compilationMode": "partial"
     }
 }

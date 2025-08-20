@@ -126,7 +126,7 @@ describe('Storage - Immer', () => {
             store.select(['layout'])
                 .storage.save('testKey').subscribe(data => {
                     expect(data.key).toEqual('state::testKey');
-                    expect(data.data).toMatchObject({ 'test': 'test' });
+                    expect(JSON.parse(data.data)).toMatchObject({ 'test': 'test' });
                     done();
                 });
 
@@ -206,7 +206,7 @@ describe('Storage - Immer', () => {
                     }
                 }).subscribe(data => {
                     expect(data.key).toEqual('state::testKey');
-                    expect(data.data).toMatchObject({ 'test': 'test' });
+                    expect(JSON.parse(data.data)).toMatchObject({ 'test': 'test' });
                     done();
                 });
 

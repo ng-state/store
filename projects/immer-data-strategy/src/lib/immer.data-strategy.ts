@@ -1,5 +1,6 @@
 import { DataStrategy, AdditionalData } from '@ng-state/data-strategy';
 import { produce, setAutoFreeze } from 'immer';
+import fastEqual from 'fast-deep-equal';
 import deepEqual from 'deep-equal';
 
 export class ImmerDataStrategy extends DataStrategy {
@@ -98,7 +99,22 @@ export class ImmerDataStrategy extends DataStrategy {
     }
 
     equals(objOne: any, objTwo: any): boolean {
-        return deepEqual(objOne, objTwo);
+        if (this.hasMapOrSet(objOne) || this.hasMapOrSet(objTwo)) {
+            return deepEqual(objOne, objTwo);
+        }
+        return fastEqual(objOne, objTwo);
+    }
+
+    private hasMapOrSet(x: any): boolean {
+        if (x instanceof Map || x instanceof Set) {
+            return true;
+        }
+
+        if (typeof x !== 'object' || x === null) {
+            return false;
+        }
+
+        return Object.values(x).some(this.hasMapOrSet);
     }
 
     private getCursor(state: any, propertyPath: string | any[]): any {

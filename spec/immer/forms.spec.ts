@@ -175,6 +175,30 @@ describe('Forms manager - Immer', () => {
             done();
         });
     });
+
+    /* const UPDATES = 1000;
+    it('should measure equality performance on rapid updates', (done) => {
+        const layoutForm = store.select(['layout']).form.bind(form, { debounceTime: 0 });
+
+        // Spy on dataStrategy.equals
+        const equalsSpy = jest.spyOn(dataStrategy, 'equals');
+
+        const start = performance.now();
+
+        for (let i = 0; i < UPDATES; i++) {
+            store.update(state => state.layout.test = 'value' + i);
+        }
+
+        // Wait for the form subscription to finish processing
+        setTimeout(() => {
+            const end = performance.now();
+            console.log(`Elapsed time for ${UPDATES} rapid updates: ${(end - start).toFixed(2)} ms`);
+            console.log(`Total equality checks: ${equalsSpy.mock.calls.length}`);
+
+            layoutForm.destroy();
+            done();
+        }, 50);
+    }); */
 });
 
 class InitialState {

@@ -38,7 +38,7 @@
     "@angular/router": "^18.2.4",
     "@angular/service-worker": "^18.2.4",
     "@ng-state/data-strategy": "^3.0.0",
-    "@ng-state/immer-data-strategy": "^3.0.0",
+    "@ng-state/immer-data-strategy": "^4.0.0",
     "@ng-state/immutablejs-data-strategy": "^3.0.0",
     "@ngneat/until-destroy": "9.2.0",
     "@nguniversal/builders": "^16.2.0",
