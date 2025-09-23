@@ -31,7 +31,7 @@ describe('InjectStore decorator', () => {
         NgStateTestBed.setTestEnvironment(new ImmerDataStrategy());
     });
 
-    let setup = (newPath: string[] | string | ((currentPath, stateIndex) => string[] | string), initialState?: Object | any, debug: boolean = false) => {
+    let setup = (newPath: string[] | string | ((currentPath, stateIndex) => string[] | string), initialState?: (Object | any) | (() => (Object | any)), debug: boolean = false) => {
         jest.clearAllMocks();
         jest.spyOn(store, 'initialize').mockReturnValueOnce(store);
         NgStateTestBed.registerDependency(Store, store);
@@ -131,4 +131,32 @@ describe('InjectStore decorator', () => {
         const signalState: Signal<any> = target.state as Signal<any>;
         expect(signalState).toBeTruthy();
     });
+
+    it('should evaluate initialState function fresh on each createStore call', () => {
+        jest.useFakeTimers();
+
+        const initialStateFn = () => ({ now: new Date() });
+        setup(['time'], initialStateFn);
+
+        const firstDate = new Date('2020-01-01T00:00:00Z');
+        jest.setSystemTime(firstDate);
+
+        target.createStore();
+        expect(store.initialize).toHaveBeenCalledWith(
+            ['time'],
+            expect.objectContaining({ now: firstDate })
+        );
+
+        const secondDate = new Date('2021-01-01T00:00:00Z');
+        jest.setSystemTime(secondDate);
+
+        target.createStore();
+        expect(store.initialize).toHaveBeenCalledWith(
+            ['time'],
+            expect.objectContaining({ now: secondDate })
+        );
+
+        jest.useRealTimers();
+    });
+
 });

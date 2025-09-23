@@ -1,3 +1,8 @@
+### 10.0.0
+
+- Added function ```createEffect``` to react to multiple state changes if needed
+- Added ability to have initial state as a function call in ```@InjectStore``` decorator. This is useful if your initial state is for example date/time dependent in order to get new date with every store creation.
+
 ### 9.8.0
 
 -   Added possibility to provide just string as a key to save, load and remove storage manager plugin functions

@@ -3,12 +3,13 @@ import { StateIndex, StatePath } from './inject-store.model';
 
 export const InjectStore = (
     newPath: string[] | string | ((currentPath: StatePath, stateIndex: StateIndex) => string[] | string),
-    initialState: Object | any = null,
+    initialState: (Object | any) | (() => (Object | any)) = null,
     debug: boolean = false,
 ) => {
     return (target: any) => {
         target.prototype.createStore = function (currentPath: StatePath = [], stateIndex: StateIndex, options?: { isSignalStore: boolean }): any[] {
-            return InjectStoreFactory.createStore(this, { statePath: currentPath, stateIndex, newPath, initialState, options: { isSignalStore: options?.isSignalStore, debug } });
+            const initialStateValue = typeof initialState === 'function' ? (initialState as Function)() : initialState;
+            return InjectStoreFactory.createStore(this, { statePath: currentPath, stateIndex, newPath, initialState: initialStateValue, options: { isSignalStore: options?.isSignalStore, debug } });
         }
 
         target.prototype.createTestStore = function (statePath: any[], options?: { isSignalStore: boolean }) {

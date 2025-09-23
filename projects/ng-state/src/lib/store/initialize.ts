@@ -62,7 +62,7 @@ export class Initialize {
             };
 
             const defaultDebugInfo = { actionType: ActionType.Initialize, statePath: statePath };
-            DebugInfo.instance.add(defaultDebugInfo);
+            DebugInfo.instance?.add(defaultDebugInfo);
 
             store.pipe(
                 tap(actionWrapper),
