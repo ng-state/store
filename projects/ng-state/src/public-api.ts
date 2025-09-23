@@ -23,3 +23,4 @@ export * from './lib/inject-constants';
 export * from './lib/signal-actions';
 export * from './lib/decorators/inject-store.model';
 export * from './lib/decorators/with-store.decorator';
+export * from './lib/store/effect';

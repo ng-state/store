@@ -1,54 +1,62 @@
 import { inject, DestroyRef } from '@angular/core';
-import { combineLatest, distinctUntilChanged, startWith, Observable, pairwise } from 'rxjs';
+import { combineLatest, distinctUntilChanged, startWith, Observable, pairwise, debounceTime } from 'rxjs';
 import { Store } from './store';
 
-// Leaf result type
-export type WatchResult<T> = {
+type WatchResult<T> = {
     oldValue: T | undefined;
     newValue: T | undefined;
     hasChanges: boolean;
 };
 
-// Nested result type, recursively applies WatchResult to object leaves
-export type NestedWatchResult<T> = {
+type NestedWatchResult<T> = {
     [K in keyof T]?: T[K] extends object ? NestedWatchResult<T[K]> : WatchResult<T[K]>;
 };
 
-// Effect callback receives a nested result
-export type EffectsCallback<T = any> = (changes: NestedWatchResult<T>) => void;
+type EffectsCallback<T = any> = (changes: NestedWatchResult<T>) => void;
 
-export function createEffect<T>(sources: Observable<T>[], callback: EffectsCallback<T>): void;
-export function createEffect<T>(store: Store<T>, paths: (string | string[])[], callback: EffectsCallback<T>): void;
+export function createEffect<T>(sources: Observable<T>[], callback: EffectsCallback<T>, options?: { debounceTime: number }): void;
+export function createEffect<T>(store: Store<T>, paths: (string | string[])[], callback: EffectsCallback<T>, options?: { debounceTime: number }): void;
 export function createEffect<T>(
     storeOrSources: Store<T> | Observable<T>[],
     pathsOrCallback: (string | string[])[] | EffectsCallback<T>,
-    maybeCallback?: EffectsCallback<T>
+    callbackOrOptions?: EffectsCallback<T> | { debounceTime?: number },
+    options?: { debounceTime: number },
 ): void {
     const destroyRef = inject(DestroyRef);
 
     let observables: Observable<any>[] = [];
     let callback: EffectsCallback<T>;
+    let debounceMs = 100;
+
+    if (typeof callbackOrOptions === 'function') {
+        callback = callbackOrOptions;
+        debounceMs = options?.debounceTime ?? debounceMs;
+    } else {
+        callback = pathsOrCallback as EffectsCallback<T>;
+        debounceMs = callbackOrOptions?.debounceTime ?? debounceMs;
+    }
+
 
     if (Array.isArray(storeOrSources) && typeof pathsOrCallback === 'function') {
         // Mode 1: array of observables
-        observables = (storeOrSources as Observable<T>[]).map((obs) =>
+        observables = (storeOrSources as Observable<T>[]).map(obs =>
             obs.pipe(
                 startWith(undefined),
+                debounceTime(debounceMs),
                 distinctUntilChanged()
             )
         );
-        callback = pathsOrCallback as EffectsCallback<T>;
-    } else if (storeOrSources instanceof Store && Array.isArray(pathsOrCallback) && typeof maybeCallback === 'function') {
+    } else if (storeOrSources instanceof Store && Array.isArray(pathsOrCallback)) {
         // Mode 2: store + paths
         const store: Store<T> = storeOrSources;
         const paths: (string | string[])[] = pathsOrCallback;
-        callback = maybeCallback as EffectsCallback<T>;
 
         observables = paths.map((path) => {
             const pathArray = typeof path === 'string' ? path.split('/') : path;
             const initialValue = pathArray.reduce((acc: any, key: string | number) => acc?.[key], store.snapshot());
             return store.select(pathArray).pipe(
                 startWith(initialValue),
+                debounceTime(debounceMs),
                 distinctUntilChanged()
             );
         });
