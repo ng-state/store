@@ -26,7 +26,7 @@ export function createEffect<T>(
 
     let observables: Observable<any>[] = [];
     let callback: EffectsCallback<T>;
-    let debounceMs = 100;
+    let debounceMs = 200;
 
     if (typeof callbackOrOptions === 'function') {
         callback = callbackOrOptions;
