@@ -4,22 +4,21 @@ import { ActionType } from '../debug/debug-info-data';
 import { DebugInfo } from '../debug/debug-info';
 import { ServiceLocator } from '../helpers/service-locator';
 import { DataStrategy } from '@ng-state/data-strategy';
-import { BehaviorSubject } from 'rxjs';
 
 export class Initialize {
-    static statePathsAreEqual(statePathOne: any[], statePathTwo: any[]){
+    static statePathsAreEqual(statePathOne: any[], statePathTwo: any[]) {
         return statePathOne.length === statePathTwo.length && statePathOne.every((value, index) => value === statePathTwo[index]);
     }
 
     static execute<T>(store: Store<T>) {
         let newStore: Store<any>;
 
-
         const initialize = function (statePath: any[], initialState: any = null) {
             const initialized = '__initialized';
+            newStore = null;
 
             let actionWrapper = (state: any) => {
-                if(!initialState) {
+                if (!initialState) {
                     newStore = store.select(statePath);
                     return;
                 }
@@ -27,13 +26,17 @@ export class Initialize {
                 const dataStrategy = ServiceLocator.injector.get(DataStrategy);
 
                 if (dataStrategy.getIn(state, [...statePath, initialized])) {
-                    if(!newStore || !Initialize.statePathsAreEqual(newStore.statePath, statePath)) {
+                    if (!newStore || !Initialize.statePathsAreEqual(newStore.statePath, statePath)) {
                         newStore = store.select(statePath);
 
                         let initializedInitialState = dataStrategy.fromJS(initialState);
                         initializedInitialState = dataStrategy.set(initializedInitialState, initialized, true);
                         newStore.initialState = initializedInitialState;
                         newStore.rootPath = statePath;
+
+                        var updatedTest = dataStrategy.setIn(state, statePath, newStore.initialState);
+
+                        store.next(updatedTest);
                     }
                     return;
                 }
@@ -58,7 +61,7 @@ export class Initialize {
                     console.error(exception);
                 }
 
-                (store.source as BehaviorSubject<T>).next(newState);
+                store.next(newState);
             };
 
             const defaultDebugInfo = { actionType: ActionType.Initialize, statePath: statePath };

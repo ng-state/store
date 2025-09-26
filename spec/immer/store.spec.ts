@@ -10,6 +10,11 @@ describe('Store tests - Immer', () => {
     let store: Store<any>;
     const dataStrategy = new ImmerDataStrategy();
 
+    const initialState = {
+        layout: { test: 'test' },
+        locallyInitialized: {},
+    };
+
     describe('Initial setup', () => {
         it('should not convert initial state classes to immutable', () => {
             const state = stateFactory(new InitialState(), dataStrategy) as BehaviorSubject<InitialState>;
@@ -25,16 +30,34 @@ describe('Store tests - Immer', () => {
     describe('Common cases', () => {
         beforeEach(() => {
             NgStateTestBed.setTestEnvironment(dataStrategy);
-            const initialState = {
-                layout: { test: 'test' },
-                locallyInitialized: {},
-            };
             store = NgStateTestBed.createStore(initialState);
         });
 
         it('should initialize state with initial value - immer', () => {
             store.initialize([], { test: 'test' });
             expect(StateKeeper.CURRENT_STATE['test']).toEqual('test');
+            expect(StateKeeper.CURRENT_STATE['__initialized']).toEqual(true);
+        });
+
+        it('should initialize state with dynamic initial object - immer', () => {
+            store.initialize(['deep'], { test: 'test' });
+            expect(StateKeeper.CURRENT_STATE['deep']['test']).toEqual('test');
+            expect(StateKeeper.CURRENT_STATE['deep']['__initialized']).toEqual(true);
+            expect(StateKeeper.CURRENT_STATE['layout']['test']).toEqual('test');
+
+            store.initialize(['deep'], { test: 'test2' });
+            expect(StateKeeper.CURRENT_STATE['deep']['test']).toEqual('test2');
+            expect(StateKeeper.CURRENT_STATE['deep']['__initialized']).toEqual(true);
+            expect(StateKeeper.CURRENT_STATE['layout']['test']).toEqual('test');
+        });
+
+         it('should initialize state with dynamic initial value - immer', () => {
+            store.initialize([], { test: 'test' });
+            expect(StateKeeper.CURRENT_STATE['test']).toEqual('test');
+            expect(StateKeeper.CURRENT_STATE['__initialized']).toEqual(true);
+
+            store.initialize([], { test: 'test2' });
+            expect(StateKeeper.CURRENT_STATE['test']).toEqual('test2');
             expect(StateKeeper.CURRENT_STATE['__initialized']).toEqual(true);
         });
 
