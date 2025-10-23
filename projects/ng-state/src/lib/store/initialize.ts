@@ -13,9 +13,12 @@ export class Initialize {
     static execute<T>(store: Store<T>) {
         let newStore: Store<any>;
 
-        const initialize = function (statePath: any[], initialState: any = null) {
+        const initialize = function (statePath: any[], initialState: any = null, createNewStore: boolean = false): Store<any> {
             const initialized = '__initialized';
-            newStore = null;
+
+            if (createNewStore) {
+                newStore = null;
+            }
 
             let actionWrapper = (state: any) => {
                 if (!initialState) {
@@ -34,9 +37,10 @@ export class Initialize {
                         newStore.initialState = initializedInitialState;
                         newStore.rootPath = statePath;
 
-                        var updatedTest = dataStrategy.setIn(state, statePath, newStore.initialState);
-
-                        store.next(updatedTest);
+                        if (createNewStore) {
+                            var updatedTest = dataStrategy.setIn(state, statePath, newStore.initialState);
+                            store.next(updatedTest);
+                        }
                     }
                     return;
                 }
@@ -80,5 +84,5 @@ export class Initialize {
 }
 
 export interface InitializeSignature<T> {
-    <R>(statePath, initialState?: T, addToHistory?: boolean): Store<R>;
+    <R>(statePath, initialState?: T, createNewStore?: boolean): Store<R>;
 }

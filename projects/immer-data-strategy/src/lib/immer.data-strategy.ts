@@ -4,6 +4,10 @@ import fastEqual from 'fast-deep-equal';
 import deepEqual from 'deep-equal';
 
 export class ImmerDataStrategy extends DataStrategy {
+    deleteIn(path: any[], stateToMerge: any): void {
+        throw new Error('Method not implemented.');
+    }
+
     init(store: any, isProd: boolean) {
         super.init(store, isProd);
         setAutoFreeze(false);

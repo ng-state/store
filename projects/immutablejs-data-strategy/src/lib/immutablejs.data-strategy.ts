@@ -3,6 +3,9 @@ import { Map, fromJS, Collection, isMap, isCollection } from 'immutable';
 import * as Cursor from 'immutable-cursor';
 
 export class ImmutableJsDataStrategy extends DataStrategy {
+    deleteIn(path: any[], stateToMerge: any): void {
+        throw new Error('Method not implemented.');
+    }
 
     getIn(state: Map<any, any>, path: any[]): Collection<any, any> {
         return state.getIn(path) as Collection<any, any> ;

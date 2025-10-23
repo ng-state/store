@@ -5,6 +5,7 @@ import { StateHistory } from '../../projects/ng-state/src/lib/state/history';
 import { ServiceLocator } from '../../projects/ng-state/src/public-api';
 import { createEffect } from '../../projects/ng-state/src/lib/store/effect';
 import { TestBed } from '@angular/core/testing';
+import { DestroyRef } from '@angular/core';
 
 interface MyState {
     layout: {
@@ -16,7 +17,7 @@ interface MyState {
 }
 
 describe('Effects - Immer', () => {
-    let store: Store<any>;
+    let store: Store<MyState>;
     let stateHistory: StateHistory;
     const dataStrategy = new ImmerDataStrategy();
 
@@ -43,26 +44,24 @@ describe('Effects - Immer', () => {
     });
 
     it('should react on single property change', () => {
-        TestBed.runInInjectionContext(() => {
-            createEffect<MyState>(store, ['layout/test'], (result) => {
-                if (!result.layout?.test?.oldValue) {
-                    expect(result.layout.test.newValue).toBe('test2');
-                    expect(result.layout.test.hasChanges).toBe(true);
-                }
+        createEffect(store, ['layout/test'], (result) => {
+            if (!result.layout?.test?.oldValue) {
+                expect(result.layout.test.newValue).toBe('test2');
+                expect(result.layout.test.hasChanges).toBe(true);
+            }
 
-                if (result.layout?.test?.oldValue === 'test2') {
-                    expect(result.layout.test.newValue).toBe('second');
-                    expect(result.layout.test.hasChanges).toBe(true);
-                }
-            });
-        });
+            if (result.layout?.test?.oldValue === 'test2') {
+                expect(result.layout.test.newValue).toBe('second');
+                expect(result.layout.test.hasChanges).toBe(true);
+            }
+        }, { destroyRef: TestBed.inject(DestroyRef) });
 
         store.update(state => state['layout']['test'] = 'second');
     });
 
     it('should react on multiple property changes', () => {
         TestBed.runInInjectionContext(() => {
-            createEffect<MyState>(store, ['layout/test', 'user/name'], (result) => {
+            createEffect(store, ['layout/test', 'user/name'], (result) => {
                 // Initial emissions
                 if (!result.layout?.test?.oldValue) {
                     expect(result.layout.test.newValue).toBe('test2');

@@ -40,23 +40,23 @@ describe('Store tests - Immer', () => {
         });
 
         it('should initialize state with dynamic initial object - immer', () => {
-            store.initialize(['deep'], { test: 'test' });
+            store.initialize(['deep'], { test: 'test' }, true);
             expect(StateKeeper.CURRENT_STATE['deep']['test']).toEqual('test');
             expect(StateKeeper.CURRENT_STATE['deep']['__initialized']).toEqual(true);
             expect(StateKeeper.CURRENT_STATE['layout']['test']).toEqual('test');
 
-            store.initialize(['deep'], { test: 'test2' });
+            store.initialize(['deep'], { test: 'test2' }, true);
             expect(StateKeeper.CURRENT_STATE['deep']['test']).toEqual('test2');
             expect(StateKeeper.CURRENT_STATE['deep']['__initialized']).toEqual(true);
             expect(StateKeeper.CURRENT_STATE['layout']['test']).toEqual('test');
         });
 
-         it('should initialize state with dynamic initial value - immer', () => {
-            store.initialize([], { test: 'test' });
+        it('should initialize state with dynamic initial value - immer', () => {
+            store.initialize([], { test: 'test' }, true);
             expect(StateKeeper.CURRENT_STATE['test']).toEqual('test');
             expect(StateKeeper.CURRENT_STATE['__initialized']).toEqual(true);
 
-            store.initialize([], { test: 'test2' });
+            store.initialize([], { test: 'test2' }, true);
             expect(StateKeeper.CURRENT_STATE['test']).toEqual('test2');
             expect(StateKeeper.CURRENT_STATE['__initialized']).toEqual(true);
         });
@@ -135,7 +135,7 @@ describe('Store tests - Immer', () => {
         });
 
         it('should reset locally initialized nested state', () => {
-            const initStore = store.initialize(['locallyInitialized'], { value: 'test value' }, false);
+            const initStore = store.initialize(['locallyInitialized'], { value: 'test value' });
             initStore.update(state => state['value'] = 'test value 2');
             expect(StateKeeper.CURRENT_STATE['locallyInitialized']['value']).toEqual('test value 2');
 
@@ -144,7 +144,7 @@ describe('Store tests - Immer', () => {
         });
 
         it('should reset nested state with dynamically added objects', () => {
-            const initStore = store.initialize(['locallyInitialized'], { value: 'test value' }, false);
+            const initStore = store.initialize(['locallyInitialized'], { value: 'test value' });
             initStore.update(state => {
                 state['nested'] = { val: 'test value 3' };
             });
@@ -155,7 +155,7 @@ describe('Store tests - Immer', () => {
         });
 
         it('should reset locally initialized nested state child path', () => {
-            const initStore = store.initialize(['locallyInitialized'], { value: 'test value', nestedValue: { value: 'v1' } }, false);
+            const initStore = store.initialize(['locallyInitialized'], { value: 'test value', nestedValue: { value: 'v1' } });
             initStore.update(state => state['value'] = 'test value 2');
             initStore.select(['nestedValue']).update(state => state['value'] = 'v2');
             expect(StateKeeper.CURRENT_STATE['locallyInitialized']['value']).toEqual('test value 2');
@@ -197,10 +197,25 @@ describe('Store tests - Immer', () => {
         });
 
         it('should extend existing state with new object', () => {
-            store.initialize(['layout'], { innerObject: { value: 'val1' } }, false);
+            store.initialize(['layout'], { innerObject: { value: 'val1' } });
             expect(StateKeeper.CURRENT_STATE['layout']['test']).toEqual('test');
             expect(StateKeeper.CURRENT_STATE['layout']['innerObject']['value']).toEqual('val1');
-        })
+        });
+
+        it('should not create new store if marked as persistent', () => {
+            store.initialize([], { test: 'test' });
+            expect(StateKeeper.CURRENT_STATE['test']).toEqual('test');
+            expect(StateKeeper.CURRENT_STATE['__initialized']).toEqual(true);
+
+            store.update(state => {
+                state.test = 'test2';
+            });
+
+            expect(StateKeeper.CURRENT_STATE['test']).toEqual('test2');
+
+            store.initialize([], { test: 'test' }, false);
+            expect(StateKeeper.CURRENT_STATE['test']).toEqual('test2');
+        });
     });
 });
 

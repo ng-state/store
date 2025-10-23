@@ -1,3 +1,7 @@
+### 10.7.0
+
+- Added ```createNewStore``` to ```@InjectStore``` decorator. If false then store state will be taken from memory rather than recreate it with initial state
+
 ### 10.0.0
 
 - Added function ```createEffect``` to react to multiple state changes if needed

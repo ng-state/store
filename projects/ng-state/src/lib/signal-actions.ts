@@ -4,20 +4,28 @@ import { IS_TEST } from './inject-constants';
 import { TestBed } from '@angular/core/testing';
 import { CreateStoreOptions } from './decorators/inject-store.model';
 
+const actionCache = new Map<Provider<any>, any>();
+
 export function signalActions<T>(stateActions: Provider<T>): T;
 export function signalActions<T>(stateActions: Provider<T>, args: { late: true }): T & { init: (args: CreateStoreOptions) => void };
 export function signalActions<T>(stateActions: Provider<T>, args?: { late?: boolean }): T | T & { init: (args: CreateStoreOptions) => void } {
+
+    if (actionCache.has(stateActions)) {
+        return actionCache.get(stateActions);
+    }
 
     let actions;
     if (ServiceLocator.injector.get(IS_TEST)) {
         actions = TestBed.inject(stateActions, null, { optional: true });
         TestBed.inject(DestroyRef).onDestroy(() => {
             actions.onDestroy();
+            actionCache.delete(stateActions);
         });
     } else {
         actions = inject(stateActions, { optional: true });
         inject(DestroyRef).onDestroy(() => {
             actions.onDestroy();
+            actionCache.delete(stateActions);
         });
     }
 
@@ -27,12 +35,13 @@ export function signalActions<T>(stateActions: Provider<T>, args?: { late?: bool
 
     if (!args?.late) {
         actions.statePath = actions.createStore([], null, { isSignalStore: true }) as any[];
+        actionCache.set(stateActions, actions);
         return actions;
     }
 
     actions.init = (args: CreateStoreOptions) => {
         if (!args.options) {
-            args.options = { debug: false };
+            args.options = { debug: false, createNewStore: true };
         }
 
         args.options.isSignalStore = true;
@@ -42,6 +51,7 @@ export function signalActions<T>(stateActions: Provider<T>, args?: { late?: bool
             : actions.createStore(args.statePath, args.stateIndex, args.options) as any[];
     }
 
+    actionCache.set(stateActions, actions);
     return actions;
 }
 

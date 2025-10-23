@@ -94,7 +94,7 @@ export class InjectStoreFactory {
         }
 
         if (!options.options) {
-            options.options = { debug: false };
+            options.options = { debug: false, createNewStore: true };
         }
 
         if (options.options.debug === undefined) {
@@ -118,7 +118,7 @@ export class InjectStoreFactory {
         const dataStrategy = ServiceLocator.injector.get(DataStrategy);
         const stateHistory = ServiceLocator.injector.get(StateHistory);
 
-        instance.store = store.initialize(statePath, options.initialState);
+        instance.store = store.initialize(statePath, options.initialState, options.options.createNewStore);
 
         if (InjectStoreFactory.checkPath(options.options.debug) && !dataStrategy.getIn(stateHistory.currentState, statePath)) {
             console.error(`No such state in path ${statePath}. Define initial state for this path in global initial state or component actions.`);

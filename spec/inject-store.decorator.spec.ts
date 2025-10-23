@@ -31,18 +31,25 @@ describe('InjectStore decorator', () => {
         NgStateTestBed.setTestEnvironment(new ImmerDataStrategy());
     });
 
-    let setup = (newPath: string[] | string | ((currentPath, stateIndex) => string[] | string), initialState?: (Object | any) | (() => (Object | any)), debug: boolean = false) => {
+    let setup = (
+        newPath: string[] | string | ((currentPath, stateIndex) => string[] | string),
+        initialState?: (Object | any) | (() => (Object | any)),
+        debug: boolean = false,
+    ) => {
         jest.clearAllMocks();
-        jest.spyOn(store, 'initialize').mockReturnValueOnce(store);
+        jest.spyOn(store, 'initialize').mockReturnValue(store);
         NgStateTestBed.registerDependency(Store, store);
         NgStateTestBed.registerDependency(Dispatcher, new Dispatcher());
         NgStateTestBed.registerDependency(StateHistory, new StateHistory());
-        const decorator = InjectStore(newPath, initialState, debug);
+
+        const decorator = InjectStore(newPath, initialState, { debug });
         decorator(TestStateActions);
+
         target = new TestStateActions();
         StateKeeper.CURRENT_STATE = fromJS({});
         jest.spyOn(StateKeeper.CURRENT_STATE, 'getIn').mockReturnValue(() => true);
     };
+
 
     it('should resolve state path from anonymous function', () => {
         setup((currentPath, stateIndex) => 'new path');
@@ -144,7 +151,8 @@ describe('InjectStore decorator', () => {
         target.createStore();
         expect(store.initialize).toHaveBeenCalledWith(
             ['time'],
-            expect.objectContaining({ now: firstDate })
+            expect.objectContaining({ now: firstDate }),
+            true,
         );
 
         const secondDate = new Date('2021-01-01T00:00:00Z');
@@ -153,7 +161,8 @@ describe('InjectStore decorator', () => {
         target.createStore();
         expect(store.initialize).toHaveBeenCalledWith(
             ['time'],
-            expect.objectContaining({ now: secondDate })
+            expect.objectContaining({ now: secondDate }),
+            true,
         );
 
         jest.useRealTimers();

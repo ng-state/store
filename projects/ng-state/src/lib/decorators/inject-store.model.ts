@@ -17,7 +17,7 @@ export interface CreateStoreOptions {
     newPath?: string[] | string | ((currentPath: StatePath, stateIndex: StateIndex) => string[] | string),
     initialState?: Object | any,
     stateIndex?: StateIndex,
-    options?: { isSignalStore?: boolean, debug?: boolean },
+    options?: { isSignalStore?: boolean, debug?: boolean, createNewStore?: boolean },
 }
 
 export type StateIndex = (string | number) | (string | number)[];
