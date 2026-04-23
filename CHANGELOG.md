@@ -1,3 +1,15 @@
+### 10.10.0
+
+- Fixed SSR and prerender teardown issue where ```update()``` and ```reset()``` could still reach the destroyed Angular injector and throw ```NG0205```
+- ```DataStrategy``` is now captured on the root ```Store``` instance and reused by child stores instead of being resolved from ```ServiceLocator``` during teardown
+- Added regression tests covering server teardown behaviour to ensure ```update()``` and ```reset()``` still work when injector lookup is no longer available
+
+### 10.8.0
+
+- Fixed SSR issue where ```signalActions``` could reuse cached action instances across requests and bind them to stale store state
+- Added safeguards for missing SSR state slices in ```update()``` and for destroyed injector or missing slices in ```reset()``` while keeping existing reset exception behavior for scalar values
+- Added regression tests simulating fresh SSR requests with existing ```todos``` state to ensure signal actions are recreated per request and do not crash during server-side updates
+
 ### 10.7.0
 
 - Added ```createNewStore``` to ```@InjectStore``` decorator. If false then store state will be taken from memory rather than recreate it with initial state

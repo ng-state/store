@@ -131,7 +131,9 @@
                             "hammerjs",
                             "deep-equal",
                             "core-js",
-                            "immutable"
+                            "immutable",
+                            "fast-deep-equal",
+                            "immutable-cursor"
                         ]
                     },
                     "configurations": {

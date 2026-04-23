@@ -10,11 +10,13 @@ import { PersistStateManager } from './plugins/persist-state.plugin';
 import { OptimisticUpdatesManager } from './plugins/optimistic-updates.plugin';
 import { Signal } from '@angular/core';
 import { ToSignal } from './to-signal';
+import { DataStrategy } from '@ng-state/data-strategy';
 
 export class Store<T> extends Observable<T> implements Observer<any> {
     statePath: any[] = [];
     rootPath: any[] = [];
     initialState: any;
+    dataStrategy: DataStrategy;
 
     update: UpdateSignature<T>;
     initialize: InitializeSignature<T>;
@@ -39,6 +41,7 @@ export class Store<T> extends Observable<T> implements Observer<any> {
         selectStore.statePath = [...this.statePath, ...statePath];
         selectStore.rootPath = this.rootPath;
         selectStore.initialState = this.initialState;
+        selectStore.dataStrategy = this.dataStrategy;
         this.initializeOperators(selectStore);
         return selectStore;
     }
@@ -46,6 +49,7 @@ export class Store<T> extends Observable<T> implements Observer<any> {
     lift<R>(operator: Operator<T, R>): Store<R> {
         const store = new Store<R>(this, this.isProd);
         store.operator = operator;
+        store.dataStrategy = this.dataStrategy;
         return store;
     }
 

@@ -10,8 +10,13 @@ import { helpers } from '../helpers/helpers';
 export class Reset {
     static execute<T>(store: Store<T>) {
         const reset = function (debugMessage: string = null) {
+            if (ServiceLocator.injector['destroyed']) {
+                console.error('Cannot reset store because injector is already destroyed.');
+                return;
+            }
 
-            const dataStrategy = ServiceLocator.injector.get(DataStrategy);
+            const dataStrategy = store.dataStrategy as DataStrategy;
+            const currentState = dataStrategy.getIn(StateKeeper.CURRENT_STATE, store.statePath);
 
             const restoreState = () => {
                 let path = helpers.getChildPath(store.statePath, store.rootPath);
@@ -31,7 +36,12 @@ export class Reset {
                 DebugInfo.instance.add(defaultDebugInfo);
             };
 
-            if (!dataStrategy.isObject(dataStrategy.getIn(StateKeeper.CURRENT_STATE, store.statePath))) {
+            if (currentState === undefined || currentState === null) {
+                console.error(`Cannot reset missing state at path: ${store.statePath.join('/')}.`);
+                return;
+            }
+
+            if (!dataStrategy.isObject(currentState)) {
                 throw new Error(`Cannot resotre state at path: ${store.statePath}. Maybe you are trying to restore value rather then state.`);
             }
 

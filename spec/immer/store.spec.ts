@@ -5,6 +5,7 @@ import { ImmerDataStrategy } from '../../projects/immer-data-strategy/src/lib/im
 import { stateFactory } from '../../projects/ng-state/src/lib/ng-state.module';
 import { NgStateTestBed } from '../../projects/ng-state/src/lib/ng-state.test-bed';
 import { StateKeeper } from '../../projects/ng-state/src/lib/state/history';
+import { ServiceLocator } from '../../projects/ng-state/src/lib/helpers/service-locator';
 
 describe('Store tests - Immer', () => {
     let store: Store<any>;
@@ -215,6 +216,43 @@ describe('Store tests - Immer', () => {
 
             store.initialize([], { test: 'test' }, false);
             expect(StateKeeper.CURRENT_STATE['test']).toEqual('test2');
+        });
+
+        it('should reset state even if injector lookup fails during teardown', () => {
+            const originalInjector = ServiceLocator.injector;
+            const layoutStore = store.select(['layout']);
+
+            layoutStore.update(state => state['test'] = 'changed');
+            ServiceLocator.injector = {
+                destroyed: false,
+                get: () => {
+                    throw new Error('NG0205: Injector has already been destroyed.');
+                }
+            } as any;
+
+            expect(() => layoutStore.reset()).not.toThrow();
+            expect(StateKeeper.CURRENT_STATE['layout']['test']).toEqual('test');
+
+            ServiceLocator.injector = originalInjector;
+        });
+
+        it('should update state even if injector lookup fails during teardown', () => {
+            const originalInjector = ServiceLocator.injector;
+            const layoutStore = store.select(['layout']);
+
+            ServiceLocator.injector = {
+                destroyed: false,
+                get: () => {
+                    throw new Error('NG0205: Injector has already been destroyed.');
+                }
+            } as any;
+
+            expect(() => {
+                layoutStore.update(state => state['test'] = 'updated while tearing down');
+            }).not.toThrow();
+            expect(StateKeeper.CURRENT_STATE['layout']['test']).toEqual('updated while tearing down');
+
+            ServiceLocator.injector = originalInjector;
         });
     });
 });

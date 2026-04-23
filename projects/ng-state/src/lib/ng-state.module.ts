@@ -31,8 +31,10 @@ export function stateFactory(initialState: any, dataStrategy: DataStrategy) {
     return new State(initialState, dataStrategy);
 }
 
-export function storeFactory(state: State<any>, isProd: boolean) {
-    return new Store(state, isProd);
+export function storeFactory(state: State<any>, isProd: boolean, dataStrategy: DataStrategy) {
+    const store = new Store(state, isProd);
+    store.dataStrategy = dataStrategy;
+    return store;
 }
 
 export function historyControllerFactory(
@@ -88,7 +90,7 @@ export class StoreModule {
                     useFactory: stateFactory,
                     deps: [INITIAL_STATE, DataStrategy],
                 },
-                { provide: Store, useFactory: storeFactory, deps: [State, IS_PROD] },
+                { provide: Store, useFactory: storeFactory, deps: [State, IS_PROD, DataStrategy] },
                 { provide: StateHistory, useClass: StateHistory },
                 {
                     provide: DebugInfo,

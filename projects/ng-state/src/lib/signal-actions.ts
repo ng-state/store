@@ -1,4 +1,5 @@
-import { DestroyRef, inject } from '@angular/core';
+import { isPlatformServer } from '@angular/common';
+import { DestroyRef, inject, PLATFORM_ID } from '@angular/core';
 import { ServiceLocator } from './helpers/service-locator';
 import { IS_TEST } from './inject-constants';
 import { TestBed } from '@angular/core/testing';
@@ -9,8 +10,9 @@ const actionCache = new Map<Provider<any>, any>();
 export function signalActions<T>(stateActions: Provider<T>): T;
 export function signalActions<T>(stateActions: Provider<T>, args: { late: true }): T & { init: (args: CreateStoreOptions) => void };
 export function signalActions<T>(stateActions: Provider<T>, args?: { late?: boolean }): T | T & { init: (args: CreateStoreOptions) => void } {
+    const isServer = isPlatformServer(getPlatformId());
 
-    if (actionCache.has(stateActions)) {
+    if (!isServer && actionCache.has(stateActions)) {
         return actionCache.get(stateActions);
     }
 
@@ -19,13 +21,17 @@ export function signalActions<T>(stateActions: Provider<T>, args?: { late?: bool
         actions = TestBed.inject(stateActions, null, { optional: true });
         TestBed.inject(DestroyRef).onDestroy(() => {
             actions.onDestroy();
-            actionCache.delete(stateActions);
+            if (!isServer) {
+                actionCache.delete(stateActions);
+            }
         });
     } else {
         actions = inject(stateActions, { optional: true });
         inject(DestroyRef).onDestroy(() => {
             actions.onDestroy();
-            actionCache.delete(stateActions);
+            if (!isServer) {
+                actionCache.delete(stateActions);
+            }
         });
     }
 
@@ -35,7 +41,9 @@ export function signalActions<T>(stateActions: Provider<T>, args?: { late?: bool
 
     if (!args?.late) {
         actions.statePath = actions.createStore([], null, { isSignalStore: true }) as any[];
-        actionCache.set(stateActions, actions);
+        if (!isServer) {
+            actionCache.set(stateActions, actions);
+        }
         return actions;
     }
 
@@ -51,8 +59,19 @@ export function signalActions<T>(stateActions: Provider<T>, args?: { late?: bool
             : actions.createStore(args.statePath, args.stateIndex, args.options) as any[];
     }
 
-    actionCache.set(stateActions, actions);
+    if (!isServer) {
+        actionCache.set(stateActions, actions);
+    }
+
     return actions;
+}
+
+function getPlatformId() {
+    if (ServiceLocator.injector.get(IS_TEST)) {
+        return TestBed.inject(PLATFORM_ID);
+    }
+
+    return inject(PLATFORM_ID);
 }
 
 declare type Provider<T> = Type<T> | AbstractType<T>;

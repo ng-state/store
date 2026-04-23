@@ -50,7 +50,7 @@ export class NgStateTestBed {
 
     public static createStore(initialState: any, path?: any[] | string): Store<any> {
         const state = stateFactory(initialState, this.dataStrategy);
-        let store = storeFactory(state, false);
+        let store = storeFactory(state, false, this.dataStrategy);
 
         if (path) {
             store = store.select(NgStateTestBed.getPath(path));
